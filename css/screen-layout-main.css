@@ -486,7 +486,7 @@ footer {
 	font-size: .75em;
 }
 .clock, .date{
-	 padding: 10px 15px; 
+	 padding: 0px 15px; 
 }
 .layout-portrait .clock {
 	float: left;

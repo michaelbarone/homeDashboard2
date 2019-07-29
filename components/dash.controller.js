@@ -24,6 +24,10 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 		// the user appears to have gone idle
 		$scope.idle=true;
 		console.log("idle");
+		// reset to default states
+		$scope.showHourly=false;
+		$scope.showMaps=false;
+		$scope.showAlert=false;
 	});	
 	
 	$scope.$on('IdleEnd', function() {
@@ -270,24 +274,12 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 			}else{
 				$scope.data.weather.alerts = {};
 			}
-
-			/*
-			if(wgov.features.length>0){
-				//console.log(wgov.features);
-				var thisfeature = wgov.features[0];
-				
-				document.getElementById('weather-alert-expires').innerHTML = thisfeature.properties.headline;
-				//document.getElementById('weather-alert-description').innerHTML = thisfeature.properties.instruction;
-				document.getElementById('weather-alert-message').innerHTML = thisfeature.properties.instruction;
-
-				$('#weather-alert').show();
-			} else {
-				$('#weather-alert').hide();
-			}
-			*/
 		});
 	}
 
+	
+	
+	
 	
 	
 	

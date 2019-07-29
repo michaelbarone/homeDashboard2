@@ -1,11 +1,17 @@
-<div class="wrap dashboard"  ng-style="{'background-image': 'url(' + data.background.currentImage + ')'}"  ng-controller="dashCtrl">
+<script async defer
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDz5MdlcKiMA6mmdDbbVTf3HUedsMq_n8Y"
+></script>
+<div class="wrap dashboard" ng-controller="dashCtrl">
+	<div class="abs-zero" ng-show="!idle" ng-style="{'background-image': 'url(' + data.background.currentImage + ')'}"></div>
 	<div class="brightness abs-zero"></div>
+	<div ng-show="showMaps" class="abs-zero maps brightness" style="z-index:150;"></div>
+	<img src="./images/google-maps.png" ng-click="showMaps = !showMaps" class="weather-item" style="z-index:155;position:absolute;bottom:calc(50% - 22px);right:0;cursor:pointer;width:45px;">
 	<ng-include ng-cloak src="'components/spinner/spinner.html'"></ng-include>
 	<div id="header" class="menu">
 	
 	
 	
-		<div id="weather-alert" ng-cloak ng-click="showAlert = !showAlert;" ng-init="showAlert=false;" class="translucent-alert weather-alert hide" style="display: block;padding:5px;">
+		<div id="weather-alert" ng-cloak ng-show="data.weather.alerts.headline" ng-click="showAlert = !showAlert;" ng-init="showAlert=false;" class="translucent-alert weather-alert" style="display: block;padding:5px;position: relative;">
 				<div class="pull-left font-ultralight xxsmall" stlye="margin:-5px">
 					<img id="weather-alert-icon" src="./images/alert.png" height="20px" width="20px">
 				</div>
@@ -29,47 +35,48 @@
 		<div id="dashboardMask">
 			
 
-		<div ng-cloak class="clock pull-left" style="display: block;">
-			<div class="time large bright">{{data.time.hour}}:{{data.time.minute}}<span class="sec">{{data.time.second}}</span><span class="time-ampm">{{data.time.ampm}}</span></div>
+		<div ng-cloak class="clock pull-left" style="display: block;position: relative;">
+			<div ng-show="data.time.hour > 0" class="time large bright">{{data.time.hour}}:{{data.time.minute}}<span class="sec">{{data.time.second}}</span><span class="time-ampm">{{data.time.ampm}}</span></div>
 		</div>
 
-		<div ng-cloak class="date pull-right medium font-light bright text-right"><div class="day-of-week">{{data.time.day}}</div><div class="month">{{data.time.month}} {{data.time.date}}</div></div>
+		<div ng-cloak class="date pull-right medium font-light bright text-right" style="position: relative;"><div class="day-of-week">{{data.time.day}}</div><div class="month">{{data.time.month}} {{data.time.date}}</div></div>
 		<div class="clear"></div>
 
 		<footer style="display: block;position: absolute;bottom: 0;width: 100%;">
-			<div ng-cloak id="weather" ng-show="data.weather.daily.length>0" style="display: block;position: relative;bottom: 0;width: 95%;padding: 0 2.5%;">
+			<div ng-cloak id="weather" ng-show="data.weather.daily.length>0" style="display: block;position: relative;bottom: 0;width: 100%;padding: 0 0 0 2.5%;">
 				<div ng-show="!showHourly" ng-init="showHourly=false;" id="weather-container-current">
 					<div id="weather-current" class="weather-item weather-current">
 						<div class="bright big">{{data.weather.current.temp}}<sup>°</sup><span class="wi wi-yahoo-32"></span></div>
-						<div class="bright"><span class="bright weather-forecast-item-low xxsmall">Humidity: {{data.weather.current.rh}}%</span></div>
+						<div class="bright"><span class="bright weather-forecast-item-low xsmall">Humidity: {{data.weather.current.rh}}%</span></div>
 						<div class="weather-current-alt font-light"><span class="wi wi-strong-wind"> {{data.weather.current.wind_spd}}mph <i class="xsmall wi wi-wind towards-{{data.weather.current.wind_dir}}-deg"></i></span><br>
 						<span class="wi wi-sunrise"></span>  {{functions.getSunrise(data.weather.current.sunrise,data.weather.current.datetime)}} am<br>
 						<span class="wi wi-sunset"></span>  {{functions.getSunset(data.weather.current.sunset,data.weather.current.datetime)}} pm</div>
 						<div><span class="weather-forecast-item-low xxsmall">Checked: {{functions.getTime(data.weather.lastChecked)}}</span></div>
-						<div><span class="weather-forecast-item-low xxsmall">Updated: {{functions.getTime(data.weather.lastUpdate)}}</span></div></div>
+						<div><span class="weather-forecast-item-low xxsmall">Updated: {{functions.getTime(data.weather.lastUpdate)}}</span></div>
+					</div>
 					
-					<div id="weather-forecast" class="weather-item" style="position:absolute;bottom:0;right:50px;max-width: 70%;display:inline-flex;">
+					<div id="weather-forecast" class="weather-item" style="position:absolute;bottom:0;right:40px;max-width: 70%;display:inline-flex;">
 						<div class="text-center weather-item weather-forecast"
 						style="margin:10px;"
-						ng-repeat="day in data.weather.daily | limitTo: 4">
+						ng-repeat="day in data.weather.daily | limitTo: 5">
 							<div class="day">{{functions.getDay(day.datetime)}}</div><span class="wi wi-yahoo-{{functions.weatherCode(day.weather.code)}} bottom"></span><br><div style="white-space: nowrap;">
-							<span class="weather-forecast-item-low xxsmall">Rain: {{day.pop}}%</span></div>
+							<span class="weather-forecast-item-low xsmall">Rain: {{day.pop}}%</span></div>
 							<div class="bright weather-forecast-item-high">{{day.max_temp}}<sup>°</sup></div>
 							<div class="bright weather-forecast-item-low xsmall">{{day.min_temp}}<sup>°</sup></div>
 						</div>
 					</div>
-					<img src="./images/1hour.png" onclick="toggleWeather()" class="weather-item hide" style="position:absolute;bottom:45px;right:0;cursor:pointer;">
+					<img src="./images/1hour.png" ng-click="showHourly = !showHourly" class="weather-item" style="position:absolute;bottom:45px;right:0;cursor:pointer;width:45px;">
 				</div>
 				<div ng-show="showHourly" id="weather-container-hourly" style="position:relative;right:-2%;width:100%;float:right;overflow:auto;">
-					<img src="./images/24hour.png" onclick="toggleWeather()" class="weather-item" style="display:none;position:absolute;left:-5px;cursor:pointer;margin-top:2%;">
+					<img src="./images/24hour.png" ng-click="showHourly = !showHourly" class="weather-item" style="position:fixed;bottom:45px;left:0px;cursor:pointer;width:45px;">
 					<div id="weather-hourly" class="weather-item" style="display:inline-flex;overflow-y: hidden;overflow-x: auto;left:50px;position:relative;">
 						<div class="text-center weather-item weather-hourly" style="padding:0 15px;"
 						ng-repeat="hour in data.weather.hourly">
 							<div class="day bright">{{functions.getTime(hour.timestamp_local)}}</div>
 							<span class="bright weather-forecast-item-high">{{hour.temp}}<sup>°</sup><br/> 
 							<span class="wi wi-yahoo-{{functions.weatherCode(hour.weather.code)}}"></span><br></span>
-							<span class="bright weather-forecast-item-low xxsmall" style="margin: 0 10px;">Humidity: {{hour.rh}}%<br></span>
-							<span class="bright weather-forecast-item-low xxsmall" style="margin: 0 10px;">Rain: {{hour.pop}}%<br>
+							<span class="bright weather-forecast-item-low xsmall" style="margin: 0 10px;">Humidity: {{hour.rh}}%<br></span>
+							<span class="bright weather-forecast-item-low xsmall" style="margin: 0 10px;">Rain: {{hour.pop}}%<br>
 							<span class="wi wi-strong-wind"> {{hour.wind_spd}} mph <i class="wi wi-wind towards-{{hour.wind_dir}}-deg"></i></span></span>
 						</div>
 					</div>	
