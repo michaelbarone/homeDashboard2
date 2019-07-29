@@ -1,0 +1,517 @@
+/** 
+ * screen-layout-main.css
+ * 
+ * This file contains overrides for the portrait,
+ * landscape and tablet layouts 
+ */
+header,
+footer {
+	z-index:100;
+	position: fixed }
+.layout-portrait header {
+	width:100%;
+	padding-bottom: 50px;
+	background: rgba(0,0,0,0.75);
+	background: -moz-linear-gradient(top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 100%);
+	background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(0,0,0,0.75)), color-stop(100%, rgba(0,0,0,0)));
+	background: -webkit-linear-gradient(top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 100%);
+	background: -o-linear-gradient(top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 100%);
+	background: -ms-linear-gradient(top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 100%);
+	background: linear-gradient(to bottom, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#000000', GradientType=0 );
+} 
+.layout-portrait footer{
+	width:100%;
+	bottom:0;
+	padding-top: 50px;
+	background: rgba(0,0,0,0);
+	background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%);
+	background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(0,0,0,0)), color-stop(100%, rgba(0,0,0,0.75)));
+	background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%);
+	background: -o-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%);
+	background: -ms-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%);
+	background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#000000', GradientType=0 );
+}
+.layout-landscape header {
+	height:100%;
+	min-width: 20%;
+	max-width: 75%;
+	left:0;
+	bottom:0;
+	padding-right: 50px;
+	background: rgba(0,0,0,0.75);
+	background: -moz-linear-gradient(left, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 100%);
+	background: -webkit-gradient(left top, right top, color-stop(0%, rgba(0,0,0,0.75)), color-stop(100%, rgba(0,0,0,0)));
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 100%);
+	background: -o-linear-gradient(left, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 100%);
+	background: -ms-linear-gradient(left, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 100%);
+	background: linear-gradient(to right, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#000000', GradientType=1 );
+} 
+.layout-landscape footer{
+	height:100%;	
+	right:0;
+	padding-left: 50px;
+	background: rgba(0,0,0,0);
+	background: -moz-linear-gradient(left, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%);
+	background: -webkit-gradient(left top, right top, color-stop(0%, rgba(0,0,0,0)), color-stop(100%, rgba(0,0,0,0.75)));
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%);
+	background: -o-linear-gradient(left, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%);
+	background: -ms-linear-gradient(left, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%);
+	background: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#000000', GradientType=1 );
+}
+
+/**
+ * Font sizes
+ * ---------------------------------------- */
+.layout-tablet.font-x-small {
+	font-size: 100%}
+.layout-tablet.font-small {
+	font-size: 150%}
+.layout-tablet.font-medium {
+	font-size: 200%}
+.layout-tablet.font-large {
+	font-size: 250%}
+.layout-tablet.font-x-large {
+	font-size: 350%}
+.layout-tablet.font-xx-large {
+	font-size: 500%}
+
+/**
+ * Photo-related classes
+ * ---------------------------------------- */
+
+/**
+ *  Event classes/colors
+ * ---------------------------------------- */
+#events-table {
+	height: 100%;
+}
+#events-table td {
+	padding: 15px; 
+	vertical-align: top;
+}
+.layout-portrait .events .day-container {
+	padding: 15px 0 0 15px;
+}
+.layout-portrait .events {
+	margin-bottom: 20px;
+}
+.layout-landscape .events {
+	overflow: hidden;
+}
+.events .day-container {
+	margin-top: 20px; 
+	padding-top: 20px; 
+	padding-left: 15px;
+}
+.events .event-description {
+	margin-left: 80px;
+}
+.events .time-container {
+	float: left;
+	padding-right: 10px; 
+	width: 70px; 
+}
+.events .hour {
+	float: right;
+	letter-spacing: -3px;
+}
+.events .minute-container {
+	line-height: .8em; 
+	padding-top: .45em; 
+	padding-left: 5px;
+	float: right;
+	font-size: .5em;
+	/*color: rgba(255,255,255,0.8);*/
+}
+.events .minute {
+	font-weight: bold;
+	font-size: 1.1em;
+}
+.events .ampm {
+	font-size: .8em;
+	text-transform: uppercase;
+}
+.events li {
+	color: #fff;
+}
+.events li.red {
+	color: #ffc1c1;
+}
+.events li.red-bright {
+	color: #ff4f4f;
+}
+.events li.orange {
+	color: #ffd5a9;
+}
+.events li.orange-bright {
+	color: #ffb04f;
+}
+.events li.yellow {
+	color: #fff3a3;
+}
+.events li.yellow-bright {
+	color: #fcff4f;
+}
+.events li.green {
+	color: #c1ffa7;
+}
+.events li.green-bright {
+	color: #28e840;
+}
+.events li.teal {
+	color: #b8f3e3;
+}
+.events li.teal-bright {
+	color: #27e8d8;
+}
+.events li.blue {
+	color: #aae0fc;
+}
+.events li.blue-bright {
+	color: #68baff;
+}
+.events li.purple {
+	color: #c1c8ff;
+}
+.events li.pink {
+	color: #ffc9fe;;
+}
+.events li.pink-bright {
+	color: #fd79ff;
+}
+.events .location {
+	font-size: .65em;
+	line-height: 1.2em;
+	display: block;
+	opacity: .8;
+}
+.calmonth .location {
+	font-size: .85em;
+	line-height: 1.4em;
+}
+.events .end-time {
+	font-size: .65em;
+	line-height: 1.2em;
+	display: block;
+	opacity: .8;
+}
+.calmonth .end-time {
+	font-size: .85em;
+	line-height: 1.4em;
+}
+.calmonth table {
+	/*border-spacing: 2px;*/
+}
+.layout-portrait .events table.calmonth {
+	width: 100%;
+}
+.calmonth tr {
+	/*border-top: 1px solid rgba(255,255,255,0.25);*/
+}
+.calmonth th {
+	font-weight: 100;
+	text-align: left;
+	padding: 2px 5px;
+}
+.calmonth td {
+	vertical-align: top;
+	width: 14.2%;
+	/*padding: 0 3px;*/
+	padding:1px 2px;
+}
+.calmonth .daybox {
+	min-height: 100px;
+	min-width: 100px;
+	border-top: 2px solid rgba(255,255,255,0.3);
+	padding: 3px;
+	word-break: break-word;
+	/*background: rgba(0,0,0,.2);*/
+}
+.calmonth .caldate {
+	font-size: 1.25em;
+	font-weight: bold;
+}
+.calmonth .time-container {
+	width: 30px;
+}
+.calmonth .today {
+	border-top: 3px solid rgba(255,255,255,0.8);
+}
+/* Fade out events for landsacpe view */
+.layout-landscape .events {
+	-webkit-mask-image: linear-gradient(to bottom, white 95%, transparent);
+	mask-image: linear-gradient(to bottom, white 95%, transparent);
+}
+/* Tablet layout for events */
+.layout-tablet .events .time-container {
+	width: 2em; 
+}
+.layout-tablet .events {
+	clear: both;
+}
+.layout-tablet .event-description {
+	margin-left: 2.5em;
+}
+.layout-tablet .events .day-container {
+	margin-top: 0; 
+	padding-top: 15px; 
+}
+
+
+
+/**
+ * Weather styles
+ * ------------------------------------------------------ */
+.layout-portrait #weather {
+	 margin-bottom: 40px;
+	 padding: 0 20px; }
+.layout-portrait .weather-container {
+	display: table; 
+	width: 100% }
+.layout-portrait .weather-item {
+	display: table-cell }
+.layout-portrait .weather-current {
+	 min-width: 250px }
+.layout-portrait .weather-current-alt {
+	line-height: 1.6em }
+.layout-portrait .weather-forecast {
+	vertical-align: bottom; 
+	line-height: 1.8em; 
+	width: 16% }
+.layout-portrait .weather-moon {
+	vertical-align: bottom;
+	padding-bottom: 10px; }	 
+.layout-portrait .weather-forecast-item-high,
+.layout-portrait .weather-forecast-item-low {
+	padding: 0 5px;
+}
+/* </= 1080 */
+@media (max-width: 1080px) {
+	.layout-portrait .weather-forecast-item-high,
+	.layout-portrait .weather-forecast-item-low {
+		display: block;
+	}
+	.layout-portrait .weather-current {
+		padding-top: 25px;
+	}
+}
+/* > 1080 */
+@media (min-width: 1081px) {
+	.layout-portrait .weather-item {
+		padding-top: 15px;
+	}
+}
+/**
+ * Right side weather / landscape */
+.layout-landscape #weather {
+	height: 100% }
+.layout-landscape .weather-current {
+	padding: 15px 20px 0 0; 
+	text-align: right;
+	height: 20% }
+.layout-landscape .weather-current-alt {
+	text-align: right;
+	margin-top: 10px; }
+.layout-landscape .weather-forecast {
+	height: 78% }
+.layout-landscape .weather-forecast-item {
+	height: 20%; 
+	line-height: 1.8em }
+.layout-landscape .weather-forecast-item-table {
+	display: table; 
+	width: 100%; 
+	padding-top: 10px; }
+.layout-landscape .weather-forecast-item-label {
+	display: table-cell; 
+	vertical-align: middle; 
+	padding-right: 10px; }
+.layout-landscape .weather-forecast-item-icon {	
+	display: table-cell; 
+	padding-right: 10px; 
+	vertical-align: middle }
+.layout-landscape .weather-forecast-item-hilo {	
+	display: table-cell; 
+	padding-right: 15px;
+	line-height: 1.4em }
+.layout-landscape .weather-pop {
+	display: table-cell;
+	color: #fff;
+	font-size: 70%;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.weather-forecast-item .day {
+	margin-bottom: .5em;
+}
+#weather .day {
+	margin-bottom: .5em;
+}
+#weather-alert-message {
+	line-height: 1.4em;
+	color: rgba(255,255,255,0.6);
+}
+.layout-portrait .weather-alert {
+	padding: 10px; 
+	z-index: 100;
+}
+.layout-landscape .weather-alert {
+	position: fixed; 
+	left: 0; 
+	right: 0; 
+	top: 0;
+	margin: 0 auto; 
+	width: 50%; 
+	padding: 15px 15px 15px 25px; 
+	border-bottom-right-radius: 5px; 
+	border-bottom-left-radius: 5px;
+	z-index: 100;
+}
+.layout-tablet #weather {
+	margin-bottom: 10px;
+}
+.layout-tablet .weather-forecast {
+	line-height: 1em; 
+	padding: 0 10px;
+}
+.layout-tablet .weather-current {
+	 min-width: 0 }
+.layout-tablet .weather-current-alt {
+	line-height: 1.2em }
+.layout-tablet .weather-forecast-item-high {
+	/*margin-top: 20px;*/
+}
+.layout-tablet .weather-forecast .wi {
+	margin-bottom: 20px;
+}
+.layout-tablet .weather-hourly span {
+	white-space: nowrap;
+}
+.layout-portrait .weather-pop {
+	color: #fff;
+	font-size: 70%;
+	margin-top: .5em;
+}
+
+/**
+ * RSS styles
+ * ------------------------------------------------------ */
+.layout-landscape #rss { /*.rss-landscape {*/
+	z-index: 200; 
+	position: absolute; 
+	bottom: 10%; 
+	right: 20%; 
+	left: 25%;
+}
+.layout-portrait #rss { /*.rss-portrait {*/
+	z-index: 200; 
+	position: absolute; 
+	min-height: 50px; 
+	bottom: 25%; 
+	padding: 50px 20px; 
+	right: 0; 
+	left: 0;
+}
+.layout-tablet #rss {
+	position: relative;
+	padding: 0 20px 40px 20px;
+	left: auto;
+	right: auto;
+}
+.layout-tablet .rss-title,
+.layout-tablet .rss-description {
+	overflow: hidden;
+	height: 1em;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 100%;
+}
+
+@media (min-width: 1600px) {
+    .layout-portrait #rss {
+        padding: 50px 150px;
+    }
+    .calmonth td {
+	    padding: 0 6px;
+    }
+}
+
+/**
+ * Message styles 
+ * ------------------------------------------------------ */
+
+
+/**
+ * Todo styles 
+ * ------------------------------------------------------ */
+.layout-portrait .todo {
+	margin-left: 20px;
+	padding-top: 20px;
+	clear: both;
+}
+.layout-landscape .todo {
+	margin-left: 20px;
+	padding-top: 20px;
+	position: fixed;
+	bottom: 60px;
+	max-height: 25%;
+	overflow: hidden;
+}
+
+/**
+ * Clocks
+ * ------------------------------------------------------ */
+.time .sec {
+	font-size: .4em;
+	color: #fff;
+	padding-left: 5px;
+	position: relative;
+	top: -1em;
+}
+.time-ampm {
+	font-size: .3em;
+	color: rgba(255,255,255,0.8);
+	padding-left: 5px;
+	position: relative;
+}
+.day {
+	font-family: "Roboto", "HelveticaNeue-Light";
+	text-transform: uppercase;
+}
+.layout-tablet .day {
+	font-size: .75em;
+}
+.clock, .date{
+	 padding: 10px 15px; 
+}
+.layout-portrait .clock {
+	float: left;
+}
+.layout-tablet .clock {
+	padding-bottom: 0;
+}
+.clock .date {
+	padding-left: 5px;
+}
+.layout-portrait .day-of-week {
+	font-size: 1.5em;
+}
+.layout-landscape .day-of-week,
+.layout-landscape .month{
+	float: left;
+}
+.layout-landscape .month {
+	padding-left: .75em;
+}
+.layout-tablet .date .day-of-week {
+	text-align: right;
+	font-size: .9em;
+}
+.layout-tablet .date .month {
+	text-align: right;
+	font-size: .7em;
+}

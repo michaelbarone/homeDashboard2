@@ -1,0 +1,122 @@
+<div class="modal fade in">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="header">
+			<ul><li>
+				<button type="button" class="btn btn-danger close right" ng-click="closeModal('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h2 class="left">CSV Format</h2>
+			</li></ul>
+		  </div>
+		  <div class="modal-body">		
+			<p>
+				CSV format explained for demographic file
+			</p>
+			<p>
+				All data is only stored within this browser session.  No data will be sent or stored on any server for this application.<br/>
+				All Emplid fields are hashed when imported to help anonymise both student and instructor identities.
+			</p>		
+			
+			<span>CSV example:</span>
+			<br /><br />
+			<table>
+				<tr>
+					<th>Emplid</th>
+					<th>Gender</th>
+					<th>Birth Year</th>
+					<th>Ethnic Group</th>
+					<th>Citizenship</th>
+					<th>Application Year</th>
+					<th>Admit Type Desc</th>
+					<th>Father Educ Lvl Desc</th>
+					<th>Mother Educ Lvl Desc</th>
+					<th>ELM Status Desc</th>
+					<th>EPT Status Desc</th>
+				</tr>
+				<tr>
+					<td>783089809</td>
+					<td>F</td>
+					<td>1976</td>
+					<td>Asian</td>
+					<td>USA</td>
+					<td>2008-09</td>
+					<td>Transfer</td>
+					<td>2 - Some High School</td>
+					<td>3 - High School Graduate</td>
+					<td>Exempt (GE Breadth)</td>
+					<td>Exempt (Transfer)</td>
+				</tr>
+				<tr>
+					<td>743039216</td>
+					<td>M</td>
+					<td>1980</td>
+					<td>White</td>
+					<td>USA</td>
+					<td>2007-08</td>
+					<td>First Time</td>
+					<td>7 - Postgraduate</td>
+					<td>5 - 2-Year College Graduate</td>
+					<td>Exempt (SAT I)</td>
+					<td>Exempt (SAT I)</td>					
+				</tr>
+				<tr>
+					<td>555089809</td>
+					<td>M</td>
+					<td>1986</td>
+					<td>Black/African</td>
+					<td>USA</td>
+					<td>2004-05</td>
+					<td>First Time</td>
+					<td>6 - 4 Year College Graduate</td>
+					<td>5 - 2-Year College Graduate</td>
+					<td>Exempt (SAT I)</td>
+					<td>Exempt (SAT I)</td>					
+				</tr>			
+			</table>
+			
+			<br /><br /><br /><br />
+
+			<br /><br />
+			<table>
+				<tr>
+					<th class="txtleft">Emplid</th><td class="txtleft">The student ID or any unique key to identify a student.  This id should only occur 1 time in this data set.</td>
+				</tr>
+				<tr>
+					<th class="txtleft">Gender</th><td class="txtleft">Gender of the Student: only use: [M, F, Unknown]</td>
+				</tr>
+				<tr>
+					<th class="txtleft">Birth Year</th><td class="txtleft">Birth Year of the student</td>
+				</tr>
+				<tr>
+					<th class="txtleft">Ethnic Group</th><td class="txtleft">Students' ethnic group as reported</td>
+				</tr>	
+				<tr>
+					<th class="txtleft">Citizenship</th><td class="txtleft">Country the student has main Citizenship in.  [USA, Canada, Mexico, etc.]</td>
+				</tr>
+				<tr>
+					<th class="txtleft">Application Year</th><td class="txtleft">The academic year the student applied to attend the college or transfered into the college.</td>
+				</tr>				
+				<tr>
+					<th class="txtleft">Admit Type Desc</th><td class="txtleft">The type of admission to the university: [First Time, Transfer, Ret Transfer, Continuing, Early Start, Transient, etc]</td>
+				</tr>
+				<tr>
+					<th class="txtleft">Father Educ Lvl Desc</th><td class="txtleft">Highest Edu level of father: [1 - No High School,2 - Some High School,3 - High School Graduate,4 - Some College,5 - 2 Year College Graduate,6 - 4 Year College Graduate,7 - Postgraduate,8- No Response] </td>
+				</tr>
+				<tr>
+					<th class="txtleft">Mother Educ Lvl Desc</th><td class="txtleft">Highest Edu level of mother: [1 - No High School,2 - Some High School,3 - High School Graduate,4 - Some College,5 - 2 Year College Graduate,6 - 4 Year College Graduate,7 - Postgraduate,8- No Response]</td>
+				</tr>
+				<tr>
+					<th class="txtleft">Total GPA</th><td class="txtleft">Total GPA at start of this term</td>
+				</tr>
+				<tr>
+					<th class="txtleft">ELM Status Desc</th><td class="txtleft">ELM status of student when entering university</td>
+				</tr>
+				<tr>
+					<th class="txtleft">EPT Status Desc</th><td class="txtleft">EPT status of student when entering university</td>
+				</tr>				
+			</table>			
+			
+		  </div>
+		</div>
+	</div>
+	<div ng-click="closeModal('close')" class="modal-backdrop fade in"></div>
+</div>

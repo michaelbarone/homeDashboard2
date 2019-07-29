@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" ng-app="homeDashboard">
+	<head>
+		<meta charset="utf-8">
+		<title>homeDashboard</title>
+		<meta name='viewport' content='width=device-width,height:window-height, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=auto' />
+		<meta name="mobile-web-app-capable" content="yes">
+		<link rel="icon" sizes="192x192" href="icon-hirez.png">
+		<link rel="icon" sizes="128x128" href="icon-lowrez.png">
+		<meta name='apple-mobile-web-app-capable' content='yes' />		
+		<meta name="apple-mobile-web-app-title" content="homeDashboard">
+		<!--
+		<link rel="apple-touch-icon" href="icon-lowrez-58.png">
+		<link rel="apple-touch-startup-image" href="startup-image-320x460.png">
+		-->
+		<!--
+		see http://stackoverflow.com/a/15533693
+		<link rel="apple-touch-icon" sizes="192x192" href="icon-hirez.png">
+		<link rel="apple-touch-icon" sizes="128x128" href="icon-lowrez.png">
+		-->
+		
+		
+		<link rel="icon" type="image/png" href="favicon.ico">  
+		<meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link rel="stylesheet" href="css/font-awesome.min.css"/>		
+		
+		<link rel="stylesheet" href="css/app.css"/>
+		
+		
+		<link rel="stylesheet" href="css/bootstrap.min.css"/>
+		<link rel="stylesheet" href="css/screen-layout-main.css"/>
+		<link rel="stylesheet" href="css/weather-icons.css">
+		<link rel="stylesheet" href="css/weather-icons-wind.css">
+		<link rel="stylesheet" href="css/wu-icons-style.css">		
+		<script src="lib/angular/angular.min.js"></script>
+		<script src="lib/js/moment.min.js"></script>
+		<script src="lib/js/moment-timezone-2010-2010.min.js"></script>
+		<script src="lib/js/jquery-2.1.1.min.js"></script>
+		<script src="settings.js"></script>
+	</head>
+	<body>
+		<div ng-view id="windowContainer" class="windowContainer"></div>
+		
+		<script src="lib/angular/angular-sanitize.min.js"></script>
+		<script src="lib/angular/angular-route.min.js"></script>
+		<script src="lib/angular/angular-resource.min.js"></script>
+		<script src="lib/angular/angular-animate.min.js"></script>
+		<script src="lib/angular/angular-idle.min.js"></script>
+		<script src="lib/angular/angular-model.min.js"></script>
+		<script src="lib/angular/angular-modal-service.js"></script>
+		<script src="lib/angular/angular-ui-bootstrap.min.js"></script>
+
+		<script src="app.js"></script>
+
+		<script src="components/spinner/spinnerService.js"></script>
+		<script src="components/dash.controller.js"></script>
+		<script src="components/modal/modal.controller.js"></script>
+		<script src="components/services/filters.js"></script>
+		<script src="components/services/directives.js"></script>
+		
+
+<!--		
+		<script src="components/charts/directive.sankeyCourses.js"></script>
+		<script src="components/charts/directive.sankeyPersistence.js"></script>
+		<script src="components/charts/directive.sequenceSunburst.js"></script>
+		<script src="components/charts/directive.demographicsSide.js"></script>
+		<script src="components/charts/directive.charts.js"></script>
+-->
+
+	</body>
+</html>

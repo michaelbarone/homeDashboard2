@@ -1,0 +1,4 @@
+*json
+*log
+private/sessions/sess_*
+settings.js

@@ -1,0 +1,95 @@
+<div class="modal fade in">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="header">
+			<ul><li>
+				<button type="button" class="btn btn-danger close right" ng-click="closeModal('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h2 class="left">CSV Format</h2>
+			</li></ul>
+		  </div>
+		  <div class="modal-body">		
+			<p>
+				CSV format explained for term by term Course data
+			</p>
+			<p>
+				All data is only stored within this browser session.  No data will be sent or stored on any server for this application.<br/>
+				All Emplid fields are hashed when imported to help anonymise both student and instructor identities.
+			</p>
+		
+			
+			<span>CSV example:</span>
+			<br /><br />
+			<table>
+				<tr>
+					<th>Emplid</th>
+					<th>Term Code</th> 
+					<th>Term Description</th>
+					<th>Course</th>
+					<th>Class Title</th>
+					<th>Official Grade</th>
+					<th>Instructor Emplid</th>
+					<th>Department</th>
+					<th>Status Desc</th>
+				</tr>
+				<tr>
+					<td>783089809</td>
+					<td>2175</td> 
+					<td>Spring 2017</td>
+					<td>MATH  30</td>
+					<td>Calculus I</td>
+					<td>A</td>
+					<td>986085804</td>
+					<td>Mathematics</td>
+					<td>Enrolled</td>
+				</tr>
+				<tr>
+					<td>783089809</td>
+					<td>2178</td> 
+					<td>Fall 2017</td>
+					<td>MATH  31</td>
+					<td>Calculus II</td>
+					<td>A</td>
+					<td>986085804</td>
+					<td>Mathematics</td>
+					<td>Enrolled</td>
+				</tr>				
+			</table>
+			
+			<br /><br /><br /><br />
+
+			<br /><br />
+			<table>
+				<tr>
+					<th class="txtleft">Emplid</th><td class="txtleft">The student ID or any unique key to identify a student.  This id can occur multiple times in the data set, and will be grouped as the same student.</td>
+				</tr>
+				<tr>
+					<th class="txtleft">Term Code</th><td class="txtleft">A numeric code for each academic term where each term code is larger than the last</td>
+				</tr>
+				<tr>
+					<th class="txtleft">Term Description</th><td class="txtleft">A human readable description of the term</td>
+				</tr>
+				<tr>
+					<th class="txtleft">Course</th><td class="txtleft">The course short title which is made up of the department short code and the course number</td>
+				</tr>
+				<tr>
+					<th class="txtleft">Class Title</th><td class="txtleft">The official title of the course</td>
+				</tr>
+				<tr>
+					<th class="txtleft">Official Grade</th><td class="txtleft">The official grade earned by this student, in this course, this term</td>
+				</tr>
+				<tr>
+					<th class="txtleft">Instructor Emplid</th><td class="txtleft">The instructor ID who taught this course</td>
+				</tr>
+				<tr>
+					<th class="txtleft">Department</th><td class="txtleft">Full department name</td>
+				</tr>
+				<tr>
+					<th class="txtleft">Status Desc</th><td class="txtleft">Enrollment status for this course, can include "Dropped" or "Enrolled"</td>
+				</tr>
+			</table>			
+			
+		  </div>
+		</div>
+	</div>
+	<div ng-click="closeModal('close')" class="modal-backdrop fade in"></div>
+</div>

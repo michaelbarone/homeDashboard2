@@ -1,0 +1,122 @@
+<div class="modal fade in">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="header">
+			<ul><li>
+				<button type="button" class="btn btn-danger close right" ng-click="closeModal('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h2 class="left">CSV Format</h2>
+			</li></ul>
+		  </div>
+		  <div class="modal-body">		
+			<p>
+				CSV format explained for majors
+			</p>
+			<p>
+				All data is only stored within this browser session.  No data will be sent or stored on any server for this application.<br/>
+				All Emplid fields are hashed when imported to help anonymise both student and instructor identities.
+			</p>		
+			
+			<span>CSV example:</span>
+			<br /><br />
+			<table>
+				<tr>
+					<th>Emplid</th>
+					<th>Grad Year</th>
+					<th>Grad Term</th>
+					<th>Grad Major Degree Label</th>
+					<th>Grad Total GPA</th>
+					<th>Year</th>
+					<th>Term Name</th>
+					<th>Major</th>
+					<th>Total GPA</th>
+					<th>Total Units Earned</th>
+					<th>Transfer Units Earned</th>
+				</tr>
+				<tr>
+					<td>783089809</td>
+					<td>2009</td>
+					<td>2098</td>
+					<td>EDUCATION</td>
+					<td>3.91</td>
+					<td>2009</td>
+					<td>Fall</td>
+					<td>Education</td>
+					<td>3.91</td>
+					<td>120</td>
+					<td>0</td>
+				</tr>
+				<tr>
+					<td>783089809</td>
+					<td>2009</td>
+					<td>2098</td>
+					<td>EDUCATION</td>
+					<td>3.91</td>
+					<td>2008</td>
+					<td>Spring</td>
+					<td>Education</td>
+					<td>3.8</td>
+					<td>108</td>
+					<td>0</td>					
+				</tr>
+				<tr>
+					<td>555089809</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td>2008</td>
+					<td>Spring</td>
+					<td>Biology</td>
+					<td>2.5</td>
+					<td>12</td>
+					<td>12</td>					
+				</tr>			
+			</table>
+			
+			<br /><br /><br /><br />
+
+			<br /><br />
+			<table>
+				<tr>
+					<th class="txtleft">Emplid</th><td class="txtleft">The student ID or any unique key to identify a student.  This id can occur multiple times in the data set, and will be grouped as the same student.</td>
+				</tr>
+				<tr>
+					<th class="txtleft">Grad Year</th><td class="txtleft">The year of graduation, or blank if not graduated</td>
+				</tr>
+				<tr>
+					<th class="txtleft">Grad Term</th><td class="txtleft">The term code of graduation, or blank if not graduated</td>
+				</tr>
+				<tr>
+					<th class="txtleft">Grad Major Degree Label</th><td class="txtleft">Graduating Major, or blank if not graduated</td>
+				</tr>	
+				<tr>
+					<th class="txtleft">Grad Total GPA</th><td class="txtleft">Graduating GPA, or blank if not graduated</td>
+				</tr>
+				<tr>
+					<th class="txtleft">Year</th><td class="txtleft">The Current year for this term</td>
+				</tr>				
+				<tr>
+					<th class="txtleft">Term Code</th><td class="txtleft">A numeric code for each academic term where each term code is larger than the last</td>
+				</tr>
+				<tr>
+					<th class="txtleft">Term Name</th><td class="txtleft">A human readable description of the term</td>
+				</tr>
+				<tr>
+					<th class="txtleft">Major</th><td class="txtleft">Major or official program on record for this term</td>
+				</tr>
+				<tr>
+					<th class="txtleft">Total GPA</th><td class="txtleft">Total GPA at start of this term</td>
+				</tr>
+				<tr>
+					<th class="txtleft">Total Units Earned</th><td class="txtleft">Total units earned at start of this term</td>
+				</tr>
+				<tr>
+					<th class="txtleft">Transfer Units Earned</th><td class="txtleft">Total Transfer units (not earned at this university) at start of this term</td>
+				</tr>				
+			</table>			
+			
+		  </div>
+		</div>
+	</div>
+	<div ng-click="closeModal('close')" class="modal-backdrop fade in"></div>
+</div>
