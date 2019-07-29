@@ -2,7 +2,7 @@
 	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDz5MdlcKiMA6mmdDbbVTf3HUedsMq_n8Y"
 ></script>
 <div class="wrap dashboard" ng-controller="dashCtrl">
-	<div class="abs-zero" ng-show="!idle" ng-style="{'background-image': 'url(' + data.background.currentImage + ')'}"></div>
+	<div class="abs-zero" ng-show="!idle" style="background-repeat: no-repeat;background-size: cover;" ng-style="{'background-image': 'url(' + data.background.currentImage + ')'}"></div>
 	<div class="brightness abs-zero"></div>
 	<div ng-show="showMaps" class="abs-zero maps brightness" style="z-index:150;"></div>
 	<img src="./images/google-maps.png" ng-click="showMaps = !showMaps" class="weather-item" style="z-index:155;position:absolute;bottom:calc(50% - 22px);right:0;cursor:pointer;width:45px;">
