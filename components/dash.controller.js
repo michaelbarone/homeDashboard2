@@ -6,6 +6,10 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 	$scope.data = {};
 	$scope.data.weather = {};
 	$scope.data.weather.alerts = {};
+	$scope.data.weather.lastUpdate = 0;
+	$scope.data.weather.current = {};
+	$scope.data.weather.daily = [];
+	$scope.data.weather.hourly = [];
 	$scope.data.background = {};
 	$scope.data.background.currentImage = "";
 	$scope.data.background.images = {};
@@ -28,6 +32,7 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 		$scope.showHourly=false;
 		$scope.showMaps=false;
 		$scope.showAlert=false;
+		$scope.functions.showMap("close");
 	});	
 	
 	$scope.$on('IdleEnd', function() {
@@ -291,10 +296,7 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 		
 		
 		
-		$scope.data.weather.lastUpdate = Date.now();
-		$scope.data.weather.current = {};
-		$scope.data.weather.daily = {};
-		$scope.data.weather.hourly = {};
+
 		/*
 		var weekday = new Array(7);
 			weekday[0] =  "Sunday";
@@ -402,4 +404,35 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 			}
 			return theWeatherCode;
 		}
+		
+		
+		
+	$scope.functions.showMap = function(type){
+		if(type=="traffic" && $scope.currentMap != "traffic"){
+			$scope.currentMap = "traffic";
+			var map = new google.maps.Map(document.getElementById('map'), {
+				zoom: 11,
+				center: {'lat': parseFloat(dashboardSettings.mapLat), 'lng': parseFloat(dashboardSettings.mapLong)}
+			});
+
+			var trafficLayer = new google.maps.TrafficLayer();
+			trafficLayer.setMap(map);
+			
+			
+			
+		} else if(type=="weather" && $scope.currentMap != "weather") {
+			$scope.currentMap = "weather";
+			document.getElementById('weatherMap').innerHTML = '<iframe src="https://www.rainviewer.com/map.html?loc='+dashboardSettings.mapLat+','+dashboardSettings.mapLong+',8&amp;oFa=0&amp;oC=0&amp;oU=0&amp;oCUB=1&amp;oCS=1&amp;oF=0&amp;oAP=0&amp;rmt=4" style="border:0px #ffffff none;" name="myiFrame" scrolling="no" marginheight="0px" marginwidth="0px" height="100%" width="100%" allowfullscreen=""></iframe>';
+		} else if(type=="close"){
+			$scope.currentMap = "";
+			document.getElementById('map').innerHTML = "";
+			document.getElementById('weatherMap').innerHTML = "";
+		}
+	}
+		
+	var script = document.createElement('script');
+	script.type = 'text/javascript';
+	script.src = "https://maps.googleapis.com/maps/api/js?key="+dashboardSettings.googleMapsApi;
+	document.body.appendChild(script);		
+		
 }]);

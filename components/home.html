@@ -1,11 +1,24 @@
-<script async defer
-	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDz5MdlcKiMA6mmdDbbVTf3HUedsMq_n8Y"
-></script>
 <div class="wrap dashboard" ng-controller="dashCtrl">
 	<div class="abs-zero" ng-show="!idle" style="background-repeat: no-repeat;background-size: cover;" ng-style="{'background-image': 'url(' + data.background.currentImage + ')'}"></div>
 	<div class="brightness abs-zero"></div>
-	<div ng-show="showMaps" class="abs-zero maps brightness" style="z-index:150;"></div>
-	<img src="./images/google-maps.png" ng-click="showMaps = !showMaps" class="weather-item" style="z-index:155;position:absolute;bottom:calc(50% - 22px);right:0;cursor:pointer;width:45px;">
+	<div ng-show="showMaps" class="abs-zero maps brightness" style="z-index:150;">
+
+		<div ng-show="currentMap=='traffic'" id="mapContainer" style="bottom:0;position: absolute;height: 100%;width: 100%;overflow: hidden;pointer-events:all;">
+			<div id="map" style="height:100%;"></div>
+		</div>
+
+		<div ng-show="currentMap=='weather'" id="weatherMapContainer" style="bottom:0;position: absolute;height: 100%;width: 100%;overflow: hidden;pointer-events:all;">
+			<div id="weatherMap" style="height:100%;">
+
+			</div>
+		</div>
+	
+	
+	</div>
+	<img src="./images/google-maps.png" ng-show="showMaps" ng-click="functions.showMap('traffic');" class="weather-item" style="z-index:155;position:absolute;bottom:calc(75% - 22px);right:0;cursor:pointer;width:45px;">
+	<img src="./images/globe.png" ng-show="!showMaps"  ng-click="showMaps = !showMaps;showMaps ? functions.showMap('traffic') : null;" class="weather-item" style="z-index:155;position:absolute;bottom:calc(50% - 22px);right:0;cursor:pointer;width:45px;">
+	<img src="./images/globe-red.png" ng-show="showMaps"  ng-click="showMaps = !showMaps;functions.showMap('close');" class="weather-item" style="z-index:155;position:absolute;bottom:calc(50% - 22px);right:0;cursor:pointer;width:45px;">
+	<img src="./images/weatherRadar.png" ng-show="showMaps" ng-click="functions.showMap('weather');" class="weather-item" style="z-index:155;position:absolute;bottom:calc(25% - 22px);right:0;cursor:pointer;width:45px;">
 	<ng-include ng-cloak src="'components/spinner/spinner.html'"></ng-include>
 	<div id="header" class="menu">
 	
@@ -82,7 +95,7 @@
 					</div>	
 				</div>
 			</div>
-			<div id="weather-loading" ng-show="data.weather.daily.length<1" class="text-center" style="margin-bottom: 30px;">
+			<div id="weather-loading" ng-show="data.weather.daily.length==0" class="text-center" style="margin-bottom: 30px;">
 				<span class="dark font-light">Loading Weather...</span>
 			</div>
 		</footer>
