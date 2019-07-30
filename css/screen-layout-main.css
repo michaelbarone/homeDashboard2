@@ -136,7 +136,7 @@ footer {
 	text-transform: uppercase;
 }
 .events li {
-	color: #fff;
+	color: #eee;
 }
 .events li.red {
 	color: #ffc1c1;
@@ -339,7 +339,7 @@ footer {
 	line-height: 1.4em }
 .layout-landscape .weather-pop {
 	display: table-cell;
-	color: #fff;
+	color: #eee;
 	font-size: 70%;
 	text-align: center;
 	vertical-align: middle;
@@ -392,7 +392,7 @@ footer {
 	white-space: nowrap;
 }
 .layout-portrait .weather-pop {
-	color: #fff;
+	color: #eee;
 	font-size: 70%;
 	margin-top: .5em;
 }
@@ -467,7 +467,7 @@ footer {
  * ------------------------------------------------------ */
 .time .sec {
 	font-size: .4em;
-	color: #fff;
+	color: #eee;
 	padding-left: 5px;
 	position: relative;
 	top: -1em;

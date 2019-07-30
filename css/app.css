@@ -12,14 +12,14 @@ body, html {
 	height: 100%;
 	font-family: "Roboto", "HelveticaNeue-Medium";
 	letter-spacing: 0px;
-	color: #fff;
+	color: #eee;
 
 	 -webkit-font-smoothing: antialiased;
 	text-shadow: 1px 1px 0px rgba(0,0,0,.3);
 	overflow:hidden;
 }
 a, span, p, div {
-	color: #fff;
+	color: #eee;
 	text-decoration: none }
 a:hover {
 	text-decoration: underline }
@@ -108,7 +108,7 @@ a:hover {
  *  Font colors
  * ---------------------------------------- */
 .dim {
-	color: #fff; /*color: #999; */
+	color: #eee; /*color: #999; */
 	opacity: 0.7;
 }
 .dark {
@@ -125,7 +125,7 @@ a:hover {
 	color: rgba(255,255,255,0.8);
 }
 .bright {
-	color: #fff;
+	color: #eee;
 }
 
 /**
@@ -183,7 +183,7 @@ a:hover {
 }
 .label.label-critical {
 	background: rgba(255, 50, 50, .7); 
-	color: #ffffff;
+	color: #eee;
 }
 .abs-zero {
 	position: absolute; 
@@ -346,7 +346,7 @@ a.options-link {
 	display: none;
 }
 .rss-title a {
-	color: #fff;
+	color: #eee;
 
 }
 .rss-title,
@@ -438,7 +438,7 @@ a.options-link {
 	height:5em;
 	margin: 0 auto 15px auto;
 	position:relative;
-	border:.25em solid #fff;
+	border:.25em solid #eee;
 	border-radius:50%;
 }
 .analog-face{
@@ -452,7 +452,7 @@ a.options-link {
 	width:12px;
 	height:12px;
 	margin:-6px 0 0 -6px;
-	background:#fff;
+	background:#eee;
 	border-radius:6px;
 	content:"";
 	display:block
@@ -465,7 +465,7 @@ a.options-link {
 	left:50%;
 	margin:-3px 0 -3px -25%;
 	padding:3px 0 3px 25%;
-	background:#fff;
+	background:#eee;
 	-webkit-transform-origin:100% 50%;
 	-ms-transform-origin:100% 50%;
 	transform-origin:100% 50%;
@@ -479,7 +479,7 @@ a.options-link {
 	left:50%;
 	margin:-40% -2px 0;
 	padding:40% 2px 0;
-	background:#fff;
+	background:#eee;
 	-webkit-transform-origin:50% 100%;
 	-ms-transform-origin:50% 100%;
 	transform-origin:50% 100%;
@@ -493,7 +493,7 @@ a.options-link {
 	left:50%;
 	margin:-40% -1px 0 0;
 	padding:40% 1px 0;
-	background:#fff;
+	background:#eee;
 	-webkit-transform-origin:50% 100%;
 	-ms-transform-origin:50% 100%;
 	transform-origin:50% 100%
