@@ -60,8 +60,8 @@
 				<div ng-show="!showHourly" ng-init="showHourly=false;" id="weather-container-current">
 					<div id="weather-current" class="weather-item weather-current">
 						<div class="bright big">{{data.weather.current.temp}}<sup>°</sup><span class="wi wi-yahoo-32"></span></div>
-						<div class="bright"><span class="bright weather-forecast-item-low xsmall">Humidity: {{data.weather.current.rh}}%</span></div>
-						<div class="weather-current-alt font-light"><span class="wi wi-strong-wind"> {{data.weather.current.wind_spd}}mph <i class="xsmall wi wi-wind towards-{{data.weather.current.wind_dir}}-deg"></i></span><br>
+						<div class="bright"><span class="bright weather-forecast-item-low">Humidity: {{data.weather.current.rh}}%</span></div>
+						<div class="weather-current-alt font-light medium wi"><span class="wi wi-strong-wind"> {{data.weather.current.wind_spd}}mph <i class="xsmall wi wi-wind towards-{{data.weather.current.wind_dir}}-deg"></i></span><br>
 						<span class="wi wi-sunrise"></span>  {{functions.getSunrise(data.weather.current.sunrise,data.weather.current.datetime)}} am<br>
 						<span class="wi wi-sunset"></span>  {{functions.getSunset(data.weather.current.sunset,data.weather.current.datetime)}} pm</div>
 						<div><span class="weather-forecast-item-low xxsmall">Checked: {{functions.getTime(data.weather.lastChecked)}}</span></div>
@@ -72,10 +72,10 @@
 						<div class="text-center weather-item weather-forecast"
 						style="margin:10px;"
 						ng-repeat="day in data.weather.daily | limitTo: 5">
-							<div class="day">{{functions.getDay(day.datetime)}}</div><span class="wi wi-yahoo-{{functions.weatherCode(day.weather.code)}} bottom"></span><br><div style="white-space: nowrap;">
+							<div class="day medium wi">{{functions.getDay(day.datetime)}}</div><br/><span class="wi medium wi-yahoo-{{functions.weatherCode(day.weather.code)}}"></span><br><div style="white-space: nowrap;">
 							<span class="weather-forecast-item-low xsmall">Rain: {{day.pop}}%</span></div>
-							<div class="bright weather-forecast-item-high">{{day.max_temp}}<sup>°</sup></div>
-							<div class="bright weather-forecast-item-low xsmall">{{day.min_temp}}<sup>°</sup></div>
+							<div class="bright weather-forecast-item-high medium">{{day.max_temp}}<sup>°</sup></div>
+							<div class="bright weather-forecast-item-low medium">{{day.min_temp}}<sup>°</sup></div>
 						</div>
 					</div>
 					<img src="./images/1hour.png" ng-click="showHourly = !showHourly" class="weather-item" style="position:absolute;bottom:45px;right:0;cursor:pointer;width:45px;">
@@ -86,7 +86,7 @@
 						<div class="text-center weather-item weather-hourly" style="padding:0 15px;"
 						ng-repeat="hour in data.weather.hourly">
 							<div class="day bright">{{functions.getTime(hour.timestamp_local)}}</div>
-							<span class="bright weather-forecast-item-high">{{hour.temp}}<sup>°</sup><br/> 
+							<span class="bright weather-forecast-item-high medium">{{hour.temp}}<sup>°</sup><br/> 
 							<span class="wi wi-yahoo-{{functions.weatherCode(hour.weather.code)}}"></span><br></span>
 							<span class="bright weather-forecast-item-low xsmall" style="margin: 0 10px;">Humidity: {{hour.rh}}%<br></span>
 							<span class="bright weather-forecast-item-low xsmall" style="margin: 0 10px;">Rain: {{hour.pop}}%<br>
