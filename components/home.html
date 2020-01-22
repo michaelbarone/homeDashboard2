@@ -80,7 +80,7 @@
 							<div class="bright weather-forecast-item-low medium wi">{{day.min_temp}}<sup>°</sup></div>
 						</div>
 					</div>
-					<img src="./images/1hour.png" ng-click="showHourly = !showHourly" class="weather-item" style="position:absolute;bottom:45px;right:0;cursor:pointer;width:45px;">
+					<img ng-hide="data.weather.hourly.length==0" src="./images/1hour.png" ng-click="showHourly = !showHourly" class="weather-item" style="position:absolute;bottom:45px;right:0;cursor:pointer;width:45px;">
 				</div>
 				<div ng-show="showHourly" id="weather-container-hourly" style="position:relative;right:-2%;width:100%;float:right;overflow:auto;">
 					<img src="./images/24hour.png" ng-click="showHourly = !showHourly" class="weather-item" style="position:fixed;bottom:45px;left:0px;cursor:pointer;width:45px;">

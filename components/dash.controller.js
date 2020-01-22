@@ -197,7 +197,17 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 		return currentTime;
 	}
 	
-	
+	$scope.functions.updateWeatherFromObject = function(){
+		if($scope.functions.getDay($scope.data.weather.daily[0].datetime)!="TODAY"){
+			while($scope.functions.getDay($scope.data.weather.daily[0].datetime)!="TODAY"){
+				$scope.data.weather.daily.shift();
+			}
+		}
+		$scope.data.weather.lastUpdate = Date.now();
+		$.post('./data/saveToJSON.php',
+			JSON.stringify($scope.data.weather)
+		);
+	}
 	
 
 
@@ -210,8 +220,6 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 	function updateWeather(){
 		console.log("updating weather");
 
-		
-		
 		$.get('./data/weather.json', function(data) {
 				$scope.data.weather = data;
 				//console.log("data from json:")
@@ -220,7 +228,7 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 			}).fail(function() {
 				$scope.data.weather.lastUpdate = 0;
 				
-			}).always(function() {	
+			}).always(function() {
 		
 				var difDate = Date.now() - $scope.data.weather.lastUpdate;
 				
@@ -231,46 +239,36 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 					return;
 				} else {
 					// JSON too old, refresh data and save new data
-					console.log("date too long, refreshing JSON");
-					
-					$scope.data.weather.lastUpdate = Date.now();
+					console.log("data too old, refreshing JSON");
 					$.getJSON("https://api.weatherbit.io/v2.0/current?city="+dashboardSettings.city+","+dashboardSettings.state+"&units=I&key="+dashboardSettings.weatherBitKey, function(wb) {
-						$scope.data.weather.current = wb.data[0];
-					}).done(function(){
-						
-						$.getJSON("https://api.weatherbit.io/v2.0/forecast/hourly?city="+dashboardSettings.city+","+dashboardSettings.state+"&key="+dashboardSettings.weatherBitKey+"&hours=12&units=I", function(wb) {
-							$scope.data.weather.hourly = wb.data;
-						
-						
-						}).done(function(){
-							
+						$scope.data.weather.current = wb.data[0];				
+					}).always(function(){
+						//
+						// hourly forcast no longer available for free from weatherbit
+						//$.getJSON("https://api.weatherbit.io/v2.0/forecast/hourly?city="+dashboardSettings.city+","+dashboardSettings.state+"&key="+dashboardSettings.weatherBitKey+"&hours=48&units=I", function(wb) {
+						//	$scope.data.weather.hourly = wb.data;
+						//}).always(function(){
 							if(getDailyReset<1){
 								$.getJSON("https://api.weatherbit.io/v2.0/forecast/daily?city="+dashboardSettings.city+","+dashboardSettings.state+"&key="+dashboardSettings.weatherBitKey+"&units=I", function(wb) {
 									$scope.data.weather.daily = wb.data;
-								}).done(function(){
-									$.post('./data/saveToJSON.php',
-										JSON.stringify($scope.data.weather)
-									);
-									//updateWeatherFromObject();
+									$scope.functions.updateWeatherFromObject();
 								});
 							} else {
-								$.post('./data/saveToJSON.php',
-									JSON.stringify($scope.data.weather)
-								);
-								//updateWeatherFromObject();
+								$scope.functions.updateWeatherFromObject();
 							}
 							getDailyReset++;
 							if(getDailyReset>20){
 								getDailyReset = 0;
 							}
-						
-						});
+						//
+						// hourly weather comment out	
+						//});
 					});
 				}
 			});
-	
-	
-	
+			
+			
+			
 		// get any weather alerts
 		$.getJSON("https://api.weather.gov/alerts/active/zone/"+dashboardSettings.weatherGovZone, function(wgov) {
 			
