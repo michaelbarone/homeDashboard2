@@ -240,18 +240,26 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 				} else {
 					// JSON too old, refresh data and save new data
 					console.log("data too old, refreshing JSON");
+
 					$.getJSON("https://api.weatherbit.io/v2.0/current?city="+dashboardSettings.city+","+dashboardSettings.state+"&units=I&key="+dashboardSettings.weatherBitKey, function(wb) {
 						$scope.data.weather.current = wb.data[0];				
+					}).fail(function() {
+						$scope.data.weather.current = {};
 					}).always(function(){
 						//
 						// hourly forcast no longer available for free from weatherbit
+						//
 						//$.getJSON("https://api.weatherbit.io/v2.0/forecast/hourly?city="+dashboardSettings.city+","+dashboardSettings.state+"&key="+dashboardSettings.weatherBitKey+"&hours=48&units=I", function(wb) {
 						//	$scope.data.weather.hourly = wb.data;
+						//}).fail(function() {
+							$scope.data.weather.hourly = [];
 						//}).always(function(){
 							if(getDailyReset<1){
 								$.getJSON("https://api.weatherbit.io/v2.0/forecast/daily?city="+dashboardSettings.city+","+dashboardSettings.state+"&key="+dashboardSettings.weatherBitKey+"&units=I", function(wb) {
 									$scope.data.weather.daily = wb.data;
 									$scope.functions.updateWeatherFromObject();
+								}).fail(function() {
+									$scope.data.weather.daily = [];
 								});
 							} else {
 								$scope.functions.updateWeatherFromObject();
@@ -277,6 +285,8 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 			}else{
 				$scope.data.weather.alerts = {};
 			}
+		}).fail(function() {
+			$scope.data.weather.alerts = {};
 		});
 	}
 
