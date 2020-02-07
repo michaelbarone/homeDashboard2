@@ -5,8 +5,13 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 	
 	$scope.data = {};
 	$scope.data.weather = {};
+	$scope.data.weather.version = 2020.1;
 	$scope.data.weather.alerts = {};
 	$scope.data.weather.lastUpdate = 0;
+	$scope.data.weather.lastUpdated = {};
+	$scope.data.weather.lastUpdated.current = 0;
+	$scope.data.weather.lastUpdated.daily = 0;
+	$scope.data.weather.lastUpdated.hourly = 0;
 	$scope.data.weather.current = {};
 	$scope.data.weather.daily = [];
 	$scope.data.weather.hourly = [];
@@ -215,37 +220,69 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 	// reset when day changes
 	
 	
-	$interval(updateWeather, 9e5);
+	$interval(updateWeather, dashboardSettings.checkWeatherCurrentInterval);
 	updateWeather();
 	function updateWeather(){
 		console.log("updating weather");
 
 		$.get('./data/weather.json', function(data) {
-				$scope.data.weather = data;
-				//console.log("data from json:")
-				//console.log(data);
-				
+				if(data.version && $scope.data.weather.version==data.version){
+					$scope.data.weather = data;
+				} else {
+					console.log("JSON data version outdated, refreshing from sources");
+				}
+			
 			}).fail(function() {
 				$scope.data.weather.lastUpdate = 0;
+				$scope.data.weather.lastUpdated.current = 0;
+				$scope.data.weather.lastUpdated.daily = 0;
+				$scope.data.weather.lastUpdated.hourly = 0;
 				
 			}).always(function() {
 		
-				var difDate = Date.now() - $scope.data.weather.lastUpdate;
+				var dateNow = Date.now();
+		
+				var difDate = dateNow - $scope.data.weather.lastUpdated.current;
 				
-				$scope.data.weather.lastChecked = Date.now();
+				$scope.data.weather.lastChecked = dateNow;
 				
-				if(difDate<1200000){
+				if(difDate<dashboardSettings.checkWeatherCurrentMinimumElapsedTime){
 					// difDate closer than refresh rate, use JSON data
 					return;
 				} else {
 					// JSON too old, refresh data and save new data
-					console.log("data too old, refreshing JSON");
+					console.log("current data too old, refreshing JSON");
 
 					$.getJSON("https://api.weatherbit.io/v2.0/current?city="+dashboardSettings.city+","+dashboardSettings.state+"&units=I&key="+dashboardSettings.weatherBitKey, function(wb) {
-						$scope.data.weather.current = wb.data[0];				
+						$scope.data.weather.current = wb.data[0];
+						$scope.data.weather.lastUpdated.current = dateNow;						
 					}).fail(function() {
 						$scope.data.weather.current = {};
+						$scope.data.weather.lastUpdated.current = 0;
 					}).always(function(){
+
+
+						var difDate = dateNow - $scope.data.weather.lastUpdated.daily;
+						
+						if(difDate<dashboardSettings.checkWeatherDailyMinimumElapsedTime){
+							// difDate closer than refresh rate, use JSON data
+							$scope.functions.updateWeatherFromObject();
+							return;
+						} else {
+							// JSON too old, refresh data and save new data
+							console.log("daily data too old, refreshing JSON");
+								$.getJSON("https://api.weatherbit.io/v2.0/forecast/daily?city="+dashboardSettings.city+","+dashboardSettings.state+"&key="+dashboardSettings.weatherBitKey+"&units=I", function(wb) {
+									$scope.data.weather.daily = wb.data;
+									$scope.data.weather.lastUpdated.daily = dateNow;
+									$scope.functions.updateWeatherFromObject();
+								}).fail(function() {
+									$scope.data.weather.lastUpdated.daily = 0;
+									$scope.data.weather.daily = [];
+								});							
+							
+						}
+
+					/*
 						//
 						// hourly forcast no longer available for free from weatherbit
 						//
@@ -271,6 +308,7 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 						//
 						// hourly weather comment out	
 						//});
+					*/
 					});
 				}
 			});
