@@ -18,12 +18,13 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 	$scope.data.background = {};
 	$scope.data.background.currentImage = "";
 	$scope.data.background.images = {};
+	$scope.data.houseTemperature = {};
 	$scope.functions = {};
 	
 	$scope.data.time = {};
 	$scope.idle=false;
 	
-	
+	var currentDay = "";
 	
 	
 	
@@ -34,6 +35,7 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 		$scope.idle=true;
 		console.log("idle");
 		// reset to default states
+		$scope.showHouseTemp=false;
 		$scope.showHourly=false;
 		$scope.showMaps=false;
 		$scope.showAlert=false;
@@ -62,6 +64,14 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 		$scope.data.time.date = $scope.data.time.raw.format("D");
 		$scope.data.time.month = $scope.data.time.raw.format("MMMM");
 		$scope.data.time.year = $scope.data.time.raw.format("YYYY");
+		if(currentDay == "") {
+			currentDay = $scope.data.time.day
+		} else {
+			if(currentDay != $scope.data.time.day) {
+				$scope.functions.updateWeatherFromObject();
+				currentDay = $scope.data.time.day
+			}
+		}
 	}
 	
 
@@ -326,15 +336,45 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 		}).fail(function() {
 			$scope.data.weather.alerts = {};
 		});
+		
+		
+		
+		// get local house data
+		$.getJSON('./data/houseTemperature.json', function(ht) {
+			
+			//if(ht.length>0){
+				$scope.data.houseTemperature = ht;
+			//}else{
+			//	$scope.data.houseTemperature = {};
+			//}
+		}).fail(function() {
+			$scope.data.houseTemperature = {};
+		});		
+		
+		
+		
 	}
 
 	
+	$scope.functions.getHouseTemperature = function(){
+		$.getJSON('./data/houseTemperature.json', function(ht) {
+			
+			//if(ht.length>0){
+				$scope.data.houseTemperature = ht;
+			//}else{
+			//	$scope.data.houseTemperature = {};
+			//}
+		}).fail(function() {
+			$scope.data.houseTemperature = {};
+		});	
+	}
 	
 	
 	
 	
-	
-	
+	$scope.functions.isObjectEmpty = function(obj){
+	   return Object.keys(obj).length === 0;
+	}	
 	
 	
 	
