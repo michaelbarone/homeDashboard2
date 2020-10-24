@@ -1,5 +1,6 @@
 <div class="wrap dashboard" ng-controller="dashCtrl">
-	<div class="abs-zero" ng-show="!idle" style="background-repeat: no-repeat;background-size: cover;" ng-style="{'background-image': 'url(' + data.background.currentImage + ')'}"></div>
+	<div class="abs-zero fade show" ng-show="!idle && data.background.countValue == 'Odd'" style="background-repeat: no-repeat;background-size: cover;" ng-style="{'background-image': 'url(' + data.background.odd + ')'}"></div>
+	<div class="abs-zero fade show" ng-show="!idle && data.background.countValue == 'Even'" style="background-repeat: no-repeat;background-size: cover;" ng-style="{'background-image': 'url(' + data.background.even + ')'}"></div>
 	<div class="brightness abs-zero"></div>
 	<div ng-show="showMaps" class="abs-zero maps brightness" style="z-index:150;">
 
@@ -15,10 +16,10 @@
 	
 	
 	</div>
-	<img src="./images/google-maps.png" ng-show="showMaps" ng-click="functions.showMap('traffic');" class="weather-item" style="z-index:155;position:absolute;bottom:calc(75% - 22px);right:0;cursor:pointer;width:45px;">
-	<img src="./images/globe.png" ng-show="!showMaps"  ng-click="showMaps = !showMaps;showMaps ? functions.showMap('traffic') : null;" class="weather-item" style="z-index:155;position:absolute;bottom:calc(50% - 22px);right:0;cursor:pointer;width:45px;">
-	<img src="./images/globe-red.png" ng-show="showMaps"  ng-click="showMaps = !showMaps;functions.showMap('close');" class="weather-item" style="z-index:155;position:absolute;bottom:calc(50% - 22px);right:0;cursor:pointer;width:45px;">
-	<img src="./images/weatherRadar.png" ng-show="showMaps" ng-click="functions.showMap('weather');" class="weather-item" style="z-index:155;position:absolute;bottom:calc(25% - 22px);right:0;cursor:pointer;width:45px;">
+	<img src="./images/google-maps.png" ng-show="showMaps && !data.params['kiosk']" ng-click="functions.showMap('traffic');" class="weather-item" style="z-index:155;position:absolute;bottom:calc(75% - 22px);right:0;cursor:pointer;width:45px;">
+	<img src="./images/globe.png" ng-show="!showMaps && !data.params['kiosk']"  ng-click="showMaps = !showMaps;showMaps ? functions.showMap('traffic') : null;" class="weather-item" style="z-index:155;position:absolute;bottom:calc(50% - 22px);right:0;cursor:pointer;width:45px;">
+	<img src="./images/globe-red.png" ng-show="showMaps && !data.params['kiosk']"  ng-click="showMaps = !showMaps;functions.showMap('close');" class="weather-item" style="z-index:155;position:absolute;bottom:calc(50% - 22px);right:0;cursor:pointer;width:45px;">
+	<img src="./images/weatherRadar.png" ng-show="showMaps && !data.params['kiosk']" ng-click="functions.showMap('weather');" class="weather-item" style="z-index:155;position:absolute;bottom:calc(25% - 22px);right:0;cursor:pointer;width:45px;">
 	<ng-include ng-cloak src="'components/spinner/spinner.html'"></ng-include>
 	<div id="header" class="menu">
 	
@@ -46,7 +47,16 @@
 
 	<div id="dashboardWrapper" scrolling="auto">
 		<div id="dashboardMask">
-			
+
+		<div ng-show="data.params['kiosk']" id="house-temp" class="weather-item" style="position: sticky;top: 0;left: calc(50% - 265px);width: 530px;display: inline-flex;">
+			<div class="text-center weather-item weather-forecast"
+			style="margin:10px;"
+			ng-repeat="(zoneName, zoneValue) in data.houseTemperature">
+				<div class="day medium wi">{{zoneName.replace('ave', '')}}</div><br><div style="white-space: nowrap;"></div>
+				<div class="bright weather-forecast-item-high medium">{{zoneValue | number:1}}<sup>°</sup></div><br/><br/>
+			</div>
+			<span class="weather-forecast-item-low xxsmall" style="position:absolute;top:0px;right:calc(50% - 50px);cursor:pointer;">Updated: {{functions.getTime(data.houseTemperature.$now)}}</span>
+		</div>
 
 		<div ng-cloak class="clock pull-left" style="display: block;position: relative;">
 			<div ng-show="data.time.hour > 0" class="time large bright">{{data.time.hour}}:{{data.time.minute}}<span class="sec">{{data.time.second}}</span><span class="time-ampm">{{data.time.ampm}}</span></div>
@@ -80,19 +90,19 @@
 							<div class="bright weather-forecast-item-low medium wi">{{day.min_temp}}<sup>°</sup></div>
 						</div>
 					</div>
-					
+
 					<div ng-show="showHouseTemp" id="house-temp" class="weather-item" style="position:absolute;bottom:0;right:40px;max-width: 70%;display:inline-flex;">
 						<div class="text-center weather-item weather-forecast"
 						style="margin:10px;"
 						ng-repeat="(zoneName, zoneValue) in data.houseTemperature">
 							<div class="day medium wi">{{zoneName.replace('ave', '')}}</div><br><div style="white-space: nowrap;"></div>
-							<div class="bright weather-forecast-item-high medium">{{zoneValue}}<sup>°</sup></div><br/><br/>
+							<div class="bright weather-forecast-item-high medium">{{zoneValue | number:1}}<sup>°</sup></div><br/><br/>
 						</div>
-					</div>	
+					</div>
 					<span class="weather-forecast-item-low xxsmall" ng-show="showHouseTemp" style="position:absolute;bottom:0px;right:0;cursor:pointer;">Updated: {{functions.getTime(data.houseTemperature.$now)}}</span>
 					
-					<img src="./images/house.png" ng-click="functions.getHouseTemperature();showHouseTemp = !showHouseTemp" ng-show="!showHouseTemp && !functions.isObjectEmpty(data.houseTemperature)" class="weather-item" style="position:absolute;bottom:45px;right:0;cursor:pointer;width:45px;">
-					<img src="./images/24hour.png" ng-click="showHouseTemp = !showHouseTemp" ng-show="showHouseTemp" class="weather-item" style="position:absolute;bottom:45px;right:0;cursor:pointer;width:45px;">
+					<img src="./images/house.png" ng-click="functions.getHouseTemperature();showHouseTemp = !showHouseTemp" ng-show="!showHouseTemp && !functions.isObjectEmpty(data.houseTemperature) && !data.params['kiosk']" class="weather-item" style="position:absolute;bottom:45px;right:0;cursor:pointer;width:45px;">
+					<img src="./images/24hour.png" ng-click="showHouseTemp = !showHouseTemp" ng-show="showHouseTemp && !data.params['kiosk']" class="weather-item" style="position:absolute;bottom:45px;right:0;cursor:pointer;width:45px;">
 					
 					<img ng-hide="data.weather.hourly.length==0" src="./images/1hour.png" ng-click="showHourly = !showHourly" class="weather-item" style="position:absolute;bottom:45px;right:0;cursor:pointer;width:45px;">
 				</div>

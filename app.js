@@ -7,7 +7,11 @@ app.config(['$routeProvider','$controllerProvider','KeepaliveProvider', 'IdlePro
 		templateUrl: 'components/home.html'
 		, option: 'default'
 	});	
-	
+
+	$routeProvider.when('/frame', {
+		templateUrl: 'components/frame.html'
+		, option: 'default'
+	});
 	
 	$routeProvider.otherwise({redirectTo: '/home'});
 

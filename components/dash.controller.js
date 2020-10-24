@@ -17,8 +17,16 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 	$scope.data.weather.hourly = [];
 	$scope.data.background = {};
 	$scope.data.background.currentImage = "";
+	$scope.data.background.nextImage = "";
 	$scope.data.background.images = {};
+
+	$scope.data.background.odd = "";
+	$scope.data.background.even = "";
+	$scope.data.background.count = 0;
+	$scope.data.background.countValue = "Even";
+	
 	$scope.data.houseTemperature = {};
+	$scope.data.params = [];
 	$scope.functions = {};
 	
 	$scope.data.time = {};
@@ -26,14 +34,18 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 	
 	var currentDay = "";
 	
-	
-	
-	
+	angular.forEach($location.search(), function(value,key){
+		$scope.data.params[key]=value;
+	});
 	
 	$scope.$on('IdleStart', function() {
 		// the user appears to have gone idle
-		$scope.idle=true;
-		console.log("idle");
+		if(!$scope.data.params['kiosk']){
+			$scope.idle=true;
+			console.log("idle");
+		} else {
+			console.log("idle in kiosk");
+		}
 		// reset to default states
 		$scope.showHouseTemp=false;
 		$scope.showHourly=false;
@@ -104,11 +116,53 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 						$scope.functions.updatePhoto();
 					}, 5000)
 				} else {
-					if($scope.data.background.images[0]['media']['m']){
-						$scope.data.background.currentImage = $scope.data.background.images[0]['media']['m'].replace("_m", "_b");					
+						//if($scope.data.background.images[0]['media']['m']){
+						//	$scope.data.background.currentImage = $scope.data.background.images[0]['media']['m'].replace("_m", "_b");					
+						//}
+						
+					$scope.data.background.count++	
+					if($scope.data.background.count % 2 == 0){
+						$scope.data.background.countValue = "Even";
+					} else {
+						$scope.data.background.countValue = "Odd";
 					}
-					setTimeout(function() {
+
+
+					if($scope.data.background.count==1){
+						$scope.data.background.odd = $scope.data.background.images[0]['media']['m'].replace("_m", "_b");
+						$scope.data.background.even = $scope.data.background.images[1]['media']['m'].replace("_m", "_b");
 						$scope.data.background.images.shift();
+						$scope.data.background.images.shift();
+					} else {
+						setTimeout(function() {
+
+							if($scope.data.background.countValue == "Even"){
+								$scope.data.background.odd = $scope.data.background.images[0]['media']['m'].replace("_m", "_b");
+								$scope.data.background.images.shift();
+							} else {
+								$scope.data.background.even = $scope.data.background.images[0]['media']['m'].replace("_m", "_b");
+								$scope.data.background.images.shift();
+							}
+						}, 5000)
+					}
+					
+					/*
+					if($scope.data.background.currentImage != ""){
+						if($scope.data.background.images[0]['media']['m']){
+							$scope.data.background.currentImage = $scope.data.background.nextImage
+							$scope.data.background.nextImage = $scope.data.background.images[0]['media']['m'].replace("_m", "_b");
+						}
+					} else {
+						if($scope.data.background.images[0]['media']['m'] && $scope.data.background.images[1]['media']['m']){
+							$scope.data.background.currentImage = $scope.data.background.images[0]['media']['m'].replace("_m", "_b");
+							$scope.data.background.nextImage = $scope.data.background.images[1]['media']['m'].replace("_m", "_b");
+							$scope.data.background.images.shift();
+						}						
+					}
+					*/
+					
+					
+					setTimeout(function() {
 						$scope.functions.updatePhoto();
 					}, 60000)
 				}
@@ -121,6 +175,7 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 						format: "json"
 					},function(data) {
 						$scope.data.background.images = data.items;
+						$scope.data.background.count = 0
 						//console.log(backgroundImages);
 						$scope.functions.updatePhoto();
 					});

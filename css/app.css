@@ -953,3 +953,22 @@ a.options-link {
 .gm-control-active.gm-fullscreen-control {
 	display: none;
 }
+
+
+
+/**
+ * AngularJS
+ * ------------------------------------------------------ */
+
+.fade {
+    transition: all linear 2s !important;
+    opacity: 1 !important;
+}
+
+.fade.ng-hide {
+    opacity: 0 !important;
+}
+.ng-hide {
+    opacity: 0 !important;
+    transition: none 0 !important;
+}
