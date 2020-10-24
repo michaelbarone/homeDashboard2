@@ -566,14 +566,18 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 			document.getElementById('weatherMap').innerHTML = '<iframe src="https://www.rainviewer.com/map.html?loc='+dashboardSettings.mapLat+','+dashboardSettings.mapLong+',8&amp;oFa=0&amp;oC=0&amp;oU=0&amp;oCUB=1&amp;oCS=1&amp;oF=0&amp;oAP=0&amp;rmt=4" style="border:0px #ffffff none;" name="myiFrame" scrolling="no" marginheight="0px" marginwidth="0px" height="100%" width="100%" allowfullscreen=""></iframe>';
 		} else if(type=="close"){
 			$scope.currentMap = "";
-			document.getElementById('map').innerHTML = "";
-			document.getElementById('weatherMap').innerHTML = "";
+			if(document.getElementById('map') !== null){
+				document.getElementById('map').innerHTML = "";
+			}
+			if(document.getElementById('weatherMap') !== null){
+				document.getElementById('weatherMap').innerHTML = "";
+			}
 		}
 	}
-		
-	var script = document.createElement('script');
-	script.type = 'text/javascript';
-	script.src = "https://maps.googleapis.com/maps/api/js?key="+dashboardSettings.googleMapsApi;
-	document.body.appendChild(script);		
-		
+	if(!$scope.data.params['kiosk']){
+		var script = document.createElement('script');
+		script.type = 'text/javascript';
+		script.src = "https://maps.googleapis.com/maps/api/js?key="+dashboardSettings.googleMapsApi;
+		document.body.appendChild(script);		
+	}
 }]);

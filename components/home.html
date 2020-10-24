@@ -2,7 +2,7 @@
 	<div class="abs-zero fade show" ng-show="!idle && data.background.countValue == 'Odd'" style="background-repeat: no-repeat;background-size: cover;" ng-style="{'background-image': 'url(' + data.background.odd + ')'}"></div>
 	<div class="abs-zero fade show" ng-show="!idle && data.background.countValue == 'Even'" style="background-repeat: no-repeat;background-size: cover;" ng-style="{'background-image': 'url(' + data.background.even + ')'}"></div>
 	<div class="brightness abs-zero"></div>
-	<div ng-show="showMaps" class="abs-zero maps brightness" style="z-index:150;">
+	<div ng-if="!data.params['kiosk']" ng-show="showMaps" class="abs-zero maps brightness" style="z-index:150;">
 
 		<div ng-show="currentMap=='traffic'" id="mapContainer" style="bottom:0;position: absolute;height: 100%;width: 100%;overflow: hidden;pointer-events:all;">
 			<div id="map" style="height:100%;"></div>
@@ -22,26 +22,17 @@
 	<img src="./images/weatherRadar.png" ng-show="showMaps && !data.params['kiosk']" ng-click="functions.showMap('weather');" class="weather-item" style="z-index:155;position:absolute;bottom:calc(25% - 22px);right:0;cursor:pointer;width:45px;">
 	<ng-include ng-cloak src="'components/spinner/spinner.html'"></ng-include>
 	<div id="header" class="menu">
-	
-	
-	
 		<div id="weather-alert" ng-cloak ng-show="data.weather.alerts.headline" ng-click="showAlert = !showAlert;" ng-init="showAlert=false;" class="translucent-alert weather-alert" style="display: block;padding:5px;position: relative;">
 				<div class="pull-left font-ultralight xxsmall" stlye="margin:-5px">
 					<img id="weather-alert-icon" src="./images/alert.png" height="20px" width="20px">
 				</div>
 				<div>
-						<div id="weather-alert-expires" class="xxsmall pull-right" style="margin:5px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;max-width:90%;">{{data.weather.alerts.headline}}</div>
-						<div id="weather-alert-description" class="small font-light"></div>
+					<div id="weather-alert-expires" class="xxsmall pull-right" style="margin:5px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;max-width:90%;">{{data.weather.alerts.headline}}</div>
+					<div id="weather-alert-description" class="small font-light"></div>
 				</div>
 				<div class="clearfix"></div>
 				<div id="weather-alert-message" class="xsmall" ng-show="showAlert" style="text-overflow:ellipsis;overflow:hidden;">{{data.weather.alerts.instruction}}</div>
 		</div>
-
-			
-			
-			
-			
-			
 	</div>
 	
 
