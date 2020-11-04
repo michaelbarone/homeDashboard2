@@ -962,7 +962,7 @@ a.options-link {
 
 .fade {
     transition: all linear 2s !important;
-    opacity: 1 !important;
+    opacity: .8 !important;
 }
 
 .fade.ng-hide {
