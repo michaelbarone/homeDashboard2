@@ -947,6 +947,10 @@ a.options-link {
 	
 .time-ampm { left: -1.4em }
 
+.time {
+	line-height: 1.2;
+}
+
 .gmnoprint {
 	display: none;
 }

@@ -50,7 +50,7 @@
 		</div>
 
 		<div ng-cloak class="clock pull-left" style="display: block;position: relative;">
-			<div ng-show="data.time.hour > 0" class="time large bright">{{data.time.hour}}:{{data.time.minute}}<span class="sec">{{data.time.second}}</span><span class="time-ampm">{{data.time.ampm}}</span></div>
+			<div ng-show="data.time.hour > 0" class="time x-large bright">{{data.time.hour}}:{{data.time.minute}}<span class="sec">{{data.time.second}}</span><span class="time-ampm">{{data.time.ampm}}</span></div>
 		</div>
 
 		<div ng-cloak class="date pull-right medium font-light bright text-right" style="position: relative;"><div class="day-of-week">{{data.time.day}}</div><div class="month">{{data.time.month}} {{data.time.date}}</div></div>
@@ -118,6 +118,13 @@
 		</footer>
 
 			
+		</div>
+		<div ng-if="data.params['kiosk']">
+			<style>
+				#weather-forecast {
+					right: 0 !important;
+				}
+			</style>
 		</div>
 	</div>
 </div>
