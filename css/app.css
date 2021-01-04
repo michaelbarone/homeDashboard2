@@ -522,6 +522,12 @@ a.options-link {
 	}
 }
 
+@media only screen and (max-height: 400px) and (max-width: 640px){
+	html {
+		font-size: 80% !important;
+	}
+}
+
 
 /**
  * Bootstrap glyphicons 
