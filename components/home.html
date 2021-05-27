@@ -39,12 +39,12 @@
 	<div id="dashboardWrapper" scrolling="auto">
 		<div id="dashboardMask">
 
-		<div ng-show="data.params['kiosk']" id="house-temp" class="weather-item" style="position: sticky;top: 0;left: calc(50% - 265px);width: 530px;display: inline-flex;">
+		<div ng-cloak ng-show="data.params['kiosk'] && data.houseTemperature" id="house-temp" class="weather-item" style="position: sticky;top: 0;left: calc(50% - 265px);width: 530px;display: inline-flex;">
 			<div class="text-center weather-item weather-forecast"
 			style="margin:10px;"
-			ng-repeat="(zoneName, zoneValue) in data.houseTemperature track by $index">
-				<div class="day medium wi">{{zoneName.replace('ave', '')}}</div><br><div style="white-space: nowrap;"></div>
-				<div class="bright weather-forecast-item-high medium">{{zoneValue | number:1}}<sup>°</sup></div><br/><br/>
+			ng-repeat="zone in data.houseTemperature track by $index">
+				<div class="day medium wi">{{zone.name}}</div><br><div style="white-space: nowrap;"></div>
+				<div class="bright weather-forecast-item-high medium">{{zone.temp | number:1}}<sup>°</sup></div><br/><br/>
 			</div>
 			<span class="weather-forecast-item-low xxsmall" style="position:absolute;top:0px;right:calc(50% - 50px);cursor:pointer;">Updated: {{functions.getTime(data.houseTemperature.$now)}}</span>
 		</div>
@@ -57,7 +57,7 @@
 		<div class="clear"></div>
 
 		<footer style="display: block;position: absolute;bottom: 0;width: 100%;">
-			<div ng-cloak id="weather" ng-show="data.weather.daily.length>0" style="display: block;position: relative;bottom: 0;width: 100%;padding: 0 0 0 2.5%;">
+			<div ng-cloak id="weather" ng-show="data.weather.daily.length>0" style="display: block;position: relative;bottom: 0;width: 100%;padding: 0 0 0 15px;">
 				<div ng-show="!showHourly" ng-init="showHourly=false;" id="weather-container-current">
 					<div id="weather-current" class="weather-item weather-current">
 						<div class="bright big">{{data.weather.current.temp}}<sup>°</sup><span class="wi wi-yahoo-32"></span></div>
@@ -84,10 +84,10 @@
 
 					<div ng-show="showHouseTemp" id="house-temp" class="weather-item" style="position:absolute;bottom:0;right:40px;max-width: 70%;display:inline-flex;">
 						<div class="text-center weather-item weather-forecast"
-						style="margin:10px;"
-						ng-repeat="(zoneName, zoneValue) in data.houseTemperature track by $index">
-							<div class="day medium wi">{{zoneName.replace('ave', '')}}</div><br><div style="white-space: nowrap;"></div>
-							<div class="bright weather-forecast-item-high medium">{{zoneValue | number:1}}<sup>°</sup></div><br/><br/>
+							style="margin:10px;"
+							ng-repeat="zone in data.houseTemperature track by $index">
+							<div class="day medium wi">{{zone.name}}</div><br><div style="white-space: nowrap;"></div>
+							<div class="bright weather-forecast-item-high medium">{{zone.temp | number:1}}<sup>°</sup></div><br/><br/>
 						</div>
 					</div>
 					<span class="weather-forecast-item-low xxsmall" ng-show="showHouseTemp" style="position:absolute;bottom:0px;right:0;cursor:pointer;">Updated: {{functions.getTime(data.houseTemperature.$now)}}</span>

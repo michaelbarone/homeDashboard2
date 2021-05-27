@@ -279,7 +279,34 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 		);
 	}
 	
-
+	$scope.functions.getHouseTemperature = function(){
+		$.getJSON('./data/houseTemperature.json', function(ht) {
+			var temp = {};
+			angular.forEach(ht, function(value,key){
+				key = key.replace('ave', '');
+				switch(key){
+					case "Outside":
+						temp[1] = {"temp":value, "name":key};
+						break;
+					case "Upstairs":
+						temp[2] = {"temp":value, "name":key};
+						break;
+					case "Downstairs":
+						temp[3] = {"temp":value, "name":key};
+						break;
+					case "Garage":
+						temp[4] = {"temp":value, "name":key};
+						break;
+					case "$now":
+						temp["$now"] = value;
+						break;
+				}
+			});
+			$scope.data.houseTemperature = temp;
+		}).fail(function() {
+			$scope.data.houseTemperature = {};
+		});	
+	}
 
 	var getDailyReset = 0;
 	// reset when day changes
@@ -395,34 +422,11 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 		
 		
 		// get local house data
-		$.getJSON('./data/houseTemperature.json', function(ht) {
-			
-			//if(ht.length>0){
-				$scope.data.houseTemperature = ht;
-			//}else{
-			//	$scope.data.houseTemperature = {};
-			//}
-		}).fail(function() {
-			$scope.data.houseTemperature = {};
-		});		
-		
-		
-		
+		$scope.functions.getHouseTemperature();
 	}
 
 	
-	$scope.functions.getHouseTemperature = function(){
-		$.getJSON('./data/houseTemperature.json', function(ht) {
-			
-			//if(ht.length>0){
-				$scope.data.houseTemperature = ht;
-			//}else{
-			//	$scope.data.houseTemperature = {};
-			//}
-		}).fail(function() {
-			$scope.data.houseTemperature = {};
-		});	
-	}
+
 	
 	
 	
@@ -431,122 +435,104 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 	   return Object.keys(obj).length === 0;
 	}	
 	
-	
-	
-		
-		
-		
-		
 
-		/*
-		var weekday = new Array(7);
-			weekday[0] =  "Sunday";
-			weekday[1] = "Monday";
-			weekday[2] = "Tuesday";
-			weekday[3] = "Wednesday";
-			weekday[4] = "Thursday";
-			weekday[5] = "Friday";
-			weekday[6] = "Saturday";
-		*/
-		$scope.weekday = new Array(7);
-		$scope.weekday[0] = "Sun";
-		$scope.weekday[1] = "Mon";
-		$scope.weekday[2] = "Tue";
-		$scope.weekday[3] = "Wed";
-		$scope.weekday[4] = "Thu";
-		$scope.weekday[5] = "Fri";
-		$scope.weekday[6] = "Sat";
+	$scope.weekday = new Array(7);
+	$scope.weekday[0] = "Sun";
+	$scope.weekday[1] = "Mon";
+	$scope.weekday[2] = "Tue";
+	$scope.weekday[3] = "Wed";
+	$scope.weekday[4] = "Thu";
+	$scope.weekday[5] = "Fri";
+	$scope.weekday[6] = "Sat";
 
-			
-		$scope.functions.weatherCode = function(input){
-			var theWeatherCode = 3200;
-			switch(parseInt(input,10)){
-				case 200:
-				case 201:
-				case 230:
-				case 231:
-				case 232:
-					theWeatherCode = 4;
-					break;
-				case 202:
-					theWeatherCode = 45;
-					break;
-				case 233:
-					theWeatherCode = 3;
-					break;
-				case 300:
-				case 301:
-				case 500:
-					theWeatherCode = 9;
-					break;
-				case 302:
-				case 501:
-				case 502:
-				case 900:
-					theWeatherCode = 11;
-					break;
-				case 511:
-					theWeatherCode = 10;
-					break;
-				case 520:
-				case 521:
-				case 522:
-					theWeatherCode = 12;
-					break;
-				case 600:
-				case 601:
-					theWeatherCode = 16;
-					break;
-				case 602:
-				case 622:
-					theWeatherCode = 43;
-					break;
-				case 610:
-					theWeatherCode = 14;
-					break;
-				case 611:
-				case 612:
-					theWeatherCode = 18;
-					break;
-				case 621:
-					theWeatherCode = 46;
-					break;
-				case 623:
-					theWeatherCode = 13;
-					break;
-				case 700:
-				case 721:
-					theWeatherCode = 21;
-					break;
-				case 711:
-					theWeatherCode = 22;
-					break;
-				case 731:
-					theWeatherCode = 19;
-					break;
-				case 741:
-				case 751:
-					theWeatherCode = 20;
-					break;
-				case 800:
-					theWeatherCode = 32;
-					break;
-				case 801:
-				case 802:
-				case 803:
-					theWeatherCode = 30;
-					break;
-				case 804:
-					theWeatherCode = 26;
-					break;
-				case 900:
-					theWeatherCode = 11;
-					break;
-			}
-			return theWeatherCode;
+		
+	$scope.functions.weatherCode = function(input){
+		var theWeatherCode = 3200;
+		switch(parseInt(input,10)){
+			case 200:
+			case 201:
+			case 230:
+			case 231:
+			case 232:
+				theWeatherCode = 4;
+				break;
+			case 202:
+				theWeatherCode = 45;
+				break;
+			case 233:
+				theWeatherCode = 3;
+				break;
+			case 300:
+			case 301:
+			case 500:
+				theWeatherCode = 9;
+				break;
+			case 302:
+			case 501:
+			case 502:
+			case 900:
+				theWeatherCode = 11;
+				break;
+			case 511:
+				theWeatherCode = 10;
+				break;
+			case 520:
+			case 521:
+			case 522:
+				theWeatherCode = 12;
+				break;
+			case 600:
+			case 601:
+				theWeatherCode = 16;
+				break;
+			case 602:
+			case 622:
+				theWeatherCode = 43;
+				break;
+			case 610:
+				theWeatherCode = 14;
+				break;
+			case 611:
+			case 612:
+				theWeatherCode = 18;
+				break;
+			case 621:
+				theWeatherCode = 46;
+				break;
+			case 623:
+				theWeatherCode = 13;
+				break;
+			case 700:
+			case 721:
+				theWeatherCode = 21;
+				break;
+			case 711:
+				theWeatherCode = 22;
+				break;
+			case 731:
+				theWeatherCode = 19;
+				break;
+			case 741:
+			case 751:
+				theWeatherCode = 20;
+				break;
+			case 800:
+				theWeatherCode = 32;
+				break;
+			case 801:
+			case 802:
+			case 803:
+				theWeatherCode = 30;
+				break;
+			case 804:
+				theWeatherCode = 26;
+				break;
+			case 900:
+				theWeatherCode = 11;
+				break;
 		}
-		
-		
+		return theWeatherCode;
+	}
 		
 	$scope.functions.showMap = function(type){
 		if(type=="traffic" && $scope.currentMap != "traffic"){
@@ -574,6 +560,21 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 			}
 		}
 	}
+
+	if($scope.data.params['background'] == 'transparent'){
+		var css = 'body, html {background: rgba(0,0,0,0);} .windowContainer {background: rgba(0,0,0,0);} .dashboard {font-size: 8pt !important}'
+		var head = document.head || document.getElementsByTagName('head')[0];
+		var style = document.createElement('style');
+		head.appendChild(style);
+		style.type = 'text/css';
+		if (style.styleSheet){
+				// This is required for IE8 and below.
+				style.styleSheet.cssText = css;
+			} else {
+				style.appendChild(document.createTextNode(css));
+		}		
+	}
+
 	if(!$scope.data.params['kiosk']){
 		var script = document.createElement('script');
 		script.type = 'text/javascript';
