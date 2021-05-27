@@ -11,12 +11,13 @@
 
 	<ng-include ng-cloak src="'components/spinner/spinner.html'"></ng-include>
 	<div id="header" class="menu">
-		<div id="weather-alert" ng-cloak ng-show="data.weather.alerts.headline" ng-click="showAlert = !showAlert;" ng-init="showAlert=false;" class="translucent-alert weather-alert" style="display: block;padding:5px;position: relative;">
+		<div id="weather-alert" ng-cloak ng-show="data.weather.alerts.headline" ng-click="showAlert = !showAlert;" ng-init="showAlert=false;" class="translucent-alert weather-alert" style="display: block;padding:5px;position: relative;pointer-events: auto;">
 				<div class="pull-left font-ultralight xxsmall" stlye="margin:-5px">
 					<img id="weather-alert-icon" src="./images/alert.png" height="10px" width="10px">
 				</div>
 				<div>
-					<div id="weather-alert-expires" class="xsmall pull-right" style="margin:5px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;max-width:90%;">{{data.weather.alerts.headline}}</div>
+					<div ng-cloak ng-show="data.params['kiosk']" id="weather-alert-expires" class="xsmall pull-right" style="margin:5px;max-width:90%;">{{data.weather.alerts.headline}}</div>
+					<div ng-cloak ng-show="!data.params['kiosk']" id="weather-alert-expires" class="xsmall pull-right" style="margin:5px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;max-width:90%;">{{data.weather.alerts.headline}}</div>
 					<div id="weather-alert-description" class="xsmall font-light"></div>
 				</div>
 				<div class="clearfix"></div>

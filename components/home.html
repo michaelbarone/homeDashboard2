@@ -22,12 +22,13 @@
 	<img src="./images/weatherRadar.png" ng-show="showMaps && !data.params['kiosk']" ng-click="functions.showMap('weather');" class="weather-item" style="z-index:155;position:absolute;bottom:calc(25% - 22px);right:0;cursor:pointer;width:45px;">
 	<ng-include ng-cloak src="'components/spinner/spinner.html'"></ng-include>
 	<div id="header" class="menu">
-		<div id="weather-alert" ng-cloak ng-show="data.weather.alerts.headline" ng-click="showAlert = !showAlert;" ng-init="showAlert=false;" class="translucent-alert weather-alert" style="display: block;padding:5px;position: relative;">
+		<div id="weather-alert" ng-cloak ng-show="data.weather.alerts.headline" ng-click="showAlert = !showAlert;" ng-init="showAlert=false;" class="translucent-alert weather-alert" style="display: block;padding:5px;position: relative;pointer-events: auto;">
 				<div class="pull-left font-ultralight xxsmall" stlye="margin:-5px">
 					<img id="weather-alert-icon" src="./images/alert.png" height="20px" width="20px">
 				</div>
 				<div>
-					<div id="weather-alert-expires" class="xsmall pull-right" style="margin:5px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;max-width:90%;">{{data.weather.alerts.headline}}</div>
+					<div ng-cloak ng-show="data.params['kiosk']" id="weather-alert-expires" class="xsmall pull-right" style="margin:5px;max-width:90%;">{{data.weather.alerts.headline}}</div>
+					<div ng-cloak ng-show="!data.params['kiosk']" id="weather-alert-expires" class="xsmall pull-right" style="margin:5px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;max-width:90%;">{{data.weather.alerts.headline}}</div>
 					<div id="weather-alert-description" class="xsmall font-light"></div>
 				</div>
 				<div class="clearfix"></div>
@@ -39,14 +40,14 @@
 	<div id="dashboardWrapper" scrolling="auto">
 		<div id="dashboardMask">
 
-		<div ng-cloak ng-show="data.params['kiosk'] && data.houseTemperature" id="house-temp" class="weather-item" style="position: sticky;top: 0;left: calc(50% - 265px);width: 530px;display: inline-flex;">
+		<div ng-cloak ng-show="data.params['kiosk'] && data.houseTemperature[1]" id="house-temp" class="weather-item" style="position: sticky;top: 0;left: calc(50% - 265px);width: 530px;display: inline-flex;">
 			<div class="text-center weather-item weather-forecast"
 			style="margin:10px;"
 			ng-repeat="zone in data.houseTemperature track by $index">
 				<div class="day medium wi">{{zone.name}}</div><br><div style="white-space: nowrap;"></div>
 				<div class="bright weather-forecast-item-high medium">{{zone.temp | number:1}}<sup>°</sup></div><br/><br/>
 			</div>
-			<span class="weather-forecast-item-low xxsmall" style="position:absolute;top:0px;right:calc(50% - 50px);cursor:pointer;">Updated: {{functions.getTime(data.houseTemperature.$now)}}</span>
+			<span ng-cloak class="weather-forecast-item-low xxsmall" style="position:absolute;top:0px;right:calc(50% - 50px);cursor:pointer;">Updated: {{functions.getTime(data.houseTemperature.$now)}}</span>
 		</div>
 
 		<div ng-cloak class="clock pull-left" style="display: block;position: relative;">
