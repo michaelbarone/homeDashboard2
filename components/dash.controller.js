@@ -429,7 +429,10 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 	}
 
 	
-
+	$interval(getHouseTemp, 180000);
+	function getHouseTemp(){
+		$scope.functions.getHouseTemperature();
+	}
 	
 	
 	
