@@ -60,7 +60,7 @@
 		<footer style="display: block;position: absolute;bottom: 0;width: 100%;">
 			<div ng-cloak id="weather" ng-show="data.weather.daily.length>0" style="display: block;position: relative;bottom: 0;width: 100%;padding: 0 0 0 15px;">
 				<div ng-show="!showHourly" ng-init="showHourly=false;" id="weather-container-current">
-					<div id="weather-current" class="weather-item weather-current">
+					<div id="weather-current" ng-show="!showHouseTemp" class="weather-item weather-current">
 						<div class="bright big">{{data.weather.current.temp}}<sup>°</sup><span class="wi wi-yahoo-32"></span></div>
 						<div class="bright"><span class="bright weather-forecast-item-low">Humidity: {{data.weather.current.rh}}%</span></div>
 						<div class="weather-current-alt font-light medium wi">
@@ -83,7 +83,7 @@
 						</div>
 					</div>
 
-					<div ng-show="showHouseTemp" id="house-temp" class="weather-item" style="position:absolute;bottom:0;right:40px;max-width: 70%;display:inline-flex;">
+					<div ng-show="showHouseTemp" id="house-temp" class="weather-item" style="position:absolute;bottom:0;right:40px;display:inline-flex;">
 						<div class="text-center weather-item weather-forecast"
 							style="margin:10px;"
 							ng-repeat="zone in data.houseTemperature track by $index">

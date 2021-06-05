@@ -297,6 +297,9 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 					case "Garage":
 						temp[4] = {"temp":value, "name":key};
 						break;
+					case "In vs Out":
+						temp[5] = {"temp":value, "name":key};
+						break;						
 					case "$now":
 						temp["$now"] = value;
 						break;
