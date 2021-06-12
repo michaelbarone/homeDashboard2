@@ -8,7 +8,6 @@
 </style>
 <div class="wrap dashboard" ng-controller="dashCtrl">
 	<div class="brightness abs-zero"></div>
-
 	<ng-include ng-cloak src="'components/spinner/spinner.html'"></ng-include>
 	<div id="header" class="menu">
 		<div id="weather-alert" ng-cloak ng-show="data.weather.alerts.headline" ng-click="showAlert = !showAlert;" ng-init="showAlert=false;" class="translucent-alert weather-alert" style="display: block;padding:5px;position: relative;pointer-events: auto;">
@@ -45,7 +44,7 @@
 					<div id="weather-forecast" class="weather-item" style="position:absolute;bottom:0;right:0px;max-width: 70%;display:inline-flex;">
 						<div class="text-center weather-item weather-forecast"
 						style="margin:10px;"
-						ng-repeat="day in data.weather.daily | limitTo: 3 track by $index">
+						ng-repeat="day in data.weather.daily | limitTo: frameWeatherTiles track by $index">
 							<div class="day medium wi">{{functions.getDay(day.datetime)}}</div><br/><span class="wi medium wi-yahoo-{{functions.weatherCode(day.weather.code)}}"></span><br><div style="white-space: nowrap;">
 							<span class="weather-forecast-item-low xsmall">Rain: {{day.pop}}%</span></div>
 							<div class="bright weather-forecast-item-high medium">{{day.max_temp}}<sup>°</sup></div>

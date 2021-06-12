@@ -37,7 +37,13 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 	angular.forEach($location.search(), function(value,key){
 		$scope.data.params[key]=value;
 	});
-	
+
+	$scope.frameHeight = window.innerHeight;  //$(document).height();
+	$scope.frameWidth = window.innerWidth; //$(document).width();
+	$scope.mainWeatherTiles = ($scope.frameWidth/125).toFixed(0);
+	$scope.frameWeatherTiles = ($scope.frameWidth/100).toFixed(0);
+
+
 	$scope.$on('IdleStart', function() {
 		// the user appears to have gone idle
 		if(!$scope.data.params['kiosk']){

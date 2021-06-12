@@ -75,7 +75,7 @@
 					<div ng-show="!showHouseTemp" ng-init="showHouseTemp=false;"  id="weather-forecast" class="weather-item" style="position:absolute;bottom:0;right:40px;max-width: 70%;display:inline-flex;">
 						<div class="text-center weather-item weather-forecast"
 						style="margin:10px;"
-						ng-repeat="day in data.weather.daily | limitTo: 5 track by $index">
+						ng-repeat="day in data.weather.daily | limitTo: mainWeatherTiles track by $index">
 							<div class="day medium wi">{{functions.getDay(day.datetime)}}</div><br/><span class="wi medium wi-yahoo-{{functions.weatherCode(day.weather.code)}}"></span><br><div style="white-space: nowrap;">
 							<span class="weather-forecast-item-low xsmall">Rain: {{day.pop}}%</span></div>
 							<div class="bright weather-forecast-item-high medium">{{day.max_temp}}<sup>°</sup></div>
