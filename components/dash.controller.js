@@ -199,10 +199,10 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 	
 	
 	
-	$scope.functions.getDay = function(date1){
+	$scope.functions.getDay = function(date1, index = 1){
 		var date = new Date(date1+"T00:00");
 		var curDay = new Date().getDay();
-		if(curDay == date.getDay()){
+		if(index == 0 && curDay == date.getDay()){
 			//console.log("TODAY");
 			return "TODAY";
 		} else {
@@ -274,8 +274,8 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 	}
 	
 	$scope.functions.updateWeatherFromObject = function(){
-		if($scope.functions.getDay($scope.data.weather.daily[0].datetime)!="TODAY"){
-			while($scope.functions.getDay($scope.data.weather.daily[0].datetime)!="TODAY"){
+		if($scope.functions.getDay($scope.data.weather.daily[0].datetime,0)!="TODAY"){
+			while($scope.functions.getDay($scope.data.weather.daily[0].datetime,0)!="TODAY"){
 				$scope.data.weather.daily.shift();
 			}
 		}

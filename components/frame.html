@@ -41,11 +41,11 @@
 						</div>
 					</div>
 					
-					<div id="weather-forecast" class="weather-item" style="position:absolute;bottom:0;right:0px;max-width: 70%;display:inline-flex;">
+					<div id="weather-forecast" class="weather-item" style="position:absolute;bottom:0;right:0px;display:inline-flex;">
 						<div class="text-center weather-item weather-forecast"
 						style="margin:10px;"
 						ng-repeat="day in data.weather.daily | limitTo: frameWeatherTiles track by $index">
-							<div class="day medium wi">{{functions.getDay(day.datetime)}}</div><br/><span class="wi medium wi-yahoo-{{functions.weatherCode(day.weather.code)}}"></span><br><div style="white-space: nowrap;">
+							<div class="day medium wi">{{functions.getDay(day.datetime, $index)}}</div><br/><span class="wi medium wi-yahoo-{{functions.weatherCode(day.weather.code)}}"></span><br><div style="white-space: nowrap;">
 							<span class="weather-forecast-item-low xsmall">Rain: {{day.pop}}%</span></div>
 							<div class="bright weather-forecast-item-high medium">{{day.max_temp}}<sup>°</sup></div>
 							<div class="bright weather-forecast-item-low medium wi">{{day.min_temp}}<sup>°</sup></div>
