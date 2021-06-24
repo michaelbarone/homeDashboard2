@@ -38,11 +38,24 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 		$scope.data.params[key]=value;
 	});
 
-	$scope.frameHeight = window.innerHeight;  //$(document).height();
-	$scope.frameWidth = window.innerWidth; //$(document).width();
-	$scope.mainWeatherTiles = ($scope.frameWidth/125).toFixed(0);
-	$scope.frameWeatherTiles = ($scope.frameWidth/100).toFixed(0);
 
+	$scope.functions.updateFrameSize = function(limit = false) {
+		$scope.frameHeight = window.innerHeight;  //$(document).height();
+		$scope.frameWidth = window.innerWidth; //$(document).width();
+		var m = ($scope.frameWidth/125).toFixed(0);
+		var f = ($scope.frameWidth/100).toFixed(0);
+		if(!limit){
+			$scope.mainWeatherTiles = (m < 5)? 5 : m;
+			$scope.frameWeatherTiles = (f < 5)? 5 : f;
+		} else {
+			$scope.mainWeatherTiles = m;
+			$scope.frameWeatherTiles = f;			
+		}
+	}
+	$scope.functions.updateFrameSize();
+	angular.element(window).bind('resize', function(){
+		$scope.functions.updateFrameSize();
+	});
 
 	$scope.$on('IdleStart', function() {
 		// the user appears to have gone idle
