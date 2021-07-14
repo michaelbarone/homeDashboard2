@@ -71,3 +71,13 @@ app.filter('capitalize', function() {
       return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
     }
 });
+
+app.filter('roundTripleDigits', function() {
+    return function(input) {
+		if(input > 99.9){
+			return Math.round(input);
+		} else {
+			return input;
+		}
+    }
+});

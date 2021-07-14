@@ -78,8 +78,8 @@
 						ng-repeat="day in data.weather.daily | limitTo: mainWeatherTiles track by $index">
 							<div class="day medium wi">{{functions.getDay(day.datetime, $index)}}</div><br/><span class="wi medium wi-yahoo-{{functions.weatherCode(day.weather.code)}}"></span><br><div style="white-space: nowrap;">
 							<span class="weather-forecast-item-low xsmall">Rain: {{day.pop}}%</span></div>
-							<div class="bright weather-forecast-item-high medium">{{day.max_temp}}<sup>°</sup></div>
-							<div class="bright weather-forecast-item-low medium wi">{{day.min_temp}}<sup>°</sup></div>
+							<div class="bright weather-forecast-item-high medium">{{day.max_temp | roundTripleDigits}}<sup>°</sup></div>
+							<div class="bright weather-forecast-item-low medium wi">{{day.min_temp | roundTripleDigits}}<sup>°</sup></div>
 						</div>
 					</div>
 
