@@ -369,7 +369,22 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 
 					$.getJSON("https://api.weatherbit.io/v2.0/current?city="+dashboardSettings.city+","+dashboardSettings.state+"&units=I&key="+dashboardSettings.weatherBitKey, function(wb) {
 						$scope.data.weather.current = wb.data[0];
-						$scope.data.weather.lastUpdated.current = dateNow;						
+						$scope.data.weather.lastUpdated.current = dateNow;
+
+						var aqiIndex = "Good";
+						var aqi = $scope.data.weather.current.aqi;
+						switch(true){
+							case (aqi < 50): aqiIndex = "Good"; break;
+							case (aqi < 100): aqiIndex = "Moderate"; break;
+							case (aqi < 150): aqiIndex = "Unhealthy for Sensative Groups"; break;
+							case (aqi < 200): aqiIndex = "Unhealthy"; break;
+							case (aqi < 300): aqiIndex = "Very Unhealthy"; break;
+							case (aqi < 500): aqiIndex = "Hazardous"; break;
+							default: aqiIndex = "Good"; break;
+						}
+						$scope.data.weather.current.aqiIndex = aqiIndex;
+
+
 					}).fail(function() {
 						$scope.data.weather.current = {};
 						$scope.data.weather.lastUpdated.current = 0;

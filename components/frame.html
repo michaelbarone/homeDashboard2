@@ -35,6 +35,7 @@
 						<div class="bright big">{{data.weather.current.temp}}<sup>°</sup><span class="wi wi-yahoo-32"></span></div>
 						<div class="bright"><span class="bright weather-forecast-item-low">Humidity: {{data.weather.current.rh}}%</span></div>
 						<div class="weather-current-alt font-light medium wi">
+							<span class="weather-forecast-item-low xsmall">AQI: {{data.weather.current.aqi}} - {{data.weather.current.aqiIndex}}</span><br>
 							<span class="wi wi-strong-wind"> {{data.weather.current.wind_spd}}mph <i class="xsmall wi wi-wind towards-{{data.weather.current.wind_dir}}-deg"></i></span><br>
 							<span class="wi wi-sunrise"></span>  {{functions.getSunrise(data.weather.current.sunrise,data.weather.current.datetime)}} am<br>
 							<span class="wi wi-sunset"></span>  {{functions.getSunset(data.weather.current.sunset,data.weather.current.datetime)}} pm<br><br>
