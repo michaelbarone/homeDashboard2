@@ -374,12 +374,12 @@ app.controller('dashCtrl', ['$rootScope','$scope','$timeout','$interval','$http'
 						var aqiIndex = "Good";
 						var aqi = $scope.data.weather.current.aqi;
 						switch(true){
-							case (aqi < 50): aqiIndex = "Good"; break;
-							case (aqi < 100): aqiIndex = "Moderate"; break;
-							case (aqi < 150): aqiIndex = "Unhealthy for Sensative Groups"; break;
-							case (aqi < 200): aqiIndex = "Unhealthy"; break;
-							case (aqi < 300): aqiIndex = "Very Unhealthy"; break;
-							case (aqi < 500): aqiIndex = "Hazardous"; break;
+							case (aqi < 51): aqiIndex = "Good"; break;
+							case (aqi < 101): aqiIndex = "Moderate"; break;
+							case (aqi < 151): aqiIndex = "Unhealthy for Sensative Groups"; break;
+							case (aqi < 201): aqiIndex = "Unhealthy"; break;
+							case (aqi < 301): aqiIndex = "Very Unhealthy"; break;
+							case (300 < aqi): aqiIndex = "Hazardous"; break;
 							default: aqiIndex = "Good"; break;
 						}
 						$scope.data.weather.current.aqiIndex = aqiIndex;
