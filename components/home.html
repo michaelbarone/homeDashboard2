@@ -121,7 +121,7 @@
           <div ng-show="!showHourly" ng-init="showHourly=false;" id="weather-container-current">
             <div id="weather-current" ng-show="!showHouseTemp" class="weather-item weather-current">
               <div class="bright big">{{data.weather.current.temp}}<sup>°</sup><span class="wi wi-yahoo-32"></span></div>
-              <div class="bright"><span class="bright weather-forecast-item-low">Humidity: {{data.weather.current.rh}}%</span></div>
+              <div class="bright"><span class="bright weather-forecast-item-low">Humidity: {{data.weather.current.rh | number:0}}%</span></div>
               <div class="weather-current-alt font-light medium wi">
                 <span class="weather-forecast-item-low xsmall">AQI: {{data.weather.current.aqi}} - {{data.weather.current.aqiIndex}}</span><br />
                 <span class="wi wi-strong-wind"> {{data.weather.current.wind_spd}}mph <i class="xsmall wi wi-wind towards-{{data.weather.current.wind_dir}}-deg"></i></span
@@ -201,7 +201,7 @@
                   >{{hour.temp}}<sup>°</sup><br />
                   <span class="wi wi-yahoo-{{functions.weatherCode(hour.weather.code)}}"></span><br
                 /></span>
-                <span class="bright weather-forecast-item-low xsmall" style="margin: 0 10px">Humidity: {{hour.rh}}%<br /></span>
+                <span class="bright weather-forecast-item-low xsmall" style="margin: 0 10px">Humidity: {{hour.rh | number:0}}%<br /></span>
                 <span class="bright weather-forecast-item-low xsmall" style="margin: 0 10px"
                   >Rain: {{hour.pop}}%<br />
                   <span class="wi wi-strong-wind"> {{hour.wind_spd}} mph <i class="wi wi-wind towards-{{hour.wind_dir}}-deg"></i></span

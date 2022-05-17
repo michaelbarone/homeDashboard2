@@ -50,20 +50,12 @@ app.controller("dashCtrl", [
     });
 
     $scope.functions.updateFrameSize = function (limit = false) {
-      $scope.frameHeight = window.innerHeight; //$(document).height();
-      $scope.frameWidth = window.innerWidth; //$(document).width();
-      var m = ($scope.frameWidth / 125).toFixed(0);
-      var f = ($scope.frameWidth / 100).toFixed(0);
-      m = (($scope.frameWidth - 180) / 150).toFixed(0);
-      f = (($scope.frameWidth - 100) / 60).toFixed(0);
-      console.log(m,f);
-      if (!limit) {
-        $scope.mainWeatherTiles = m < 5 ? 5 : m;
-        $scope.frameWeatherTiles = f < 5 ? 5 : f;
-      } else {
-        $scope.mainWeatherTiles = m;
-        $scope.frameWeatherTiles = f;
-      }
+      $scope.frameHeight = window.innerHeight;
+      $scope.frameWidth = window.innerWidth;
+      var m = (($scope.frameWidth - 180) / 120).toFixed(0);
+      var f = (($scope.frameWidth - 160) / 70).toFixed(0);
+      $scope.mainWeatherTiles = m;
+      $scope.frameWeatherTiles = f;
     };
     $scope.functions.updateFrameSize();
     angular.element(window).bind("resize", function () {
