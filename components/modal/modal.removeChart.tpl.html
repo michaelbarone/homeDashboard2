@@ -1,29 +1,34 @@
+<!DOCTYPE html>
 <div class="modal fade in">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="header">
-				<ul><li>
-					<h1 class="left pad">Remove Chart</h1>
-					<button type="button" class="btn btn-danger close right" ng-click="closeModal('Cancel')" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i></button>
-				</li></ul>
-			</div>
-			<div class="modal-body">		
-				<div id="loginTiles">
-					<h1>This action cannot be un-done.  Are you sure?</h1>
-					<br class="clear" /><br />
-					
-					<div style="margin:0 auto;width:350px;">
-						<button type="button" title="Yes"
-								ng-click="closeModal('Remove')"
-								class="btn btn-success left margin"><i class="fa fa-times" aria-hidden="true"></i> Remove Chart</button>	
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="header">
+        <ul>
+          <li>
+            <h1 class="left pad">Remove Chart</h1>
+            <button type="button" class="btn btn-danger close right" ng-click="closeModal('Cancel')" data-dismiss="modal" aria-hidden="true">
+              <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div class="modal-body">
+        <div id="loginTiles">
+          <h1>This action cannot be un-done. Are you sure?</h1>
+          <br class="clear" /><br />
 
-						<button type="button" title="Cancel"
-								ng-click="closeModal('Cancel')"
-								class="btn btn-warning right margin"><i class="fa fa-ban" aria-hidden="true"></i> Cancel</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div ng-click="closeModal('close')" class="modal-backdrop fade in"></div>
+          <div style="margin: 0 auto; width: 350px">
+            <button type="button" title="Yes" ng-click="closeModal('Remove')" class="btn btn-success left margin">
+              <i class="fa fa-times" aria-hidden="true"></i> Remove Chart
+            </button>
+
+            <button type="button" title="Cancel" ng-click="closeModal('Cancel')" class="btn btn-warning right margin">
+              <i class="fa fa-ban" aria-hidden="true"></i> Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div ng-click="closeModal('close')" class="modal-backdrop fade in"></div>
 </div>

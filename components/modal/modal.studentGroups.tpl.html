@@ -1,65 +1,63 @@
+<!DOCTYPE html>
 <div class="modal fade in">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="header">
-				<ul><li>
-					<h1 class="left pad">Student Groups</h1>
-					<button type="button" class="btn btn-danger close right" ng-click="closeModal('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
-				</li></ul>
-			</div>
-			<div class="modal-body">		
-				<div id="loginTiles">
-					<p>
-						Create a new group by uploading a .csv or .txt file with the student IDs you want to segment or filter the data by.  The file should only contain the student IDs, separated by commas with no spaces, or if using excel, list all student IDs in column A with no header.
-					</p>
-					<p>
-						The "All Students" group and the "Graduated" group are default groups and include all of the available loaded data.  These cannot be edited or deleted.
-					</p>
-					<div dropzone droptype="studentIDs">Drop .csv or .txt Here</div>
-					<br class="clear" /><br />
-					<table style="margin:0 auto;font-size: 20px;line-height: initial;">
-						<tr>
-							<th>Edit Name</th>
-							<th>Group Name</th>
-							<th>Student Count</th>
-							<th>Delete Group</th>
-						</tr>
-						<tr ng-repeat="(group, studentIDs) in data.model.studentIDs">
-							<td>
-								<button class="btn btn-info" 
-										ng-init="scope.edit$index=false"
-										ng-show="$index>1 && !scope.edit$index" 
-										ng-click="scope.editNewName=group;scope.edit$index=!scope.edit$index">
-											<i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit
-								</button>
-								<button class="btn btn-warning" 
-										ng-show="$index>1 && scope.edit$index" 
-										ng-click="scope.edit$index=!scope.edit$index">
-											<i class="fa fa-times" aria-hidden="true"></i> Cancel
-								</button>							
-							</td>
-							<td ng-show="!scope.edit$index">{{group | camelCaseToHuman}}</td>
-							<td ng-show="scope.edit$index"><input type="text" ng-model="scope.editNewName" ng-placeholder="group" /></td>
-							<td ng-show="!scope.edit$index">{{data.model.studentIDs[group].length | number}}</td>
-							<td ng-show="scope.edit$index">
-								<button class="btn btn-success" 
-										ng-show="$index>1" 
-										ng-click="functions.studentGroups.save(group,scope.editNewName)">
-											<i class="fa fa-floppy-o" aria-hidden="true"></i> Save
-								</button>
-							</td>
-							<td>
-								<button class="btn btn-danger" 
-										ng-show="$index>1" 
-										ng-click="functions.studentGroups.remove(group)">
-											<i class="fa fa-times" aria-hidden="true"></i> Delete
-								</button>
-							</td>
-						</tr>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div ng-click="closeModal('close')" class="modal-backdrop fade in"></div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="header">
+        <ul>
+          <li>
+            <h1 class="left pad">Student Groups</h1>
+            <button type="button" class="btn btn-danger close right" ng-click="closeModal('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </li>
+        </ul>
+      </div>
+      <div class="modal-body">
+        <div id="loginTiles">
+          <p>
+            Create a new group by uploading a .csv or .txt file with the student IDs you want to segment or filter the data by. The file should only contain the student IDs,
+            separated by commas with no spaces, or if using excel, list all student IDs in column A with no header.
+          </p>
+          <p>The "All Students" group and the "Graduated" group are default groups and include all of the available loaded data. These cannot be edited or deleted.</p>
+          <div dropzone droptype="studentIDs">Drop .csv or .txt Here</div>
+          <br class="clear" /><br />
+          <table style="margin: 0 auto; font-size: 20px; line-height: initial">
+            <tr>
+              <th>Edit Name</th>
+              <th>Group Name</th>
+              <th>Student Count</th>
+              <th>Delete Group</th>
+            </tr>
+            <tr ng-repeat="(group, studentIDs) in data.model.studentIDs">
+              <td>
+                <button
+                  class="btn btn-info"
+                  ng-init="scope.edit$index=false"
+                  ng-show="$index>1 && !scope.edit$index"
+                  ng-click="scope.editNewName=group;scope.edit$index=!scope.edit$index"
+                >
+                  <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit
+                </button>
+                <button class="btn btn-warning" ng-show="$index>1 && scope.edit$index" ng-click="scope.edit$index=!scope.edit$index">
+                  <i class="fa fa-times" aria-hidden="true"></i> Cancel
+                </button>
+              </td>
+              <td ng-show="!scope.edit$index">{{group | camelCaseToHuman}}</td>
+              <td ng-show="scope.edit$index"><input type="text" ng-model="scope.editNewName" ng-placeholder="group" /></td>
+              <td ng-show="!scope.edit$index">{{data.model.studentIDs[group].length | number}}</td>
+              <td ng-show="scope.edit$index">
+                <button class="btn btn-success" ng-show="$index>1" ng-click="functions.studentGroups.save(group,scope.editNewName)">
+                  <i class="fa fa-floppy-o" aria-hidden="true"></i> Save
+                </button>
+              </td>
+              <td>
+                <button class="btn btn-danger" ng-show="$index>1" ng-click="functions.studentGroups.remove(group)">
+                  <i class="fa fa-times" aria-hidden="true"></i> Delete
+                </button>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div ng-click="closeModal('close')" class="modal-backdrop fade in"></div>
 </div>

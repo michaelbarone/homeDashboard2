@@ -1,5 +1,3 @@
-"use strict";
-
 app.controller("dashCtrl", [
   "$rootScope",
   "$scope",
@@ -43,7 +41,7 @@ app.controller("dashCtrl", [
     $scope.data.time = {};
     $scope.idle = false;
 
-    var currentDay = "";
+    let currentDay = "";
 
     angular.forEach($location.search(), function (value, key) {
       $scope.data.params[key] = value;
@@ -52,8 +50,8 @@ app.controller("dashCtrl", [
     $scope.functions.updateFrameSize = function (limit = false) {
       $scope.frameHeight = window.innerHeight;
       $scope.frameWidth = window.innerWidth;
-      var m = (($scope.frameWidth - 180) / 120).toFixed(0);
-      var f = (($scope.frameWidth - 160) / 70).toFixed(0);
+      const m = (($scope.frameWidth - 180) / 120).toFixed(0);
+      const f = (($scope.frameWidth - 160) / 70).toFixed(0);
       $scope.mainWeatherTiles = m;
       $scope.frameWeatherTiles = f;
     };
@@ -64,7 +62,7 @@ app.controller("dashCtrl", [
 
     $scope.$on("IdleStart", function () {
       // the user appears to have gone idle
-      if (!$scope.data.params["kiosk"]) {
+      if (!$scope.data.params.kiosk) {
         $scope.idle = true;
         console.log("idle");
       } else {
@@ -97,11 +95,9 @@ app.controller("dashCtrl", [
       $scope.data.time.year = $scope.data.time.raw.format("YYYY");
       if (currentDay == "") {
         currentDay = $scope.data.time.day;
-      } else {
-        if (currentDay != $scope.data.time.day) {
-          $scope.functions.updateWeatherFromObject();
-          currentDay = $scope.data.time.day;
-        }
+      } else if (currentDay != $scope.data.time.day) {
+        $scope.functions.updateWeatherFromObject();
+        currentDay = $scope.data.time.day;
       }
     }
 
@@ -130,9 +126,9 @@ app.controller("dashCtrl", [
             $scope.functions.updatePhoto();
           }, 5000);
         } else {
-          //if($scope.data.background.images[0]['media']['m']){
+          // if($scope.data.background.images[0]['media']['m']){
           //	$scope.data.background.currentImage = $scope.data.background.images[0]['media']['m'].replace("_m", "_b");
-          //}
+          // }
 
           $scope.data.background.count++;
           if ($scope.data.background.count % 2 == 0) {
@@ -142,17 +138,17 @@ app.controller("dashCtrl", [
           }
 
           if ($scope.data.background.count == 1) {
-            $scope.data.background.odd = $scope.data.background.images[0]["media"]["m"].replace("_m", "_b");
-            $scope.data.background.even = $scope.data.background.images[1]["media"]["m"].replace("_m", "_b");
+            $scope.data.background.odd = $scope.data.background.images[0].media.m.replace("_m", "_b");
+            $scope.data.background.even = $scope.data.background.images[1].media.m.replace("_m", "_b");
             $scope.data.background.images.shift();
             $scope.data.background.images.shift();
           } else {
             setTimeout(function () {
               if ($scope.data.background.countValue == "Even") {
-                $scope.data.background.odd = $scope.data.background.images[0]["media"]["m"].replace("_m", "_b");
+                $scope.data.background.odd = $scope.data.background.images[0].media.m.replace("_m", "_b");
                 $scope.data.background.images.shift();
               } else {
-                $scope.data.background.even = $scope.data.background.images[0]["media"]["m"].replace("_m", "_b");
+                $scope.data.background.even = $scope.data.background.images[0].media.m.replace("_m", "_b");
                 $scope.data.background.images.shift();
               }
             }, 5000);
@@ -183,12 +179,12 @@ app.controller("dashCtrl", [
           {
             // 78249294@N00 - "title": "Beautiful Scenery & Landscapes Pool"
             id: "78249294@N00",
-            format: "json",
+            format: "json"
           },
           function (data) {
             $scope.data.background.images = data.items;
             $scope.data.background.count = 0;
-            //console.log(backgroundImages);
+            // console.log(backgroundImages);
             $scope.functions.updatePhoto();
           }
         );
@@ -197,20 +193,19 @@ app.controller("dashCtrl", [
     $scope.functions.updatePhoto();
 
     $scope.functions.getDay = function (date1, index = 1) {
-      var date = new Date(date1 + "T00:00");
-      var curDay = new Date().getDay();
+      const date = new Date(`${date1}T00:00`);
+      const curDay = new Date().getDay();
       if (index == 0 && curDay == date.getDay()) {
-        //console.log("TODAY");
+        // console.log("TODAY");
         return "TODAY";
-      } else {
-        //console.log($scope.weekday[date.getDay()]);
-        return $scope.weekday[date.getDay()];
       }
+      // console.log($scope.weekday[date.getDay()]);
+      return $scope.weekday[date.getDay()];
     };
 
     function correctHours(i) {
       if (i > 12) {
-        i = i - 12;
+        i -= 12;
       } else if (i < 1) {
         i = 12;
       }
@@ -218,27 +213,26 @@ app.controller("dashCtrl", [
     }
     function correctMinute(i) {
       if (i < 10) {
-        i = "0" + i;
+        i = `0${i}`;
       }
       return i;
     }
     function amORpm(i) {
       if (i < 12) {
         return "am";
-      } else {
-        return "pm";
       }
+      return "pm";
     }
 
     $scope.functions.getSunrise = function (time, date) {
       if (!date) {
         return;
       }
-      var sunrise = new Date(date.split(":")[0] + "T" + time + ":00.000Z");
+      let sunrise = new Date(`${date.split(":")[0]}T${time}:00.000Z`);
       if (sunrise.getMinutes() < 10) {
-        sunrise = sunrise.getHours() + ":0" + sunrise.getMinutes();
+        sunrise = `${sunrise.getHours()}:0${sunrise.getMinutes()}`;
       } else {
-        sunrise = sunrise.getHours() + ":" + sunrise.getMinutes();
+        sunrise = `${sunrise.getHours()}:${sunrise.getMinutes()}`;
       }
       return sunrise;
     };
@@ -247,26 +241,25 @@ app.controller("dashCtrl", [
       if (!date) {
         return;
       }
-      var sunset = new Date(date.split(":")[0] + "T" + time + ":00.000Z");
+      let sunset = new Date(`${date.split(":")[0]}T${time}:00.000Z`);
       if (sunset.getMinutes() < 10) {
-        sunset = ((sunset.getHours() + 24) % 12 || 12) + ":0" + sunset.getMinutes();
+        sunset = `${(sunset.getHours() + 24) % 12 || 12}:0${sunset.getMinutes()}`;
       } else {
-        sunset = ((sunset.getHours() + 24) % 12 || 12) + ":" + sunset.getMinutes();
+        sunset = `${(sunset.getHours() + 24) % 12 || 12}:${sunset.getMinutes()}`;
       }
       return sunset;
     };
 
-    $scope.functions.getTime = function (time) {
-      var time = new Date(time);
-      var currentTime =
-        time.getMonth() + 1 + "/" + time.getDate() + " | " + correctHours(time.getHours()) + ":" + correctMinute(time.getMinutes()) + " " + amORpm(time.getHours());
+    $scope.functions.getTime = function getTime(inputtime) {
+      const time = new Date(inputtime);
+      const currentTime = `${time.getMonth() + 1}/${time.getDate()} | ${correctHours(time.getHours())}:${correctMinute(time.getMinutes())} ${amORpm(time.getHours())}`;
 
       return currentTime;
     };
 
     $scope.functions.updateWeatherFromObject = function () {
       if ($scope.functions.getDay($scope.data.weather.daily[0].datetime, 0) != "TODAY") {
-        while ($scope.functions.getDay($scope.data.weather.daily[0].datetime, 0) != "TODAY") {
+        while ($scope.data.weather.daily[0]?.datetime && $scope.functions.getDay($scope.data.weather.daily[0].datetime, 0) != "TODAY") {
           $scope.data.weather.daily.shift();
         }
       }
@@ -276,7 +269,7 @@ app.controller("dashCtrl", [
 
     $scope.functions.getHouseTemperature = function () {
       $.getJSON("./data/houseTemperature.json", function (ht) {
-        var temp = {};
+        const temp = {};
         angular.forEach(ht, function (value, key) {
           key = key.replace("ave", "");
           switch (key) {
@@ -299,8 +292,9 @@ app.controller("dashCtrl", [
               temp[5] = { temp: value, name: key };
               break;
             case "$now":
-              temp["$now"] = value;
+              temp.$now = value;
               break;
+            default:
           }
         });
         $scope.data.houseTemperature = temp;
@@ -309,14 +303,82 @@ app.controller("dashCtrl", [
       });
     };
 
-    var getDailyReset = 0;
+    $scope.functions.getWeatherCurrent = function () {
+      $.getJSON(
+        `https://api.weatherbit.io/v2.0/current?city=${dashboardSettings.city},${dashboardSettings.state}&units=I&key=${dashboardSettings.weatherBitKey}`,
+        function (wb) {
+          $scope.data.weather.current = wb.data[0];
+          $scope.data.weather.lastUpdated.current = new Date();
+
+          let aqiIndex = "Good";
+          const aqi = $scope.data.weather.current.aqi;
+          switch (true) {
+            case aqi < 51:
+              aqiIndex = "Good";
+              break;
+            case aqi < 101:
+              aqiIndex = "Moderate";
+              break;
+            case aqi < 151:
+              aqiIndex = "Unhealthy for Sensative Groups";
+              break;
+            case aqi < 201:
+              aqiIndex = "Unhealthy";
+              break;
+            case aqi < 301:
+              aqiIndex = "Very Unhealthy";
+              break;
+            case aqi > 300:
+              aqiIndex = "Hazardous";
+              break;
+            default:
+              aqiIndex = "Good";
+              break;
+          }
+          $scope.data.weather.current.aqiIndex = aqiIndex;
+          $scope.functions.updateWeatherFromObject();
+        }
+      ).fail(function () {
+        $scope.data.weather.current = {};
+        $scope.data.weather.lastUpdated.current = 0;
+      });
+    };
+
+    $scope.functions.getWeatherForecast = function () {
+      $.getJSON(
+        `https://api.weatherbit.io/v2.0/forecast/daily?city=${dashboardSettings.city},${dashboardSettings.state}&key=${dashboardSettings.weatherBitKey}&units=I`,
+        function (wb) {
+          $scope.data.weather.daily = wb.data;
+          $scope.data.weather.lastUpdated.daily = new Date();
+          $scope.functions.updateWeatherFromObject();
+        }
+      ).fail(function () {
+        $scope.data.weather.lastUpdated.daily = 0;
+        // dont reset this, so we can still see old forcast data
+        // $scope.data.weather.daily = [];
+      });
+    };
+
+    $scope.functions.getWeatherAlerts = function () {
+      $.getJSON(`https://api.weather.gov/alerts/active/zone/${dashboardSettings.weatherGovZone}`, function (wgov) {
+        if (wgov.features.length > 0) {
+          $scope.data.weather.alerts = wgov.features[0].properties;
+          $scope.functions.updateWeatherFromObject();
+        } else {
+          $scope.data.weather.alerts = {};
+        }
+      }).fail(function () {
+        $scope.data.weather.alerts = {};
+      });
+    };
+
+    const getDailyReset = 0;
     // reset when day changes
 
     $interval(updateWeather, dashboardSettings.checkWeatherCurrentInterval);
     updateWeather();
     function updateWeather() {
       console.log("updating weather");
-
       $.get("./data/weather.json", function (data) {
         if (data.version && $scope.data.weather.version == data.version) {
           $scope.data.weather = data;
@@ -331,87 +393,128 @@ app.controller("dashCtrl", [
           $scope.data.weather.lastUpdated.hourly = 0;
         })
         .always(function () {
-          var dateNow = Date.now();
-
-          var difDate = dateNow - $scope.data.weather.lastUpdated.current;
-
+          const dateNow = Date.now();
           $scope.data.weather.lastChecked = dateNow;
 
-          if (difDate < dashboardSettings.checkWeatherCurrentMinimumElapsedTime) {
-            // difDate closer than refresh rate, use JSON data
-            return;
-          } else {
-            // JSON too old, refresh data and save new data
-            console.log("current data too old, refreshing JSON");
+          let difDate = dateNow - new Date($scope.data.weather.lastUpdated.current);
+          if ($scope.data.weather.lastUpdated.current === 0 || difDate > dashboardSettings.checkWeatherCurrentMinimumElapsedTime) {
+            console.log("JSON data version outdated, refreshing current weather");
+            $scope.functions.getWeatherCurrent();
+          }
+          difDate = dateNow - new Date($scope.data.weather.lastUpdated.daily);
+          if (
+            $scope.data.weather.lastUpdated.daily === 0 ||
+            (difDate > dashboardSettings.checkWeatherCurrentMinimumElapsedTime &&
+              (!$scope.data.weather.daily[0]?.datetime || dateNow > new Date($scope.data.weather.daily[0].datetime)))
+          ) {
+            console.log("JSON data version outdated, refreshing forecast weather");
+            $scope.functions.getWeatherForecast();
+          }
+          $scope.functions.getWeatherAlerts();
+          $scope.functions.getHouseTemperature();
+        });
+    }
 
-            $.getJSON(
-              "https://api.weatherbit.io/v2.0/current?city=" + dashboardSettings.city + "," + dashboardSettings.state + "&units=I&key=" + dashboardSettings.weatherBitKey,
-              function (wb) {
-                $scope.data.weather.current = wb.data[0];
-                $scope.data.weather.lastUpdated.current = dateNow;
+    // function updateWeather() {
+    //   console.log("updating weather");
 
-                var aqiIndex = "Good";
-                var aqi = $scope.data.weather.current.aqi;
-                switch (true) {
-                  case aqi < 51:
-                    aqiIndex = "Good";
-                    break;
-                  case aqi < 101:
-                    aqiIndex = "Moderate";
-                    break;
-                  case aqi < 151:
-                    aqiIndex = "Unhealthy for Sensative Groups";
-                    break;
-                  case aqi < 201:
-                    aqiIndex = "Unhealthy";
-                    break;
-                  case aqi < 301:
-                    aqiIndex = "Very Unhealthy";
-                    break;
-                  case 300 < aqi:
-                    aqiIndex = "Hazardous";
-                    break;
-                  default:
-                    aqiIndex = "Good";
-                    break;
-                }
-                $scope.data.weather.current.aqiIndex = aqiIndex;
-              }
-            )
-              .fail(function () {
-                $scope.data.weather.current = {};
-                $scope.data.weather.lastUpdated.current = 0;
-              })
-              .always(function () {
-                var difDate = dateNow - $scope.data.weather.lastUpdated.daily;
+    //   $.get("./data/weather.json", function (data) {
+    //     if (data.version && $scope.data.weather.version == data.version) {
+    //       $scope.data.weather = data;
+    //     } else {
+    //       console.log("JSON data version outdated, refreshing from sources");
+    //     }
+    //   })
+    //     .fail(function () {
+    //       $scope.data.weather.lastUpdate = 0;
+    //       $scope.data.weather.lastUpdated.current = 0;
+    //       $scope.data.weather.lastUpdated.daily = 0;
+    //       $scope.data.weather.lastUpdated.hourly = 0;
+    //     })
+    //     .always(function () {
+    //       var dateNow = Date.now();
 
-                if (difDate < dashboardSettings.checkWeatherDailyMinimumElapsedTime) {
-                  // difDate closer than refresh rate, use JSON data
-                  $scope.functions.updateWeatherFromObject();
-                  return;
-                } else {
-                  // JSON too old, refresh data and save new data
-                  console.log("daily data too old, refreshing JSON");
-                  $.getJSON(
-                    "https://api.weatherbit.io/v2.0/forecast/daily?city=" +
-                      dashboardSettings.city +
-                      "," +
-                      dashboardSettings.state +
-                      "&key=" +
-                      dashboardSettings.weatherBitKey +
-                      "&units=I",
-                    function (wb) {
-                      $scope.data.weather.daily = wb.data;
-                      $scope.data.weather.lastUpdated.daily = dateNow;
-                      $scope.functions.updateWeatherFromObject();
-                    }
-                  ).fail(function () {
-                    $scope.data.weather.lastUpdated.daily = 0;
-                    $scope.data.weather.daily = [];
-                  });
-                }
+    //       var difDate = dateNow - $scope.data.weather.lastUpdated.current;
 
-                /*
+    //       $scope.data.weather.lastChecked = dateNow;
+
+    //       if (difDate < dashboardSettings.checkWeatherCurrentMinimumElapsedTime) {
+    //         console.log("difDate closer than refresh rate, use JSON data");
+    // difDate closer than refresh rate, use JSON data
+    // return;
+    // } else {
+    // JSON too old, refresh data and save new data
+    // console.log("current data too old, refreshing JSON");
+
+    // $.getJSON(
+    //   "https://api.weatherbit.io/v2.0/current?city=" + dashboardSettings.city + "," + dashboardSettings.state + "&units=I&key=" + dashboardSettings.weatherBitKey,
+    //   function (wb) {
+    //     $scope.data.weather.current = wb.data[0];
+    //     $scope.data.weather.lastUpdated.current = dateNow;
+
+    //     var aqiIndex = "Good";
+    //     var aqi = $scope.data.weather.current.aqi;
+    //     switch (true) {
+    //       case aqi < 51:
+    //         aqiIndex = "Good";
+    //         break;
+    //       case aqi < 101:
+    //         aqiIndex = "Moderate";
+    //         break;
+    //       case aqi < 151:
+    //         aqiIndex = "Unhealthy for Sensative Groups";
+    //         break;
+    //       case aqi < 201:
+    //         aqiIndex = "Unhealthy";
+    //         break;
+    //       case aqi < 301:
+    //         aqiIndex = "Very Unhealthy";
+    //         break;
+    //       case 300 < aqi:
+    //         aqiIndex = "Hazardous";
+    //         break;
+    //       default:
+    //         aqiIndex = "Good";
+    //         break;
+    //     }
+    //     $scope.data.weather.current.aqiIndex = aqiIndex;
+    //   }
+    // )
+    //   .fail(function () {
+    //     $scope.data.weather.current = {};
+    //     $scope.data.weather.lastUpdated.current = 0;
+    //   })
+    // .always(function () {
+    //   var difDate = dateNow - $scope.data.weather.lastUpdated.daily;
+
+    //   if (difDate < dashboardSettings.checkWeatherDailyMinimumElapsedTime) {
+    //     // difDate closer than refresh rate, use JSON data
+    //     $scope.functions.updateWeatherFromObject();
+    //     return;
+    //   } else {
+    // JSON too old, refresh data and save new data
+    // console.log("daily data too old, refreshing JSON");
+    // $.getJSON(
+    //   "https://api.weatherbit.io/v2.0/forecast/daily?city=" +
+    //     dashboardSettings.city +
+    //     "," +
+    //     dashboardSettings.state +
+    //     "&key=" +
+    //     dashboardSettings.weatherBitKey +
+    //     "&units=I",
+    //   function (wb) {
+    //     $scope.data.weather.daily = wb.data;
+    //     $scope.data.weather.lastUpdated.daily = dateNow;
+    //     $scope.functions.updateWeatherFromObject();
+    //   }
+    // ).fail(function () {
+    //   $scope.data.weather.lastUpdated.daily = 0;
+    //   $scope.data.weather.daily = [];
+    // }
+
+    //  });
+
+    /*
 						//
 						// hourly forcast no longer available for free from weatherbit
 						//
@@ -436,26 +539,26 @@ app.controller("dashCtrl", [
 							}
 						//
 						// hourly weather comment out
-						//});
+					});
 					*/
-              });
-          }
-        });
+    //       });
+    //   }
+    // });
 
-      // get any weather alerts
-      $.getJSON("https://api.weather.gov/alerts/active/zone/" + dashboardSettings.weatherGovZone, function (wgov) {
-        if (wgov.features.length > 0) {
-          $scope.data.weather.alerts = wgov.features[0].properties;
-        } else {
-          $scope.data.weather.alerts = {};
-        }
-      }).fail(function () {
-        $scope.data.weather.alerts = {};
-      });
+    // get any weather alerts
+    //   $.getJSON("https://api.weather.gov/alerts/active/zone/" + dashboardSettings.weatherGovZone, function (wgov) {
+    //     if (wgov.features.length > 0) {
+    //       $scope.data.weather.alerts = wgov.features[0].properties;
+    //     } else {
+    //       $scope.data.weather.alerts = {};
+    //     }
+    //   }).fail(function () {
+    //     $scope.data.weather.alerts = {};
+    //   });
 
-      // get local house data
-      $scope.functions.getHouseTemperature();
-    }
+    //   // get local house data
+    //   $scope.functions.getHouseTemperature();
+    // }
 
     $interval(getHouseTemp, 180000);
     function getHouseTemp() {
@@ -476,7 +579,7 @@ app.controller("dashCtrl", [
     $scope.weekday[6] = "Sat";
 
     $scope.functions.weatherCode = function (input) {
-      var theWeatherCode = 3200;
+      let theWeatherCode = 3200;
       switch (parseInt(input, 10)) {
         case 200:
         case 201:
@@ -556,9 +659,7 @@ app.controller("dashCtrl", [
         case 804:
           theWeatherCode = 26;
           break;
-        case 900:
-          theWeatherCode = 11;
-          break;
+        default:
       }
       return theWeatherCode;
     };
@@ -566,21 +667,21 @@ app.controller("dashCtrl", [
     $scope.functions.showMap = function (type) {
       if (type == "traffic" && $scope.currentMap != "traffic") {
         $scope.currentMap = "traffic";
-        var map = new google.maps.Map(document.getElementById("map"), {
+        const map = new google.maps.Map(document.getElementById("map"), {
           zoom: 11,
-          center: { lat: parseFloat(dashboardSettings.mapLat), lng: parseFloat(dashboardSettings.mapLong) },
+          center: {
+            lat: parseFloat(dashboardSettings.mapLat),
+            lng: parseFloat(dashboardSettings.mapLong)
+          }
         });
 
-        var trafficLayer = new google.maps.TrafficLayer();
+        const trafficLayer = new google.maps.TrafficLayer();
         trafficLayer.setMap(map);
       } else if (type == "weather" && $scope.currentMap != "weather") {
         $scope.currentMap = "weather";
-        document.getElementById("weatherMap").innerHTML =
-          '<iframe src="https://www.rainviewer.com/map.html?loc=' +
-          dashboardSettings.mapLat +
-          "," +
-          dashboardSettings.mapLong +
-          ',8&amp;oFa=0&amp;oC=0&amp;oU=0&amp;oCUB=1&amp;oCS=1&amp;oF=0&amp;oAP=0&amp;rmt=4" style="border:0px #ffffff none;" name="myiFrame" scrolling="no" marginheight="0px" marginwidth="0px" height="100%" width="100%" allowfullscreen=""></iframe>';
+        document.getElementById(
+          "weatherMap"
+        ).innerHTML = `<iframe src="https://www.rainviewer.com/map.html?loc=${dashboardSettings.mapLat},${dashboardSettings.mapLong},8&amp;oFa=0&amp;oC=0&amp;oU=0&amp;oCUB=1&amp;oCS=1&amp;oF=0&amp;oAP=0&amp;rmt=4" style="border:0px #ffffff none;" name="myiFrame" scrolling="no" marginheight="0px" marginwidth="0px" height="100%" width="100%" allowfullscreen=""></iframe>`;
       } else if (type == "close") {
         $scope.currentMap = "";
         if (document.getElementById("map") !== null) {
@@ -592,11 +693,12 @@ app.controller("dashCtrl", [
       }
     };
 
-    if ($scope.data.params["background"] == "transparent") {
-      var css = "body, html {background: rgba(0,0,0,0);} .windowContainer {background: rgba(0,0,0,0);} .dashboard {font-size: 8pt !important}";
-      var head = document.head || document.getElementsByTagName("head")[0];
-      var style = document.createElement("style");
+    if ($scope.data.params.background == "transparent") {
+      const css = "body, html {background: rgba(0,0,0,0);} .windowContainer {background: rgba(0,0,0,0);} .dashboard {font-size: 8pt !important}";
+      const head = document.head || document.getElementsByTagName("head")[0];
+      const style = document.createElement("style");
       head.appendChild(style);
+      // eslint-disable-next-line deprecation/deprecation
       style.type = "text/css";
       if (style.styleSheet) {
         // This is required for IE8 and below.
@@ -606,11 +708,11 @@ app.controller("dashCtrl", [
       }
     }
 
-    if (!$scope.data.params["kiosk"]) {
-      var script = document.createElement("script");
+    if (!$scope.data.params.kiosk) {
+      const script = document.createElement("script");
       script.type = "text/javascript";
-      script.src = "https://maps.googleapis.com/maps/api/js?key=" + dashboardSettings.googleMapsApi;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${dashboardSettings.googleMapsApi}`;
       document.body.appendChild(script);
     }
-  },
+  }
 ]);

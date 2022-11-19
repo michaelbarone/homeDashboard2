@@ -1,36 +1,39 @@
+<!DOCTYPE html>
 <div class="modal fade in">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="header">
-				<ul><li>
-					<h1 class="left pad">Add a Chart</h1>
-					<button type="button" class="btn btn-danger close right" ng-click="closeModal('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
-				</li></ul>
-			</div>
-			<div class="modal-body">		
-				<div id="loginTiles">
-					<div ng-repeat="type in chart.types | orderObjectBy: 'name'" 
-						class="loginTile" 
-						ng-disabled="data.load.importedTypes[type.dataType]==0" 
-						ng-click="data.load.importedTypes[type.dataType]>0 && functions.addChartCanvas(type);data.load.importedTypes[type.dataType]>0 && closeModal('close')">
-							<div style="height: 40px;">		
-								<span class="text">{{type.name}}</span>
-							</div>
-							<img ng-src="img/{{type.name}}.jpg" class="image">
-							<span class="subtext">
-								{{type.info}}
-							</span>
-							<div style="width:100%;height:100%;background-color: rgba(0, 0, 0, 0.65);cursor:default;padding-top: 100px;" ng-if="data.load.importedTypes[type.dataType]==0">
-								<h1 class="orange">'{{type.dataType}}' data file required</h1>
-								<button class="btn btn-success" 
-										ng-click="view.csvImportToggle();closeModal('close')">
-											<i class="fa fa-upload" aria-hidden="true"></i> Load Data
-								</button>							
-							</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div ng-click="closeModal('close')" class="modal-backdrop fade in"></div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="header">
+        <ul>
+          <li>
+            <h1 class="left pad">Add a Chart</h1>
+            <button type="button" class="btn btn-danger close right" ng-click="closeModal('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </li>
+        </ul>
+      </div>
+      <div class="modal-body">
+        <div id="loginTiles">
+          <div
+            ng-repeat="type in chart.types | orderObjectBy: 'name'"
+            class="loginTile"
+            ng-disabled="data.load.importedTypes[type.dataType]==0"
+            ng-click="data.load.importedTypes[type.dataType]>0 && functions.addChartCanvas(type);data.load.importedTypes[type.dataType]>0 && closeModal('close')"
+          >
+            <div style="height: 40px">
+              <span class="text">{{type.name}}</span>
+            </div>
+            <img ng-src="img/{{type.name}}.jpg" class="image" />
+            <span class="subtext"> {{type.info}} </span>
+            <div
+              style="width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.65); cursor: default; padding-top: 100px"
+              ng-if="data.load.importedTypes[type.dataType]==0"
+            >
+              <h1 class="orange">'{{type.dataType}}' data file required</h1>
+              <button class="btn btn-success" ng-click="view.csvImportToggle();closeModal('close')"><i class="fa fa-upload" aria-hidden="true"></i> Load Data</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div ng-click="closeModal('close')" class="modal-backdrop fade in"></div>
 </div>

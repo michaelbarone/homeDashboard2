@@ -1,17 +1,15 @@
+<!DOCTYPE html>
 <div ng-cloak ng-show="spinner.spinnerArray.length>0" class="spinnerContainer">
-	<ul class="pad-top">
-		<span>Current Task:</span>
-		<li ng-repeat="task in spinner.spinnerArray">
-			<p>
-				{{ task }}
-			</p>
-			<p ng-show="spinner.spinnerText!=''">
-				{{spinner.spinnerText}}
-			</p>
-			<p ng-show="spinner.spinnerCount.current">
-				{{ spinner.spinnerCount.current>0 ? (spinner.spinnerCount.current | number:0) : spinner.spinnerCount.current }} of {{ spinner.spinnerCount.total>0 ? (spinner.spinnerCount.total | number:0) : spinner.spinnerCount.total }}
-			</p>
-		</li>
-	</ul>
-	<div class="spinner"></div>	
+  <ul class="pad-top">
+    <span>Current Task:</span>
+    <li ng-repeat="task in spinner.spinnerArray">
+      <p>{{ task }}</p>
+      <p ng-show="spinner.spinnerText!=''">{{spinner.spinnerText}}</p>
+      <p ng-show="spinner.spinnerCount.current">
+        {{ spinner.spinnerCount.current>0 ? (spinner.spinnerCount.current | number:0) : spinner.spinnerCount.current }} of {{ spinner.spinnerCount.total>0 ?
+        (spinner.spinnerCount.total | number:0) : spinner.spinnerCount.total }}
+      </p>
+    </li>
+  </ul>
+  <div class="spinner"></div>
 </div>

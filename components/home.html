@@ -1,3 +1,6 @@
+<!-- eslint-disable @html-eslint/require-img-alt -->
+<!-- eslint-disable @html-eslint/no-duplicate-id -->
+<!DOCTYPE html>
 <div class="wrap dashboard" ng-controller="dashCtrl">
   <div
     class="abs-zero fade show"
@@ -42,6 +45,7 @@
     class="weather-item"
     style="z-index: 155; position: absolute; bottom: calc(50% - 22px); right: 0; cursor: pointer; width: 45px"
   />
+
   <img
     src="./images/weatherRadar.png"
     ng-show="showMaps && !data.params['kiosk']"
@@ -85,12 +89,15 @@
 
   <div id="dashboardWrapper" scrolling="auto">
     <div id="dashboardMask">
+      <!-- // change to screen width instead of kiosk mode param
+          ng-show="data.params['kiosk'] && data.houseTemperature[1]"
+        -->
       <div
         ng-cloak
-        ng-show="data.params['kiosk'] && data.houseTemperature[1]"
+        ng-show="data.houseTemperature[1]"
         id="house-temp"
         class="weather-item"
-        style="position: sticky; top: 0; left: calc(50% - 225px); width: 450px; display: inline-flex"
+        style="position: absolute; top: 0; left: calc(50% - 197px); width: 394px; display: inline-flex; font-size: 0.85rem"
       >
         <div class="text-center weather-item weather-forecast" style="margin: 10px" ng-repeat="zone in data.houseTemperature track by $index">
           <div class="day medium wi">{{zone.name}}</div>
@@ -132,6 +139,13 @@
                 <span class="weather-forecast-item-low xxsmall">Updated: {{functions.getTime(data.weather.lastUpdate)}}</span>
               </div>
             </div>
+            <!-- <div id="weather-current" ng-show="!showHouseTemp" class="weather-item weather-current">
+              <div class="bright big">Current Weather not updated</div>
+              <div class="weather-current-alt font-light medium wi">
+                <span class="weather-forecast-item-low xxsmall">Checked: {{functions.getTime(data.weather.lastChecked)}}</span><br />
+                <span class="weather-forecast-item-low xxsmall">Updated: {{functions.getTime(data.weather.lastUpdate)}}</span>
+              </div>
+            </div> -->
 
             <div
               ng-show="!showHouseTemp"

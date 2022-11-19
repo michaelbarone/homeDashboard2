@@ -1,3 +1,5 @@
+<!-- eslint-disable @html-eslint/no-duplicate-id -->
+<!DOCTYPE html>
 <style>
   .dashboard {
     font-size: 5pt;
@@ -21,12 +23,13 @@
       style="display: block; padding: 5px; position: relative; pointer-events: auto"
     >
       <div class="pull-left font-ultralight xxsmall" stlye="margin:-5px">
-        <img id="weather-alert-icon" src="./images/alert.png" height="10px" width="10px" />
+        <img id="weather-alert-icon" alt="weather-alert-icon" src="./images/alert.png" height="10px" width="10px" />
       </div>
       <div>
         <div ng-cloak ng-show="data.params['kiosk']" id="weather-alert-expires" class="xsmall pull-right" style="margin: 5px; max-width: 90%">
           {{data.weather.alerts.headline}}
         </div>
+
         <div
           ng-cloak
           ng-show="!data.params['kiosk']"
@@ -53,6 +56,7 @@
               <div class="bright"><span class="bright weather-forecast-item-low">Humidity: {{data.weather.current.rh | number:0}}%</span></div>
               <div class="weather-current-alt font-light medium wi">
                 <span class="weather-forecast-item-low xsmall">AQI: {{data.weather.current.aqi}} - {{data.weather.current.aqiIndex}}</span><br />
+                // eslint-disable-next-line prettier/prettier
                 <span class="wi wi-strong-wind"> {{data.weather.current.wind_spd}}mph <i class="xsmall wi wi-wind towards-{{data.weather.current.wind_dir}}-deg"></i></span
                 ><br />
                 <span class="wi wi-sunrise"></span> {{functions.getSunrise(data.weather.current.sunrise,data.weather.current.datetime)}} am<br />
