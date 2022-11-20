@@ -56,7 +56,6 @@
               <div class="bright"><span class="bright weather-forecast-item-low">Humidity: {{data.weather.current.rh | number:0}}%</span></div>
               <div class="weather-current-alt font-light medium wi">
                 <span class="weather-forecast-item-low xsmall">AQI: {{data.weather.current.aqi}} - {{data.weather.current.aqiIndex}}</span><br />
-                // eslint-disable-next-line prettier/prettier
                 <span class="wi wi-strong-wind"> {{data.weather.current.wind_spd}}mph <i class="xsmall wi wi-wind towards-{{data.weather.current.wind_dir}}-deg"></i></span
                 ><br />
                 <span class="wi wi-sunrise"></span> {{functions.getSunrise(data.weather.current.sunrise,data.weather.current.datetime)}} am<br />
