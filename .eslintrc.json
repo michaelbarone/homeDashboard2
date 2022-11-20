@@ -44,7 +44,10 @@
         "spaced-comment": "off",
         "@html-eslint/require-img-alt": "warn",
         "@html-eslint/no-multiple-h1": "warn",
-        "prettier/prettier": ["warn", { "endOfLine": "auto" }]
+        "prettier/prettier": ["warn", { "endOfLine": "auto" }],
+        "@html-eslint/require-li-container":"warn",
+        "@html-eslint/no-duplicate-id":"warn",
+        "@html-eslint/no-duplicate-attrs":"warn"
       }
     },
     {
@@ -54,6 +57,8 @@
   ],
   "ignorePatterns": ["*.json"],
   "rules": {
+    "guard-for-in":"warn",
+    "no-unreachable-loop":"warn",
     "vars-on-top":"off",
     "template-curly-spacing" : "off",
     "spaced-comment": "off",

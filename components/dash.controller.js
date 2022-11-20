@@ -303,7 +303,7 @@ app.controller("dashCtrl", [
       });
     };
 
-    $scope.functions.getWeatherCurrent = function () {
+    $scope.functions.getWeather = function () {
       $.getJSON(
         `https://api.weatherbit.io/v2.0/current?city=${dashboardSettings.city},${dashboardSettings.state}&units=I&key=${dashboardSettings.weatherBitKey}`,
         function (wb) {
@@ -336,26 +336,33 @@ app.controller("dashCtrl", [
               break;
           }
           $scope.data.weather.current.aqiIndex = aqiIndex;
-          $scope.functions.updateWeatherFromObject();
+          const dateNow = Date.now();
+          const difDate = dateNow - new Date($scope.data.weather.lastUpdated.daily);
+          if (
+            $scope.data.weather.lastUpdated.daily === 0 ||
+            (difDate > dashboardSettings.checkWeatherCurrentMinimumElapsedTime &&
+              (!$scope.data.weather.daily[0]?.datetime || dateNow > new Date($scope.data.weather.daily[0].datetime)))
+          ) {
+            console.log("JSON data version outdated, refreshing forecast weather");
+            $.getJSON(
+              `https://api.weatherbit.io/v2.0/forecast/daily?city=${dashboardSettings.city},${dashboardSettings.state}&key=${dashboardSettings.weatherBitKey}&units=I`,
+              function (wb) {
+                $scope.data.weather.daily = wb.data;
+                $scope.data.weather.lastUpdated.daily = new Date();
+                $scope.functions.updateWeatherFromObject();
+              }
+            ).fail(function () {
+              $scope.data.weather.lastUpdated.daily = 0;
+              // dont reset this, so we can still see old forcast data
+              // $scope.data.weather.daily = [];
+            });
+          } else {
+            $scope.functions.updateWeatherFromObject();
+          }
         }
-      ).fail(function () {
+      ).fail(function (res) {
         $scope.data.weather.current = {};
         $scope.data.weather.lastUpdated.current = 0;
-      });
-    };
-
-    $scope.functions.getWeatherForecast = function () {
-      $.getJSON(
-        `https://api.weatherbit.io/v2.0/forecast/daily?city=${dashboardSettings.city},${dashboardSettings.state}&key=${dashboardSettings.weatherBitKey}&units=I`,
-        function (wb) {
-          $scope.data.weather.daily = wb.data;
-          $scope.data.weather.lastUpdated.daily = new Date();
-          $scope.functions.updateWeatherFromObject();
-        }
-      ).fail(function () {
-        $scope.data.weather.lastUpdated.daily = 0;
-        // dont reset this, so we can still see old forcast data
-        // $scope.data.weather.daily = [];
       });
     };
 
@@ -396,19 +403,10 @@ app.controller("dashCtrl", [
           const dateNow = Date.now();
           $scope.data.weather.lastChecked = dateNow;
 
-          let difDate = dateNow - new Date($scope.data.weather.lastUpdated.current);
+          const difDate = dateNow - new Date($scope.data.weather.lastUpdated.current);
           if ($scope.data.weather.lastUpdated.current === 0 || difDate > dashboardSettings.checkWeatherCurrentMinimumElapsedTime) {
             console.log("JSON data version outdated, refreshing current weather");
-            $scope.functions.getWeatherCurrent();
-          }
-          difDate = dateNow - new Date($scope.data.weather.lastUpdated.daily);
-          if (
-            $scope.data.weather.lastUpdated.daily === 0 ||
-            (difDate > dashboardSettings.checkWeatherCurrentMinimumElapsedTime &&
-              (!$scope.data.weather.daily[0]?.datetime || dateNow > new Date($scope.data.weather.daily[0].datetime)))
-          ) {
-            console.log("JSON data version outdated, refreshing forecast weather");
-            $scope.functions.getWeatherForecast();
+            $scope.functions.getWeather();
           }
           $scope.functions.getWeatherAlerts();
           $scope.functions.getHouseTemperature();
