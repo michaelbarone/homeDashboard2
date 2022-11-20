@@ -1,3 +1,10 @@
+### [1.0.3](https://github.com/michaelbarone/homeDashboard2/compare/v1.0.2...v1.0.3) (2022-11-20)
+
+
+### Bug Fixes
+
+* remove eslint disable comment ([0f52ad4](https://github.com/michaelbarone/homeDashboard2/commit/0f52ad460dc91d2211252a254ffa7e52d54ab7cf))
+
 ### [1.0.2](https://github.com/michaelbarone/homeDashboard2/compare/v1.0.1...v1.0.2) (2022-11-20)
 
 
