@@ -2,14 +2,16 @@
   "name": "homedashboard",
   "private": true,
   "version": "1.0.3",
+  "main": "build/app.js",
   "scripts": {
     "up": "npm i && npx husky install",
     "up:lint": "npm run up:libs && npm i",
     "up:dev": "npm run up:libs && npm i --only=production",
     "up:prod": "npm run up:libs && npm i --only=production",
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "build:tsc": "npx tsc",
+    "start:tsc": "npx tsc && node -r dotenv/config ./build/app.js 8081",
+    "start": "node -r dotenv/config ./build/app.js 8081",
+    "build": "npx tsc",
     "lint": "npx eslint . --ext html,js,ts,jsx,tsx,json --quiet --config .eslintrc.json --ignore-path .eslintignore && npx markdownlint **/*.md --config .markdownlint.json --ignore-path .markdownlintignore",
     "lint:fix": "npx eslint . --ext html,js,ts,jsx,tsx,json --quiet --config .eslintrc.json --ignore-path .eslintignore --fix && npx markdownlint **/*.md --config .markdownlint.json --ignore-path .markdownlintignore --fix",
     "format": "npx prettier . --list-different --config .prettierrc  --ignore-path .prettierignore --ignore-unknown",
@@ -17,7 +19,13 @@
     "test:jest": "jest --passWithNoTests",
     "test:coverage": "jest --passWithNoTests --coverage"
   },
-  "dependencies": {},
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "serve-static": "^1.15.0",
+    "typescript": "4.7.4"
+  },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.0.3",
     "@html-eslint/eslint-plugin": "^0.15.0",
@@ -29,6 +37,7 @@
     "@types/eslint": "^8.4.5",
     "@types/jest": "^28.1.4",
     "@types/node": "^18.0.1",
+    "@types/serve-static": "^1.15.5",
     "@typescript-eslint/eslint-plugin": "^5.30.5",
     "@typescript-eslint/parser": "^5.30.5",
     "commitlint": "^17.0.3",
