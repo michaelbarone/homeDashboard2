@@ -1,6 +1,7 @@
 import express, { Request } from "express";
 import cors from "cors";
 import serveStatic from "serve-static";
+import bodyParser from "body-parser";
 
 const app = express();
 
@@ -9,12 +10,13 @@ app.use(cors());
 app.use(function appUse(err, Request, Response, NextFunction) {
   Response.status(200).json(err);
 });
+app.use(bodyParser.urlencoded({ extended: true }));
 
-if (!process.env.APP_PORT) {
+if (!process.env.weatherBitKey) {
   console.log("ALERT - check your .env file has been created and is updated with values");
 }
 
-const port = process.env.APP_PORT || 9234;
+const port = process.env.APP_PORT || 9876;
 
 app.use(serveStatic("http", { index: ["index.html"] }));
 
@@ -370,7 +372,7 @@ let weather = {
 
 const temp_pass = true;
 
-app.post("/data/saveToJSON", async (req, res) => {
+app.post("/data/saveToJSON", bodyParser.json(), async (req, res) => {
   if (temp_pass && req.body) {
     weather = req.body;
     console.log(JSON.stringify(weather));
@@ -379,7 +381,7 @@ app.post("/data/saveToJSON", async (req, res) => {
   return res.status(500).json({ status: "error" });
 });
 
-app.post("/data/saveHouseTempToJSON", async (req, res) => {
+app.post("/data/saveHouseTempToJSON", bodyParser.json(), async (req, res) => {
   if (temp_pass && req.body) {
     houseTemperature = req.body;
     return res.status(200).json({ status: "success" });
@@ -409,7 +411,7 @@ app.get("/dashboardSettings", async (req, res) => {
 });
 
 const initApp = async () => {
-  app.listen(port, () => console.log(`> Listening on port ${port}`));
+  app.listen({ port, host: "0.0.0.0" }, () => console.log(`> Listening on port ${port}`));
 };
 
 initApp();

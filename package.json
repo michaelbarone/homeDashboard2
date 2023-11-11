@@ -20,9 +20,13 @@
     "test:coverage": "jest --passWithNoTests --coverage"
   },
   "dependencies": {
+    "@types/node": "^18.0.1",
+    "@types/serve-static": "^1.15.5",
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "npx": "^10.2.2",
     "serve-static": "^1.15.0",
     "typescript": "4.7.4"
   },
@@ -36,8 +40,6 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/eslint": "^8.4.5",
     "@types/jest": "^28.1.4",
-    "@types/node": "^18.0.1",
-    "@types/serve-static": "^1.15.5",
     "@typescript-eslint/eslint-plugin": "^5.30.5",
     "@typescript-eslint/parser": "^5.30.5",
     "commitlint": "^17.0.3",
@@ -61,7 +63,6 @@
     "lint-staged": "^12.4.1",
     "markdownlint": "^0.25.0",
     "markdownlint-cli": "^0.31.1",
-    "npx": "^10.2.2",
     "prettier": "2.5.1",
     "prettier-cli": "^0.1.0",
     "ts-jest": "^28.0.5",
