@@ -400,13 +400,13 @@ weather = {
 const temp_pass = true;
 
 function check_rate_limit(res) {
-  log.info(res);
-  log.info(res.headers);
-  if (res?.headers?.["x-ratelimit-remaining"]) {
-    api.weatherbit.rate_limit_remaining = res?.headers?.["x-ratelimit-remaining"];
+  // log.verbose(res);
+  // log.verbose(res.headers);
+  if (res?.headers?.get("x-ratelimit-remaining")) {
+    api.weatherbit.rate_limit_remaining = res?.headers?.get("x-ratelimit-remaining");
   }
-  if (res?.headers?.["x-ratelimit-reset"]) {
-    api.weatherbit.x_ratelimit_reset = res?.headers?.["x-ratelimit-reset"];
+  if (res?.headers?.get("x-ratelimit-reset")) {
+    api.weatherbit.x_ratelimit_reset = res?.headers?.get("x-ratelimit-reset");
   }
 }
 
@@ -497,7 +497,7 @@ app.get("/data/updateWeather", async (req, res) => {
   log.debug("API-CALL-weatherbit current");
   fetch(`https://api.weatherbit.io/v2.0/current?city=${dashboardSettings.city},${dashboardSettings.state}&units=I&key=${backendSettings.weatherBitKey}`, { method: "Get" })
     .then((res) => {
-      // log.info(res);
+      // log.verbose(res);
       if (res.status === 429) {
         api.weatherBitBackOffCount++;
         api.weatherBitBackOffLast429 = Date.now();
@@ -510,7 +510,7 @@ app.get("/data/updateWeather", async (req, res) => {
       return res.json();
     })
     .then((json: any) => {
-      // log.info(json);
+      // log.verbose(json);
       api.weatherBitBackOffCount = 0;
       weather.current = json?.data[0] || {};
       weather.lastUpdated.current = new Date().toDateString();
@@ -552,12 +552,11 @@ app.get("/data/updateWeather", async (req, res) => {
           method: "Get"
         })
           .then((res) => {
-            // console.log(res);
+            // log.verbose(res);
             check_rate_limit(res);
             return res.json();
           })
           .then((json: any) => {
-            // log.info(json);
             if (json?.data) {
               weather.daily = json.data;
               weather.lastUpdated.daily = new Date();
