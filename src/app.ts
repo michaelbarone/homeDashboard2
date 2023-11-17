@@ -2,6 +2,9 @@ import express, { Request } from "express";
 import cors from "cors";
 import serveStatic from "serve-static";
 import bodyParser from "body-parser";
+import fetch from "node-fetch";
+import { getDay, HTTPResponseError } from "./utils.js";
+import { logger as log, morganMiddleware } from "./logger/index.js";
 
 const app = express();
 
@@ -12,6 +15,8 @@ app.use(function appUse(err, Request, Response, NextFunction) {
 });
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(morganMiddleware);
+
 if (!process.env.weatherBitKey) {
   console.log("ALERT - check your .env file has been created and is updated with values");
 }
@@ -21,12 +26,12 @@ const port = process.env.APP_PORT || 9876;
 app.use(serveStatic("http", { index: ["index.html"] }));
 
 const dashboardSettings = {
-  checkWeatherCurrentInterval: 60000,
+  checkWeatherCurrentInterval: 600000,
   checkWeatherCurrentMinimumElapsedTime: 1800000,
   checkWeatherDailyMinimumElapsedTime: 21600000,
   timezone: process.env.TIMEZONE,
   weatherGovZone: process.env.weatherGovZone,
-  weatherBitKey: process.env.weatherBitKey,
+
   googleMapsApi: process.env.googleMapsApi,
   city: process.env.CITY,
   state: process.env.STATE,
@@ -36,334 +41,356 @@ const dashboardSettings = {
   mapsLong: process.env.mapsLong
 };
 
+const backendSettings = {
+  weatherBitKey: process.env.weatherBitKey
+};
+
+const api: any = {};
+api.weatherBitBackOffCount = 0;
+api.weatherBitBackOffLast429 = 0;
+api.weatherbit = {};
+
+let weather: any = {};
+weather.version = 2020.1;
+weather.alerts = {};
+weather.lastUpdate = 0;
+weather.lastUpdated = {};
+weather.lastUpdated.current = 0;
+weather.lastUpdated.daily = 0;
+weather.lastUpdated.hourly = 0;
+weather.lastUpdated.alerts = 0;
+weather.current = {};
+weather.daily = [];
+weather.hourly = [];
+
 let houseTemperature = {};
 houseTemperature = { aveInside: 69.55, aveGarage: 52.7, aveOutside: 48.7, "In vs Out": -20.8, $now: 1699598090124 };
-let weather = {
+weather = {
   version: 2020.1,
   alerts: {},
-  lastUpdate: 1699586197752,
-  lastUpdated: { current: "2023-11-10T03:16:37.645Z", daily: "2023-11-10T03:16:37.752Z", hourly: 0 },
+  lastUpdate: 1699943888432,
+  lastUpdated: { current: "Mon Nov 13 2023", daily: "2023-11-14T06:38:08.669Z", hourly: 0, alerts: 1699943888419 },
   current: {
-    app_temp: 51,
+    app_temp: 49,
     aqi: 72,
     city_name: "Elk Grove",
     clouds: 0,
     country_code: "US",
-    datetime: "2023-11-10:03",
-    dewpt: 38.9,
+    datetime: "2023-11-14:06",
+    dewpt: 44.3,
     dhi: 0,
     dni: 0,
-    elev_angle: -24.24,
+    elev_angle: -58.69,
     ghi: 0,
-    gust: 4.7,
+    gust: 9.1,
     h_angle: -90,
     lat: 38.4088,
     lon: -121.37162,
-    ob_time: "2023-11-10 03:01",
+    ob_time: "2023-11-14 06:23",
     pod: "n",
     precip: 0,
-    pres: 1019.5,
-    rh: 62,
-    slp: 1020.84674,
+    pres: 1013.5,
+    rh: 83,
+    slp: 1014.8453,
     snow: 0,
     solar_rad: 0,
     sources: ["rtma", "radar", "satellite"],
     state_code: "CA",
     station: "AR866",
-    sunrise: "14:41",
-    sunset: "00:57",
-    temp: 51,
+    sunrise: "14:45",
+    sunset: "00:53",
+    temp: 49,
     timezone: "America/Los_Angeles",
-    ts: 1699585265,
+    ts: 1699942988,
     uv: 0,
     vis: 9.9,
-    weather: { description: "Clear sky", code: 800, icon: "c01n" },
-    wind_cdir: "WNW",
-    wind_cdir_full: "west-northwest",
-    wind_dir: 289,
-    wind_spd: 1.1,
+    weather: { icon: "c01n", description: "Clear sky", code: 800 },
+    wind_cdir: "NW",
+    wind_cdir_full: "northwest",
+    wind_dir: 306,
+    wind_spd: 0.8,
     aqiIndex: "Moderate"
   },
   daily: [
     {
-      app_max_temp: 64,
-      app_min_temp: 36.4,
-      clouds: 31,
-      clouds_hi: 41,
-      clouds_low: 0,
-      clouds_mid: 26,
-      datetime: "2023-11-09",
-      dewpt: 39.1,
-      high_temp: 65.2,
-      low_temp: 39.8,
-      max_dhi: null,
-      max_temp: 65.2,
-      min_temp: 36.4,
-      moon_phase: 0.0594252,
-      moon_phase_lunation: 0.89,
-      moonrise_ts: 1699527420,
-      moonset_ts: 1699573035,
-      ozone: 315.8,
-      pop: 0,
-      precip: 0,
-      pres: 1019.6,
-      rh: 62,
-      slp: 1020.9,
-      snow: 0,
-      snow_depth: 0,
-      sunrise_ts: 1699540850,
-      sunset_ts: 1699577902,
-      temp: 52.6,
-      ts: 1699534860,
-      uv: 0.6,
-      valid_date: "2023-11-09",
-      vis: 11.9,
-      weather: { description: "Scattered clouds", code: 802, icon: "c02d" },
-      wind_cdir: "SSW",
-      wind_cdir_full: "south-southwest",
-      wind_dir: 204,
-      wind_gust_spd: 4.9,
-      wind_spd: 3.4
-    },
-    {
-      app_max_temp: 64.5,
-      app_min_temp: 39.5,
-      clouds: 30,
-      clouds_hi: 84,
-      clouds_low: 2,
-      clouds_mid: 42,
-      datetime: "2023-11-10",
-      dewpt: 39.2,
-      high_temp: 68,
-      low_temp: 41,
-      max_dhi: null,
-      max_temp: 68,
-      min_temp: 39.8,
-      moon_phase: 0.0205337,
-      moon_phase_lunation: 0.92,
-      moonrise_ts: 1699617418,
-      moonset_ts: 1699660852,
-      ozone: 309.8,
-      pop: 0,
-      precip: 0,
-      pres: 1018.4,
-      rh: 64,
-      slp: 1019.8,
-      snow: 0,
-      snow_depth: 0,
-      sunrise_ts: 1699627316,
-      sunset_ts: 1699664248,
-      temp: 52.5,
-      ts: 1699603260,
-      uv: 3.1,
-      valid_date: "2023-11-10",
-      vis: 10.7,
-      weather: { description: "Scattered clouds", code: 802, icon: "c02d" },
-      wind_cdir: "W",
-      wind_cdir_full: "west",
-      wind_dir: 277,
-      wind_gust_spd: 6.3,
-      wind_spd: 4
-    },
-    {
-      app_max_temp: 65.2,
-      app_min_temp: 42.2,
-      clouds: 16,
-      clouds_hi: 46,
-      clouds_low: 0,
-      clouds_mid: 0,
-      datetime: "2023-11-11",
-      dewpt: 41.9,
-      high_temp: 68.3,
-      low_temp: 42.1,
-      max_dhi: null,
-      max_temp: 68.3,
-      min_temp: 41,
-      moon_phase: 0.0205337,
-      moon_phase_lunation: 0.95,
-      moonrise_ts: 1699707536,
-      moonset_ts: 1699747252,
-      ozone: 283.1,
-      pop: 0,
-      precip: 0,
-      pres: 1016.9,
-      rh: 67,
-      slp: 1018.2,
-      snow: 0,
-      snow_depth: 0,
-      sunrise_ts: 1699713781,
-      sunset_ts: 1699750596,
-      temp: 53.5,
-      ts: 1699689660,
-      uv: 3.4,
-      valid_date: "2023-11-11",
-      vis: 15.8,
-      weather: { description: "Few clouds", code: 801, icon: "c02d" },
-      wind_cdir: "W",
-      wind_cdir_full: "west",
-      wind_dir: 268,
-      wind_gust_spd: 5.6,
-      wind_spd: 3.8
-    },
-    {
-      app_max_temp: 66.1,
-      app_min_temp: 42.2,
+      app_max_temp: 66.5,
+      app_min_temp: 46.5,
       clouds: 34,
-      clouds_hi: 70,
-      clouds_low: 0,
-      clouds_mid: 12,
-      datetime: "2023-11-12",
-      dewpt: 42.9,
-      high_temp: 69.6,
-      low_temp: 43.9,
-      max_dhi: null,
-      max_temp: 69.6,
-      min_temp: 42.1,
-      moon_phase: 0.00171912,
-      moon_phase_lunation: 0.99,
-      moonrise_ts: 1699797825,
-      moonset_ts: 1699835287,
-      ozone: 292.8,
-      pop: 0,
-      precip: 0,
-      pres: 1012,
-      rh: 68,
-      slp: 1013.3,
-      snow: 0,
-      snow_depth: 0,
-      sunrise_ts: 1699800247,
-      sunset_ts: 1699836945,
-      temp: 54.5,
-      ts: 1699776060,
-      uv: 2.8,
-      valid_date: "2023-11-12",
-      vis: 15,
-      weather: { description: "Scattered clouds", code: 802, icon: "c02d" },
-      wind_cdir: "SE",
-      wind_cdir_full: "southeast",
-      wind_dir: 128,
-      wind_gust_spd: 6.9,
-      wind_spd: 4.7
-    },
-    {
-      app_max_temp: 64,
-      app_min_temp: 46,
-      clouds: 47,
-      clouds_hi: 78,
-      clouds_low: 0,
-      clouds_mid: 69,
+      clouds_hi: 40,
+      clouds_low: 6,
+      clouds_mid: 41,
       datetime: "2023-11-13",
-      dewpt: 44.8,
-      high_temp: 67.2,
-      low_temp: 44.5,
+      dewpt: 48.5,
+      high_temp: 68.8,
+      low_temp: 45.2,
       max_dhi: null,
-      max_temp: 67.2,
-      min_temp: 43.9,
+      max_temp: 68.8,
+      min_temp: 45,
       moon_phase: 0.00546865,
       moon_phase_lunation: 0.02,
       moonrise_ts: 1699888295,
       moonset_ts: 1699923659,
-      ozone: 292.6,
-      pop: 20,
-      precip: 0.002,
-      pres: 1010.8,
-      rh: 69,
-      slp: 1012.1,
+      ozone: 308.2,
+      pop: 0,
+      precip: 0,
+      pres: 1010.5,
+      rh: 74,
+      slp: 1011.8,
       snow: 0,
       snow_depth: 0,
       sunrise_ts: 1699886713,
       sunset_ts: 1699923296,
-      temp: 55.1,
-      ts: 1699862460,
-      uv: 2.3,
+      temp: 57.3,
+      ts: 1699880460,
+      uv: 0,
       valid_date: "2023-11-13",
-      vis: 15,
-      weather: { description: "Broken clouds", code: 803, icon: "c03d" },
+      vis: 11.9,
+      weather: { description: "Scattered clouds", code: 802, icon: "c02d" },
       wind_cdir: "SSW",
       wind_cdir_full: "south-southwest",
       wind_dir: 212,
-      wind_gust_spd: 8.5,
-      wind_spd: 5.8
+      wind_gust_spd: 6.7,
+      wind_spd: 4.5
     },
     {
-      app_max_temp: 63.8,
-      app_min_temp: 46.5,
-      clouds: 48,
-      clouds_hi: 0,
-      clouds_low: 18,
-      clouds_mid: 25,
+      app_max_temp: 64.9,
+      app_min_temp: 47.3,
+      clouds: 38,
+      clouds_hi: 33,
+      clouds_low: 26,
+      clouds_mid: 7,
       datetime: "2023-11-14",
-      dewpt: 43.9,
-      high_temp: 67.8,
-      low_temp: 50.2,
+      dewpt: 46.2,
+      high_temp: 67.3,
+      low_temp: 43.1,
       max_dhi: null,
-      max_temp: 66.8,
-      min_temp: 44.5,
+      max_temp: 67.3,
+      min_temp: 45.2,
       moon_phase: 0.0333539,
       moon_phase_lunation: 0.05,
       moonrise_ts: 1699978879,
       moonset_ts: 1700012503,
-      ozone: 302.6,
-      pop: 80,
-      precip: 0.278,
-      pres: 1010.9,
-      rh: 67,
-      slp: 1012.2,
+      ozone: 306.1,
+      pop: 35,
+      precip: 0.039,
+      pres: 1012.9,
+      rh: 76,
+      slp: 1014.2,
       snow: 0,
       snow_depth: 0,
       sunrise_ts: 1699973178,
       sunset_ts: 1700009649,
-      temp: 55.4,
+      temp: 54.2,
       ts: 1699948860,
-      uv: 2.5,
+      uv: 3.2,
       valid_date: "2023-11-14",
-      vis: 15,
-      weather: { description: "Light rain", code: 500, icon: "r01d" },
-      wind_cdir: "S",
-      wind_cdir_full: "south",
-      wind_dir: 175,
-      wind_gust_spd: 11.9,
-      wind_spd: 7.6
+      vis: 10.9,
+      weather: { description: "Scattered clouds", code: 802, icon: "c02d" },
+      wind_cdir: "SSW",
+      wind_cdir_full: "south-southwest",
+      wind_dir: 202,
+      wind_gust_spd: 9.4,
+      wind_spd: 6
     },
     {
-      app_max_temp: 68.5,
-      app_min_temp: 50.2,
-      clouds: 20,
-      clouds_hi: 28,
-      clouds_low: 0,
-      clouds_mid: 14,
+      app_max_temp: 62,
+      app_min_temp: 45.1,
+      clouds: 69,
+      clouds_hi: 87,
+      clouds_low: 67,
+      clouds_mid: 26,
       datetime: "2023-11-15",
-      dewpt: 32.3,
-      high_temp: 70.8,
-      low_temp: 52.2,
+      dewpt: 46.3,
+      high_temp: 64.1,
+      low_temp: 49.6,
       max_dhi: null,
-      max_temp: 70.8,
-      min_temp: 50.2,
+      max_temp: 64.1,
+      min_temp: 43.1,
       moon_phase: 0.0856678,
       moon_phase_lunation: 0.09,
       moonrise_ts: 1700069403,
       moonset_ts: 1700101939,
-      ozone: 304.5,
-      pop: 0,
-      precip: 0,
-      pres: 1009.8,
-      rh: 39,
-      slp: 1011.1,
+      ozone: 304.4,
+      pop: 75,
+      precip: 0.233,
+      pres: 1011.1,
+      rh: 79,
+      slp: 1012.4,
       snow: 0,
       snow_depth: 0,
       sunrise_ts: 1700059644,
       sunset_ts: 1700096004,
-      temp: 59,
+      temp: 53.3,
       ts: 1700035260,
-      uv: 3.6,
+      uv: 2.8,
       valid_date: "2023-11-15",
+      vis: 6.6,
+      weather: { description: "Light rain", code: 500, icon: "r01d" },
+      wind_cdir: "ESE",
+      wind_cdir_full: "east-southeast",
+      wind_dir: 114,
+      wind_gust_spd: 8.9,
+      wind_spd: 6
+    },
+    {
+      app_max_temp: 65,
+      app_min_temp: 51,
+      clouds: 60,
+      clouds_hi: 51,
+      clouds_low: 39,
+      clouds_mid: 54,
+      datetime: "2023-11-16",
+      dewpt: 53,
+      high_temp: 66.7,
+      low_temp: 49.2,
+      max_dhi: null,
+      max_temp: 66.7,
+      min_temp: 49.6,
+      moon_phase: 0.161084,
+      moon_phase_lunation: 0.12,
+      moonrise_ts: 1700159617,
+      moonset_ts: 1700191998,
+      ozone: 315.9,
+      pop: 80,
+      precip: 0.328,
+      pres: 1011.9,
+      rh: 87,
+      slp: 1013.2,
+      snow: 0,
+      snow_depth: 0,
+      sunrise_ts: 1700146109,
+      sunset_ts: 1700182361,
+      temp: 56.9,
+      ts: 1700121660,
+      uv: 2.1,
+      valid_date: "2023-11-16",
+      vis: 14.2,
+      weather: { description: "Light rain", code: 500, icon: "r01d" },
+      wind_cdir: "WSW",
+      wind_cdir_full: "west-southwest",
+      wind_dir: 258,
+      wind_gust_spd: 9.2,
+      wind_spd: 6
+    },
+    {
+      app_max_temp: 64,
+      app_min_temp: 50.1,
+      clouds: 77,
+      clouds_hi: 87,
+      clouds_low: 34,
+      clouds_mid: 83,
+      datetime: "2023-11-17",
+      dewpt: 54.2,
+      high_temp: 65.2,
+      low_temp: 52.8,
+      max_dhi: null,
+      max_temp: 65.2,
+      min_temp: 49.2,
+      moon_phase: 0.256394,
+      moon_phase_lunation: 0.16,
+      moonrise_ts: 1700249320,
+      moonset_ts: 1700282555,
+      ozone: 311.8,
+      pop: 85,
+      precip: 0.398,
+      pres: 1010.8,
+      rh: 90,
+      slp: 1012.1,
+      snow: 0,
+      snow_depth: 0,
+      sunrise_ts: 1700232575,
+      sunset_ts: 1700268719,
+      temp: 57.2,
+      ts: 1700208060,
+      uv: 1.5,
+      valid_date: "2023-11-17",
+      vis: 14.4,
+      weather: { description: "Moderate rain", code: 501, icon: "r02d" },
+      wind_cdir: "SE",
+      wind_cdir_full: "southeast",
+      wind_dir: 142,
+      wind_gust_spd: 8.7,
+      wind_spd: 5.8
+    },
+    {
+      app_max_temp: 62.5,
+      app_min_temp: 54.2,
+      clouds: 66,
+      clouds_hi: 84,
+      clouds_low: 75,
+      clouds_mid: 76,
+      datetime: "2023-11-18",
+      dewpt: 57.1,
+      high_temp: 64.1,
+      low_temp: 51.9,
+      max_dhi: null,
+      max_temp: 64.1,
+      min_temp: 52.8,
+      moon_phase: 0.366537,
+      moon_phase_lunation: 0.19,
+      moonrise_ts: 1700338453,
+      moonset_ts: 1700373374,
+      ozone: 316.2,
+      pop: 80,
+      precip: 0.356,
+      pres: 1011.7,
+      rh: 96,
+      slp: 1013,
+      snow: 0,
+      snow_depth: 0,
+      sunrise_ts: 1700319040,
+      sunset_ts: 1700355080,
+      temp: 58.1,
+      ts: 1700294460,
+      uv: 2,
+      valid_date: "2023-11-18",
+      vis: 12.1,
+      weather: { description: "Light rain", code: 500, icon: "r01d" },
+      wind_cdir: "SSE",
+      wind_cdir_full: "south-southeast",
+      wind_dir: 166,
+      wind_gust_spd: 12.1,
+      wind_spd: 7.8
+    },
+    {
+      app_max_temp: 66.2,
+      app_min_temp: 51.9,
+      clouds: 15,
+      clouds_hi: 30,
+      clouds_low: 4,
+      clouds_mid: 10,
+      datetime: "2023-11-19",
+      dewpt: 48.6,
+      high_temp: 67.4,
+      low_temp: 48.1,
+      max_dhi: null,
+      max_temp: 67.4,
+      min_temp: 51.9,
+      moon_phase: 0.485068,
+      moon_phase_lunation: 0.22,
+      moonrise_ts: 1700427089,
+      moonset_ts: 1700464233,
+      ozone: 286.2,
+      pop: 0,
+      precip: 0,
+      pres: 1015.6,
+      rh: 72,
+      slp: 1016.9,
+      snow: 0,
+      snow_depth: 0,
+      sunrise_ts: 1700405504,
+      sunset_ts: 1700441442,
+      temp: 58.6,
+      ts: 1700380860,
+      uv: 3.5,
+      valid_date: "2023-11-19",
       vis: 15,
       weather: { description: "Few clouds", code: 801, icon: "c02d" },
-      wind_cdir: "S",
-      wind_cdir_full: "south",
-      wind_dir: 175,
-      wind_gust_spd: 4.3,
-      wind_spd: 3.1
+      wind_cdir: "WNW",
+      wind_cdir_full: "west-northwest",
+      wind_dir: 284,
+      wind_gust_spd: 9.2,
+      wind_spd: 4.7
     }
   ],
   hourly: [],
@@ -372,7 +399,19 @@ let weather = {
 
 const temp_pass = true;
 
+function check_rate_limit(res) {
+  log.info(res);
+  log.info(res.headers);
+  if (res?.headers?.["x-ratelimit-remaining"]) {
+    api.weatherbit.rate_limit_remaining = res?.headers?.["x-ratelimit-remaining"];
+  }
+  if (res?.headers?.["x-ratelimit-reset"]) {
+    api.weatherbit.x_ratelimit_reset = res?.headers?.["x-ratelimit-reset"];
+  }
+}
+
 app.post("/data/saveToJSON", bodyParser.json(), async (req, res) => {
+  // not used anymore, all weather data should be coming from nodejs now
   if (temp_pass && req.body) {
     weather = req.body;
     console.log(JSON.stringify(weather));
@@ -398,15 +437,187 @@ app.get("/data/houseTemperature", async (req, res) => {
 
 app.get("/data/weather", async (req, res) => {
   if (temp_pass) {
+    if (getDay(weather.daily[0].datetime, 0) != "TODAY") {
+      while (weather.daily[0]?.datetime && getDay(weather.daily[0].datetime, 0) != "TODAY") {
+        weather.daily.shift();
+      }
+    }
     return res.status(200).json(weather);
   }
   return res.status(500).json({ status: "error" });
+});
+
+app.get("/data/weatherStats", async (req, res) => {
+  const wstats: any = {};
+  wstats.version = weather.version;
+  wstats.lastUpdated = weather.lastUpdated;
+  wstats.api = api;
+  if (temp_pass) {
+    return res.status(200).json(wstats);
+  }
+  return res.status(500).json({ status: "error" });
+});
+
+app.get("/data/updateWeather", async (req, res) => {
+  // set/check isRunning bit
+  // check memory/variable, if not exist pull from local json file
+  // check data, if old pull from api
+  // save to local json file every X hours to keep fresh for server restarts...  need to put this in persistent storage for docker, currently wont persist
+  const dateNow = Date.now();
+  let difDate = dateNow - new Date(weather.lastUpdated.current).getTime();
+  function returnData() {
+    if (getDay(weather.daily[0].datetime, 0) != "TODAY") {
+      while (weather.daily[0]?.datetime && getDay(weather.daily[0].datetime, 0) != "TODAY") {
+        weather.daily.shift();
+      }
+    }
+    weather.lastUpdate = Date.now();
+    weather.lastChecked = Date.now();
+    return res.status(200).json(weather);
+  }
+  if (weather.lastUpdated.current > 0 || difDate <= dashboardSettings.checkWeatherCurrentMinimumElapsedTime) {
+    // data still fresh, send from memory:
+    return returnData();
+  }
+  if (api.weatherBitBackOffCount > 0) {
+    // wait 1 hour for each backOffCount
+    const elapsedTime = Date.now() - api.weatherBitBackOffLast429;
+    const cooldownTime = api.weatherBitBackOffCount * 3600000;
+    if (elapsedTime > cooldownTime) {
+      // good to check again
+    } else {
+      // wait til cool down period
+      log.warn("Too Many Requests to weatherbit -- cooling down", `BackOffCount=${api.weatherBitBackOffCount}`, `Waiting for ${elapsedTime} > ${cooldownTime} `);
+      weather.current = {};
+      weather.lastUpdated.current = 0;
+
+      return returnData();
+    }
+  }
+  log.debug("API-CALL-weatherbit current");
+  fetch(`https://api.weatherbit.io/v2.0/current?city=${dashboardSettings.city},${dashboardSettings.state}&units=I&key=${backendSettings.weatherBitKey}`, { method: "Get" })
+    .then((res) => {
+      // log.info(res);
+      if (res.status === 429) {
+        api.weatherBitBackOffCount++;
+        api.weatherBitBackOffLast429 = Date.now();
+        log.warn(`Too Many Requests to weatherbit -- Backing Off - count: ${api.weatherBitBackOffCount}`);
+        weather.current = {};
+        weather.lastUpdated.current = 0;
+        throw new HTTPResponseError(res);
+      }
+      check_rate_limit(res);
+      return res.json();
+    })
+    .then((json: any) => {
+      // log.info(json);
+      api.weatherBitBackOffCount = 0;
+      weather.current = json?.data[0] || {};
+      weather.lastUpdated.current = new Date().toDateString();
+
+      let aqiIndex = "Good";
+      const aqi = weather.current.aqi;
+      switch (true) {
+        case aqi < 51:
+          aqiIndex = "Good";
+          break;
+        case aqi < 101:
+          aqiIndex = "Moderate";
+          break;
+        case aqi < 151:
+          aqiIndex = "Unhealthy for Sensative Groups";
+          break;
+        case aqi < 201:
+          aqiIndex = "Unhealthy";
+          break;
+        case aqi < 301:
+          aqiIndex = "Very Unhealthy";
+          break;
+        case aqi > 300:
+          aqiIndex = "Hazardous";
+          break;
+        default:
+          aqiIndex = "Good";
+          break;
+      }
+      weather.current.aqiIndex = aqiIndex;
+      difDate = dateNow - new Date(weather.lastUpdated.daily).getTime();
+      if (
+        weather.lastUpdated.daily === 0 ||
+        (difDate > dashboardSettings.checkWeatherCurrentMinimumElapsedTime && (!weather.daily[0]?.datetime || dateNow > new Date(weather.daily[0].datetime).getTime()))
+      ) {
+        log.info("JSON data version outdated, refreshing forecast weather");
+        log.debug("API-CALL-weatherbit forecast");
+        fetch(`https://api.weatherbit.io/v2.0/forecast/daily?city=${dashboardSettings.city},${dashboardSettings.state}&key=${backendSettings.weatherBitKey}&units=I`, {
+          method: "Get"
+        })
+          .then((res) => {
+            // console.log(res);
+            check_rate_limit(res);
+            return res.json();
+          })
+          .then((json: any) => {
+            // log.info(json);
+            if (json?.data) {
+              weather.daily = json.data;
+              weather.lastUpdated.daily = new Date();
+            }
+          })
+          .catch(function (error) {
+            log.error(`/data/updateWeather error: ${error}`);
+            weather.lastUpdated.daily = 0;
+            // dont reset this, so we can still see old forcast data
+            // weather.daily = [];
+          });
+      }
+    })
+    .catch(function (error) {
+      log.error(`/data/updateWeather error: ${error}`);
+      weather.current = {};
+      weather.lastUpdated.current = 0;
+    })
+    .finally(function () {
+      return returnData();
+      //   if (getDay(weather.daily[0].datetime, 0) != "TODAY") {
+      //     while (weather.daily[0]?.datetime && getDay(weather.daily[0].datetime, 0) != "TODAY") {
+      //       weather.daily.shift();
+      //     }
+      //   }
+      //   weather.lastUpdate = Date.now();
+      //   weather.lastUpdated.daily = Date.now();
+      //   return res.status(200).json(weather);
+    });
+});
+
+app.get("/data/weatherAlerts", async (req, res) => {
+  // set/check isRunning bit
+  // check data, if old pull from api
+  fetch(`https://api.weather.gov/alerts/active/zone/${dashboardSettings.weatherGovZone}`, { method: "Get" })
+    .then((res) => {
+      return res.json();
+    })
+    .then((json: any) => {
+      if (json.features.length > 0) {
+        weather.alerts = json.features[0].properties;
+        weather.lastUpdated.alerts = Date.now();
+        return res.status(200).json(weather);
+      }
+      weather.lastUpdated.alerts = Date.now();
+      weather.alerts = {};
+      return res.status(201).json(weather);
+    })
+    .catch(function (error) {
+      console.log(`/data/weatherAlerts error: ${error}`);
+      weather.alerts = {};
+      return res.status(500).json(weather);
+    });
 });
 
 app.get("/dashboardSettings", async (req, res) => {
   if (temp_pass) {
     return res.status(200).json(dashboardSettings);
   }
+  // return defaults?
   return res.status(500).json({ status: "error" });
 });
 
