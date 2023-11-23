@@ -97,7 +97,7 @@
         ng-show="data.houseTemperature[1]"
         id="house-temp"
         class="weather-item"
-        style="position: absolute; top: 0; left: calc(50% - 197px); width: 394px; display: inline-flex; font-size: 0.85rem"
+        style="position: sticky; top: 0; left: calc(50% - 197px); width: 394px; display: inline-flex; font-size: 0.85rem"
       >
         <div class="text-center weather-item weather-forecast" style="margin: 10px" ng-repeat="zone in data.houseTemperature track by $index">
           <div class="day medium wi">{{zone.name}}</div>

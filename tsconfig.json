@@ -68,5 +68,5 @@
     "noImplicitAny": false
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules/**/*","cmd/**/*","build/**/*","dist/**/*"]
+  "exclude": ["node_modules/**/*","cmd/**/*","build/**/*","dist/**/*","**/*.test.*"]
 }
