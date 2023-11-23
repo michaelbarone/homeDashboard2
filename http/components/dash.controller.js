@@ -174,15 +174,13 @@ app.controller("dashCtrl", [
       };
       $scope.functions.updatePhoto();
 
-      $scope.functions.getDay = function (date1, index = 1) {
-        const date = new Date(`${date1}T00:00`);
-        const curDay = new Date().getDay();
-        if (index == 0 && curDay == date.getDay()) {
-          // console.log("TODAY");
+      $scope.functions.getDay = function (date, index = 1) {
+        const inputDay = new Date(date).toLocaleString("en-US", { timeZone: dashboardSettings.timezone, weekday: "short" });
+        const currentDay = new Date().toLocaleString("en-US", { timeZone: dashboardSettings.timezone, weekday: "short" });
+        if (index == 0 && currentDay == inputDay) {
           return "TODAY";
         }
-        // console.log($scope.weekday[date.getDay()]);
-        return $scope.weekday[date.getDay()];
+        return inputDay;
       };
 
       /**
