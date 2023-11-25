@@ -13,9 +13,6 @@ app.controller("dashCtrl", [
     spinnerService.clear();
 
     $scope.data = {};
-    $scope.data.api = {};
-    $scope.data.api.weatherBitBackOffLast429 = 0;
-    $scope.data.api.weatherBitBackOffCount = 0;
     $scope.data.weather = {};
     $scope.data.weather.version = 2020.1;
     $scope.data.weather.alerts = {};
@@ -184,7 +181,7 @@ app.controller("dashCtrl", [
       };
 
       /**
-       * START NOT USED
+       * START NOT USED (used on html)
        *
        *
        *
@@ -239,6 +236,9 @@ app.controller("dashCtrl", [
       };
 
       $scope.functions.getTime = function getTime(inputtime) {
+        if (inputtime === 0) {
+          return "Never";
+        }
         const time = new Date(inputtime);
         const currentTime = `${time.getMonth() + 1}/${time.getDate()} | ${correctHours(time.getHours())}:${correctMinute(time.getMinutes())} ${amORpm(time.getHours())}`;
 

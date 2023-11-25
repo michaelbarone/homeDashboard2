@@ -52,15 +52,31 @@
         <div ng-cloak id="weather" ng-show="data.weather.daily.length>0" style="display: block; position: relative; bottom: 0; width: 100%; padding: 0 0 0 2.5%">
           <div id="weather-container-current">
             <div id="weather-current" class="weather-item weather-current">
-              <div class="bright big">{{data.weather.current.temp}}<sup>°</sup><span class="wi wi-yahoo-32"></span></div>
-              <div class="bright"><span class="bright weather-forecast-item-low">Humidity: {{data.weather.current.rh | number:0}}%</span></div>
-              <div class="weather-current-alt font-light medium wi">
-                <span class="weather-forecast-item-low xsmall">AQI: {{data.weather.current.aqi}} - {{data.weather.current.aqiIndex}}</span><br />
-                <span class="wi wi-strong-wind"> {{data.weather.current.wind_spd}}mph <i class="xsmall wi wi-wind towards-{{data.weather.current.wind_dir}}-deg"></i></span
+              <span ng-show="data.weather.api.weatherBitBackOffCount==0">
+                <div class="bright big">{{data.weather.current.temp}}<sup>°</sup><span class="wi wi-yahoo-32"></span></div>
+                <div class="bright"><span class="bright weather-forecast-item-low">Humidity: {{data.weather.current.rh | number:0}}%</span></div>
+                <div class="weather-current-alt font-light medium wi">
+                  <span class="weather-forecast-item-low xsmall">AQI: {{data.weather.current.aqi}} - {{data.weather.current.aqiIndex}}</span><br />
+                  <span class="weather-forecast-item-low xsmall">UV: {{data.weather.current.uv | number:1}} - Vis:{{data.weather.current.vis | number:1}}</span><br />
+                  <span class="wi wi-strong-wind"> {{data.weather.current.wind_spd}}mph <i class="xsmall wi wi-wind towards-{{data.weather.current.wind_dir}}-deg"></i></span
+                  ><br />
+                  <span class="wi wi-sunrise"></span> {{functions.getSunrise(data.weather.current.sunrise,data.weather.current.datetime)}} am<br />
+                  <span class="wi wi-sunset"></span> {{functions.getSunset(data.weather.current.sunset,data.weather.current.datetime)}} pm<br /><br />
+                </div>
+              </span>
+              <span ng-show="data.weather.api.weatherBitBackOffCount>0">
+                <span class="weather-forecast-item-low xxsmall">Last Check: {{functions.getTime(data.weather.lastChecked)}}</span><br />
+                <span ng-show="data.weather.api.weatherBitBackOffCount==0" class="weather-forecast-item-low xxsmall"
+                  >Last Update: {{functions.getTime(data.weather.lastUpdated.current)}}</span
+                >
+                <span ng-show="data.weather.api.weatherBitBackOffCount>0" class="weather-forecast-item-low xxsmall"
+                  >Next Check: {{functions.getTime(data.weather.api.weatherBitBackOffLast429 + data.weather.api.weatherBitBackOffCount * 3600000)}}</span
                 ><br />
-                <span class="wi wi-sunrise"></span> {{functions.getSunrise(data.weather.current.sunrise,data.weather.current.datetime)}} am<br />
-                <span class="wi wi-sunset"></span> {{functions.getSunset(data.weather.current.sunset,data.weather.current.datetime)}} pm<br /><br />
-              </div>
+                <span ng-show="data.weather.api.weatherBitBackOffCount>0" class="weather-forecast-item-low xxsmall">TOO MANY REQUESTS</span><br />
+                <span ng-show="data.weather.api.weatherBitBackOffCount>0" class="weather-forecast-item-low xxsmall"
+                  >Backoff Count: {{data.weather.api.weatherBitBackOffCount}}</span
+                >
+              </span>
             </div>
 
             <div id="weather-forecast" class="weather-item" style="position: absolute; bottom: 0; right: 0px; display: inline-flex">

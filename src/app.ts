@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morganMiddleware);
 
 if (!process.env.weatherBitKey) {
-  console.log("ALERT - check your .env file has been created and is updated with values");
+  log.critical("ALERT - check your .env file has been created and is updated with values");
 }
 
 const port = process.env.APP_PORT || 9876;
@@ -115,8 +115,8 @@ weather = {
   },
   lastUpdate: 1700718650877,
   lastUpdated: {
-    current: "Wed Nov 22 2023",
-    daily: "2023-11-23T05:49:24.083Z",
+    current: 1700718650877,
+    daily: 1700945840918,
     hourly: 0,
     alerts: 1700718605834
   },
@@ -492,11 +492,22 @@ function check_rate_limit(res) {
   }
 }
 
+function returnWeather(res) {
+  if (weather?.daily[0] && getDay(weather?.daily[0]?.datetime, 0) != "TODAY") {
+    while (weather.daily[0]?.datetime && getDay(weather.daily[0].datetime, 0) != "TODAY") {
+      weather.daily.shift();
+    }
+  }
+  weather.lastUpdate = Date.now();
+  weather.lastChecked = Date.now();
+  weather.api = api;
+  return res.status(200).json(weather);
+}
+
 app.post("/data/saveToJSON", bodyParser.json(), async (req, res) => {
   // not used anymore, all weather data should be coming from nodejs now
   if (temp_pass && req.body) {
     weather = req.body;
-    console.log(JSON.stringify(weather));
     return res.status(200).json({ status: "success" });
   }
   return res.status(500).json({ status: "error" });
@@ -519,12 +530,13 @@ app.get("/data/houseTemperature", async (req, res) => {
 
 app.get("/data/weather", async (req, res) => {
   if (temp_pass) {
-    if (getDay(weather.daily[0].datetime, 0) != "TODAY") {
+    if (weather?.daily[0] && getDay(weather.daily[0].datetime, 0) != "TODAY") {
       while (weather.daily[0]?.datetime && getDay(weather.daily[0].datetime, 0) != "TODAY") {
         weather.daily.shift();
       }
     }
-    return res.status(200).json(weather);
+    return returnWeather(res);
+    // return res.status(200).json(weather);
   }
   return res.status(500).json({ status: "error" });
 });
@@ -548,16 +560,17 @@ app.get("/data/updateWeather", async (req, res) => {
   const dateNow = Date.now();
   let difDate = dateNow - new Date(weather.lastUpdated.current).getTime();
   function returnData() {
-    if (getDay(weather.daily[0].datetime, 0) != "TODAY") {
+    if (weather?.daily[0] && getDay(weather?.daily[0]?.datetime, 0) != "TODAY") {
       while (weather.daily[0]?.datetime && getDay(weather.daily[0].datetime, 0) != "TODAY") {
         weather.daily.shift();
       }
     }
     weather.lastUpdate = Date.now();
     weather.lastChecked = Date.now();
-    return res.status(200).json(weather);
+    return returnWeather(res);
+    // return res.status(200).json(weather);
   }
-  if (weather.lastUpdated.current > 0 || difDate <= dashboardSettings.checkWeatherCurrentMinimumElapsedTime) {
+  if (weather.lastUpdated.current > 0 && difDate <= dashboardSettings.checkWeatherCurrentMinimumElapsedTime) {
     // data still fresh, send from memory:
     return returnData();
   }
@@ -580,6 +593,7 @@ app.get("/data/updateWeather", async (req, res) => {
   fetch(`https://api.weatherbit.io/v2.0/current?city=${dashboardSettings.city},${dashboardSettings.state}&units=I&key=${backendSettings.weatherBitKey}`, { method: "Get" })
     .then((res) => {
       // log.verbose(res);
+      check_rate_limit(res);
       if (res.status === 429) {
         api.weatherBitBackOffCount++;
         api.weatherBitBackOffLast429 = Date.now();
@@ -588,14 +602,14 @@ app.get("/data/updateWeather", async (req, res) => {
         weather.lastUpdated.current = 0;
         throw new HTTPResponseError(res);
       }
-      check_rate_limit(res);
       return res.json();
     })
     .then((json: any) => {
       // log.verbose(json);
       api.weatherBitBackOffCount = 0;
       weather.current = json?.data[0] || {};
-      weather.lastUpdated.current = new Date().toDateString();
+      // TODO set to lastupdated from json data
+      weather.lastUpdated.current = Date.now();
 
       let aqiIndex = "Good";
       const aqi = weather.current.aqi;
@@ -626,7 +640,7 @@ app.get("/data/updateWeather", async (req, res) => {
       difDate = dateNow - new Date(weather.lastUpdated.daily).getTime();
       if (
         weather.lastUpdated.daily === 0 ||
-        (difDate > dashboardSettings.checkWeatherCurrentMinimumElapsedTime && (!weather.daily[0]?.datetime || dateNow > new Date(weather.daily[0].datetime).getTime()))
+        (difDate > dashboardSettings.checkWeatherCurrentMinimumElapsedTime && (!weather?.daily[0]?.datetime || dateNow > new Date(weather?.daily[0].datetime).getTime()))
       ) {
         log.info("JSON data version outdated, refreshing forecast weather");
         log.debug("API-CALL-weatherbit forecast");
@@ -641,7 +655,7 @@ app.get("/data/updateWeather", async (req, res) => {
           .then((json: any) => {
             if (json?.data) {
               weather.daily = json.data;
-              weather.lastUpdated.daily = new Date();
+              weather.lastUpdated.daily = Date.now();
             }
           })
           .catch(function (error) {
@@ -659,20 +673,12 @@ app.get("/data/updateWeather", async (req, res) => {
     })
     .finally(function () {
       return returnData();
-      //   if (getDay(weather.daily[0].datetime, 0) != "TODAY") {
-      //     while (weather.daily[0]?.datetime && getDay(weather.daily[0].datetime, 0) != "TODAY") {
-      //       weather.daily.shift();
-      //     }
-      //   }
-      //   weather.lastUpdate = Date.now();
-      //   weather.lastUpdated.daily = Date.now();
-      //   return res.status(200).json(weather);
     });
 });
 
 app.get("/data/weatherAlerts", async (req, res) => {
   // set/check isRunning bit
-  // check data, if old pull from api
+  // TODO check data, if old pull from api
   fetch(`https://api.weather.gov/alerts/active/zone/${dashboardSettings.weatherGovZone}`, { method: "Get" })
     .then((res) => {
       return res.json();
@@ -680,15 +686,18 @@ app.get("/data/weatherAlerts", async (req, res) => {
     .then((json: any) => {
       if (json.features.length > 0) {
         weather.alerts = json.features[0].properties;
+        // TODO set to lastupdated from json data
         weather.lastUpdated.alerts = Date.now();
-        return res.status(200).json(weather);
+        return returnWeather(res);
+        // return res.status(200).json(weather);
       }
       weather.lastUpdated.alerts = Date.now();
       weather.alerts = {};
-      return res.status(201).json(weather);
+      return returnWeather(res);
+      // return res.status(201).json(weather);
     })
     .catch(function (error) {
-      console.log(`/data/weatherAlerts error: ${error}`);
+      log.error(`/data/weatherAlerts error: ${error}`);
       weather.alerts = {};
       return res.status(500).json(weather);
     });
@@ -703,7 +712,7 @@ app.get("/dashboardSettings", async (req, res) => {
 });
 
 const initApp = async () => {
-  app.listen({ port, host: "0.0.0.0" }, () => console.log(`> Listening on port ${port}`));
+  app.listen({ port, host: "0.0.0.0" }, () => log.warn(`> Listening on port ${port}`));
 };
 
 initApp();
