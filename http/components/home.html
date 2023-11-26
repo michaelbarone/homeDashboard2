@@ -143,20 +143,12 @@
               >Last Update: {{functions.getTime(data.weather.lastUpdated.current)}}</span
             >
             <span ng-show="data.weather.api.weatherBitBackOffCount>0" class="weather-forecast-item-low xxsmall"
-              >Next Check: {{functions.getTime(data.weather.api.weatherBitBackOffLast429 + data.weather.api.weatherBitBackOffCount * 3600000)}}</span
-            ><br />
-            <span ng-show="data.weather.api.weatherBitBackOffCount>0" class="weather-forecast-item-low xxsmall">TOO MANY REQUESTS</span><br />
+              >Next Check: {{functions.getTime(data.weather.api.weatherBitBackOffLast429 + data.weather.api.weatherBitBackOffCount * 3600000)}}<br
+            /></span>
+            <span ng-show="data.weather.api.weatherBitBackOffCount>0" class="weather-forecast-item-low xxsmall">TOO MANY REQUESTS<br /></span>
             <span ng-show="data.weather.api.weatherBitBackOffCount>0" class="weather-forecast-item-low xxsmall"
               >Backoff Count: {{data.weather.api.weatherBitBackOffCount}}</span
             >
-            <!-- <div id="weather-current" ng-show="!showHouseTemp" class="weather-item weather-current">
-              <div class="bright big">Current Weather not updated</div>
-              <div class="weather-current-alt font-light medium wi">
-                <span class="weather-forecast-item-low xxsmall">Checked: {{functions.getTime(data.weather.lastChecked)}}</span><br />
-                <span class="weather-forecast-item-low xxsmall">Updated: {{functions.getTime(data.weather.lastUpdate)}}</span>
-              </div>
-            </div> -->
-
             <div
               ng-show="!showHouseTemp"
               ng-init="showHouseTemp=false;"

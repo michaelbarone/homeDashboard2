@@ -481,7 +481,7 @@ weather = {
 
 const temp_pass = true;
 
-function check_rate_limit(res) {
+async function check_rate_limit(res) {
   // log.verbose(res);
   // log.verbose(res.headers);
   if (res?.headers?.get("x-ratelimit-remaining")) {
@@ -492,13 +492,13 @@ function check_rate_limit(res) {
   }
 }
 
-function returnWeather(res) {
+async function returnWeather(res) {
   if (weather?.daily[0] && getDay(weather?.daily[0]?.datetime, 0) != "TODAY") {
     while (weather.daily[0]?.datetime && getDay(weather.daily[0].datetime, 0) != "TODAY") {
       weather.daily.shift();
     }
   }
-  weather.lastUpdate = Date.now();
+  // weather.lastUpdate = Date.now();
   weather.lastChecked = Date.now();
   weather.api = api;
   return res.status(200).json(weather);
@@ -530,11 +530,11 @@ app.get("/data/houseTemperature", async (req, res) => {
 
 app.get("/data/weather", async (req, res) => {
   if (temp_pass) {
-    if (weather?.daily[0] && getDay(weather.daily[0].datetime, 0) != "TODAY") {
-      while (weather.daily[0]?.datetime && getDay(weather.daily[0].datetime, 0) != "TODAY") {
-        weather.daily.shift();
-      }
-    }
+    // if (weather?.daily[0] && getDay(weather.daily[0].datetime, 0) != "TODAY") {
+    //   while (weather.daily[0]?.datetime && getDay(weather.daily[0].datetime, 0) != "TODAY") {
+    //     weather.daily.shift();
+    //   }
+    // }
     return returnWeather(res);
     // return res.status(200).json(weather);
   }
@@ -559,20 +559,19 @@ app.get("/data/updateWeather", async (req, res) => {
   // save to local json file every X hours to keep fresh for server restarts...  need to put this in persistent storage for docker, currently wont persist
   const dateNow = Date.now();
   let difDate = dateNow - new Date(weather.lastUpdated.current).getTime();
-  function returnData() {
-    if (weather?.daily[0] && getDay(weather?.daily[0]?.datetime, 0) != "TODAY") {
-      while (weather.daily[0]?.datetime && getDay(weather.daily[0].datetime, 0) != "TODAY") {
-        weather.daily.shift();
-      }
-    }
-    weather.lastUpdate = Date.now();
-    weather.lastChecked = Date.now();
-    return returnWeather(res);
-    // return res.status(200).json(weather);
-  }
+  // function returnData() {
+  //   if (weather?.daily[0] && getDay(weather?.daily[0]?.datetime, 0) != "TODAY") {
+  //     while (weather.daily[0]?.datetime && getDay(weather.daily[0].datetime, 0) != "TODAY") {
+  //       weather.daily.shift();
+  //     }
+  //   }
+  //   weather.lastUpdate = Date.now();
+  //   weather.lastChecked = Date.now();
+  //   return res.status(200).json(weather);
+  // }
   if (weather.lastUpdated.current > 0 && difDate <= dashboardSettings.checkWeatherCurrentMinimumElapsedTime) {
     // data still fresh, send from memory:
-    return returnData();
+    return returnWeather(res);
   }
   if (api.weatherBitBackOffCount > 0) {
     // wait 1 hour for each backOffCount
@@ -586,7 +585,7 @@ app.get("/data/updateWeather", async (req, res) => {
       weather.current = {};
       weather.lastUpdated.current = 0;
 
-      return returnData();
+      return returnWeather(res);
     }
   }
   log.debug("API-CALL-weatherbit current");
@@ -610,6 +609,7 @@ app.get("/data/updateWeather", async (req, res) => {
       weather.current = json?.data[0] || {};
       // TODO set to lastupdated from json data
       weather.lastUpdated.current = Date.now();
+      weather.lastUpdate = Date.now();
 
       let aqiIndex = "Good";
       const aqi = weather.current.aqi;
@@ -672,7 +672,7 @@ app.get("/data/updateWeather", async (req, res) => {
       weather.lastUpdated.current = 0;
     })
     .finally(function () {
-      return returnData();
+      return returnWeather(res);
     });
 });
 
@@ -688,13 +688,11 @@ app.get("/data/weatherAlerts", async (req, res) => {
         weather.alerts = json.features[0].properties;
         // TODO set to lastupdated from json data
         weather.lastUpdated.alerts = Date.now();
-        return returnWeather(res);
-        // return res.status(200).json(weather);
+        return res.status(200).json(weather);
       }
       weather.lastUpdated.alerts = Date.now();
       weather.alerts = {};
-      return returnWeather(res);
-      // return res.status(201).json(weather);
+      return res.status(201).json(weather);
     })
     .catch(function (error) {
       log.error(`/data/weatherAlerts error: ${error}`);
