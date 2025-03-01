@@ -324,10 +324,10 @@ app.controller("dashCtrl", [
           }
         })
           .fail(function () {
-            $scope.data.weather.lastUpdate = 0;
-            $scope.data.weather.lastUpdated.current = 0;
-            $scope.data.weather.lastUpdated.daily = 0;
-            $scope.data.weather.lastUpdated.hourly = 0;
+            $scope.data.weather.lastUpdate = Date.now();
+            $scope.data.weather.lastUpdated.current = Date.now();
+            $scope.data.weather.lastUpdated.daily = Date.now();
+            $scope.data.weather.lastUpdated.hourly = Date.now();
           })
           .always(function () {
             // placeholder
@@ -362,10 +362,10 @@ app.controller("dashCtrl", [
           }
         })
           .fail(function () {
-            $scope.data.weather.lastUpdate = 0;
-            $scope.data.weather.lastUpdated.current = 0;
-            $scope.data.weather.lastUpdated.daily = 0;
-            $scope.data.weather.lastUpdated.hourly = 0;
+            $scope.data.weather.lastUpdate = Date.now();
+            $scope.data.weather.lastUpdated.current = Date.now();
+            $scope.data.weather.lastUpdated.daily = Date.now();
+            $scope.data.weather.lastUpdated.hourly = Date.now();
           })
           .always(function () {
             const dateNow = Date.now();

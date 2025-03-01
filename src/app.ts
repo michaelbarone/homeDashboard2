@@ -52,6 +52,22 @@ api.weatherbit = {};
 api.logs = {};
 api.logs[Date.now()] = "App Start";
 
+// Function to remove old log entries
+function cleanupApiLogs(maxAgeMs = 48 * 60 * 60 * 1000) {
+  // Default to 48 hours
+  const now = Date.now();
+  const cutoffTime = now - maxAgeMs;
+
+  Object.keys(api.logs).forEach((timestamp) => {
+    if (parseInt(timestamp) < cutoffTime) {
+      delete api.logs[timestamp];
+    }
+  });
+}
+
+// Clean up logs every hour
+setInterval(cleanupApiLogs, 60 * 60 * 1000);
+
 let weather: any = {};
 weather.version = 2020.1;
 weather.alerts = {};
@@ -64,6 +80,8 @@ weather.lastUpdated.alerts = 0;
 weather.current = {};
 weather.daily = [];
 weather.hourly = [];
+
+let fetchingUpdates = false;
 
 let houseTemperature = {};
 houseTemperature = { aveInside: 69.55, aveGarage: 52.7, aveOutside: 48.7, "In vs Out": -20.8, $now: 1699598090124 };
@@ -531,13 +549,7 @@ app.get("/data/houseTemperature", async (req, res) => {
 
 app.get("/data/weather", async (req, res) => {
   if (temp_pass) {
-    // if (weather?.daily[0] && getDay(weather.daily[0].datetime, 0) != "TODAY") {
-    //   while (weather.daily[0]?.datetime && getDay(weather.daily[0].datetime, 0) != "TODAY") {
-    //     weather.daily.shift();
-    //   }
-    // }
     return returnWeather(res);
-    // return res.status(200).json(weather);
   }
   return res.status(500).json({ status: "error" });
 });
@@ -576,19 +588,45 @@ app.get("/data/updateWeather", async (req, res) => {
     // wait 1 hour for each backOffCount
     const elapsedTime = Date.now() - api.weatherBitBackOffLast429;
     const cooldownTime = api.weatherBitBackOffCount * 3600000;
-    if (elapsedTime > cooldownTime) {
-      // good to check again
-    } else {
-      // wait til cool down period
+    if (elapsedTime <= cooldownTime) {
+      // Still in cooldown period
       log.warn("Too Many Requests to weatherbit -- cooling down", `BackOffCount=${api.weatherBitBackOffCount}`, `Waiting for ${elapsedTime} > ${cooldownTime} `);
-      weather.current = {};
-      weather.lastUpdated.current = 0;
 
+      // Don't clear current weather data if we have it
+      if (!weather.current || Object.keys(weather.current).length === 0) {
+        weather.current = {};
+        weather.lastUpdated.current = Date.now();
+      }
       return returnWeather(res);
     }
   }
+  if (fetchingUpdates) {
+    // Wait for updates to complete using a polling mechanism
+    const waitForUpdates = () => {
+      // Maximum wait time of 30 seconds
+      const MAX_WAIT_TIME = 30000;
+      const startTime = Date.now();
+
+      return new Promise<void>((resolve) => {
+        const checkUpdates = () => {
+          if (!fetchingUpdates || Date.now() - startTime >= MAX_WAIT_TIME) {
+            if (Date.now() - startTime >= MAX_WAIT_TIME) {
+              log.warn("Weather update wait time exceeded maximum of 30 seconds");
+            }
+            resolve();
+          } else {
+            // Poll every 100ms
+            setTimeout(checkUpdates, 100);
+          }
+        };
+        checkUpdates();
+      }).then(() => returnWeather(res));
+    };
+    return waitForUpdates();
+  }
   log.debug("API-CALL-weatherbit current");
   api.logs[Date.now()] = "API-CALL-weatherbit current";
+  fetchingUpdates = true;
   fetch(`https://api.weatherbit.io/v2.0/current?city=${dashboardSettings.city},${dashboardSettings.state}&units=I&key=${backendSettings.weatherBitKey}`, { method: "Get" })
     .then((res) => {
       log.verbose(res);
@@ -601,7 +639,7 @@ app.get("/data/updateWeather", async (req, res) => {
         if (weather.lastUpdate.current !== 0) {
           api.logs[Date.now()] = `Too Many Requests to weatherbit -- Backing Off - count: ${api.weatherBitBackOffCount}`;
         }
-        weather.lastUpdated.current = 0;
+        weather.lastUpdated.current = Date.now();
         throw new HTTPResponseError(res);
       }
       return res.json();
@@ -676,9 +714,10 @@ app.get("/data/updateWeather", async (req, res) => {
     .catch(function (error) {
       log.error(`/data/updateWeather error: ${error}`);
       weather.current = {};
-      weather.lastUpdated.current = 0;
+      weather.lastUpdated.current = Date.now();
     })
     .finally(function () {
+      fetchingUpdates = false;
       return returnWeather(res);
     });
 });
