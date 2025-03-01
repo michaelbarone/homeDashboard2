@@ -49,6 +49,8 @@ const api: any = {};
 api.weatherBitBackOffCount = 0;
 api.weatherBitBackOffLast429 = 0;
 api.weatherbit = {};
+api.logs = {};
+api.logs[Date.now()] = "App Start";
 
 let weather: any = {};
 weather.version = 2020.1;
@@ -478,7 +480,6 @@ weather = {
   hourly: [],
   lastChecked: 1700718650877
 };
-
 const temp_pass = true;
 
 async function check_rate_limit(res) {
@@ -559,16 +560,14 @@ app.get("/data/updateWeather", async (req, res) => {
   // save to local json file every X hours to keep fresh for server restarts...  need to put this in persistent storage for docker, currently wont persist
   const dateNow = Date.now();
   let difDate = dateNow - new Date(weather.lastUpdated.current).getTime();
-  // function returnData() {
-  //   if (weather?.daily[0] && getDay(weather?.daily[0]?.datetime, 0) != "TODAY") {
-  //     while (weather.daily[0]?.datetime && getDay(weather.daily[0].datetime, 0) != "TODAY") {
-  //       weather.daily.shift();
-  //     }
-  //   }
-  //   weather.lastUpdate = Date.now();
-  //   weather.lastChecked = Date.now();
-  //   return res.status(200).json(weather);
-  // }
+
+  // trim old data
+  if (weather?.daily[0] && getDay(weather?.daily[0]?.datetime, 0) != "TODAY") {
+    while (weather.daily[0]?.datetime && getDay(weather.daily[0].datetime, 0) != "TODAY") {
+      weather.daily.shift();
+    }
+  }
+
   if (weather.lastUpdated.current > 0 && difDate <= dashboardSettings.checkWeatherCurrentMinimumElapsedTime) {
     // data still fresh, send from memory:
     return returnWeather(res);
@@ -589,15 +588,19 @@ app.get("/data/updateWeather", async (req, res) => {
     }
   }
   log.debug("API-CALL-weatherbit current");
+  api.logs[Date.now()] = "API-CALL-weatherbit current";
   fetch(`https://api.weatherbit.io/v2.0/current?city=${dashboardSettings.city},${dashboardSettings.state}&units=I&key=${backendSettings.weatherBitKey}`, { method: "Get" })
     .then((res) => {
-      // log.verbose(res);
+      log.verbose(res);
       check_rate_limit(res);
       if (res.status === 429) {
         api.weatherBitBackOffCount++;
         api.weatherBitBackOffLast429 = Date.now();
         log.warn(`Too Many Requests to weatherbit -- Backing Off - count: ${api.weatherBitBackOffCount}`);
         weather.current = {};
+        if (weather.lastUpdate.current !== 0) {
+          api.logs[Date.now()] = `Too Many Requests to weatherbit -- Backing Off - count: ${api.weatherBitBackOffCount}`;
+        }
         weather.lastUpdated.current = 0;
         throw new HTTPResponseError(res);
       }
@@ -621,7 +624,8 @@ app.get("/data/updateWeather", async (req, res) => {
           aqiIndex = "Moderate";
           break;
         case aqi < 151:
-          aqiIndex = "Unhealthy for Sensative Groups";
+          // aqiIndex = "Unhealthy for Sensative Groups";
+          aqiIndex = "Unhealthy-ish";
           break;
         case aqi < 201:
           aqiIndex = "Unhealthy";
@@ -640,10 +644,13 @@ app.get("/data/updateWeather", async (req, res) => {
       difDate = dateNow - new Date(weather.lastUpdated.daily).getTime();
       if (
         weather.lastUpdated.daily === 0 ||
-        (difDate > dashboardSettings.checkWeatherCurrentMinimumElapsedTime && (!weather?.daily[0]?.datetime || dateNow > new Date(weather?.daily[0].datetime).getTime()))
+        // (difDate > dashboardSettings.checkWeatherCurrentMinimumElapsedTime && (!weather?.daily[0]?.datetime || dateNow > new Date(weather?.daily[0].datetime).getTime()))
+        (difDate > dashboardSettings.checkWeatherCurrentMinimumElapsedTime &&
+          (!weather?.daily[0]?.datetime || !weather.daily[3]?.datetime || dateNow - weather.lastUpdated.daily < 21600000)) // 21600000 is 1/4 day
       ) {
         log.info("JSON data version outdated, refreshing forecast weather");
         log.debug("API-CALL-weatherbit forecast");
+        api.logs[Date.now()] = "API-CALL-weatherbit forecast";
         fetch(`https://api.weatherbit.io/v2.0/forecast/daily?city=${dashboardSettings.city},${dashboardSettings.state}&key=${backendSettings.weatherBitKey}&units=I`, {
           method: "Get"
         })
@@ -678,7 +685,7 @@ app.get("/data/updateWeather", async (req, res) => {
 
 app.get("/data/weatherAlerts", async (req, res) => {
   // set/check isRunning bit
-  // TODO check data, if old pull from api
+  // TODO check data, if old pull from api otherwise return current
   fetch(`https://api.weather.gov/alerts/active/zone/${dashboardSettings.weatherGovZone}`, { method: "Get" })
     .then((res) => {
       return res.json();
@@ -699,6 +706,26 @@ app.get("/data/weatherAlerts", async (req, res) => {
       weather.alerts = {};
       return res.status(500).json(weather);
     });
+
+  // TODO not working
+  // try {
+  //   const weatherAlerts: any = await fetch(`https://api.weather.gov/alerts/active/zone/${dashboardSettings.weatherGovZone}`, { method: "Get" });
+  //   const json = weatherAlerts.json();
+  //   log.debug(json);
+  //   if (json.features.length > 0) {
+  //     weather.alerts = json.features[0].properties;
+  //     // TODO set to lastupdated from json data
+  //     weather.lastUpdated.alerts = Date.now();
+  //     return res.status(200).json(weather);
+  //   }
+  //   weather.lastUpdated.alerts = Date.now();
+  //   weather.alerts = {};
+  //   return res.status(201).json(weather);
+  // } catch (error) {
+  //   log.error(`/data/weatherAlerts error: ${error}`);
+  //   weather.alerts = {};
+  //   return res.status(500).json(weather);
+  // }
 });
 
 app.get("/dashboardSettings", async (req, res) => {

@@ -1,5 +1,6 @@
 import { dashboardSettings } from "./app.js";
 
+// getDay function also in dash.controller.js
 export function getDay(date, index = 1) {
   const inputDay = new Date(`${date} 12:00.000Z`).toLocaleString("en-US", { timeZone: dashboardSettings.timezone, weekday: "short" });
   const currentDay = new Date().toLocaleString("en-US", { timeZone: dashboardSettings.timezone, weekday: "short" });

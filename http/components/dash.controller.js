@@ -171,20 +171,21 @@ app.controller("dashCtrl", [
       };
       $scope.functions.updatePhoto();
 
+      // getDay function also in utils.ts file
       $scope.functions.getDay = function (date, index = 1) {
         // const inputDay = new Date(date).toLocaleString("en-US", { timeZone: dashboardSettings.timezone, weekday: "short" });
-        // const currentDay = new Date().toLocaleString("en-US", { timeZone: dashboardSettings.timezone, weekday: "short" });
-        // if (index == 0 && currentDay == inputDay) {
+        // const currentDay1 = new Date().toLocaleString("en-US", { timeZone: dashboardSettings.timezone, weekday: "short" });
+        // if (index == 0 && currentDay1 == inputDay) {
         //   return "TODAY";
         // }
         // return inputDay;
 
         const inputDay = new Date(`${date} 12:00.000Z`).toLocaleString("en-US", { timeZone: dashboardSettings.timezone, weekday: "short" });
-        const currentDay = new Date().toLocaleString("en-US", { timeZone: dashboardSettings.timezone, weekday: "short" });
+        const currentDay1 = new Date().toLocaleString("en-US", { timeZone: dashboardSettings.timezone, weekday: "short" });
         const d = new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles", dateStyle: "short" });
         const currentDate = new Date(d).toISOString().split("T")[0];
         // console.log(`${date}--${currentDate} || ${inputDay}--${currentDay}`);
-        if (index == 0 && date == currentDate && currentDay == inputDay) {
+        if (index == 0 && date == currentDate && currentDay1 == inputDay) {
           // console.log("return today");
           return "TODAY";
         }
