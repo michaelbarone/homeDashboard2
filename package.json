@@ -5,11 +5,6 @@
   "main": "build/app.js",
   "type": "module",
   "scripts": {
-    "up": "npm i && npx husky install",
-    "up:lint": "npm run up:libs && npm i",
-    "up:dev": "npm run up:libs && npm i --only=production",
-    "up:prod": "npm run up:libs && npm i --only=production",
-    "build:tsc": "npx tsc",
     "start:tsc": "npx tsc && node -r dotenv/config ./build/app.js 8081",
     "start": "node -r dotenv/config ./build/app.js 8081",
     "build": "npx tsc",
@@ -18,7 +13,8 @@
     "format": "npx prettier . --list-different --config .prettierrc  --ignore-path .prettierignore --ignore-unknown",
     "format:fix": "npx prettier . --list-different --write --config .prettierrc  --ignore-path .prettierignore --ignore-unknown",
     "test:jest": "jest --passWithNoTests",
-    "test:coverage": "jest --passWithNoTests --coverage"
+    "test:coverage": "jest --passWithNoTests --coverage",
+    "prepare": "npx husky install"
   },
   "dependencies": {
     "@types/node": "^18.0.1",
