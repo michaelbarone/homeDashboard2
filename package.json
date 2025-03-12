@@ -14,7 +14,8 @@
     "format:fix": "npx prettier . --list-different --write --config .prettierrc  --ignore-path .prettierignore --ignore-unknown",
     "test:jest": "jest --passWithNoTests",
     "test:coverage": "jest --passWithNoTests --coverage",
-    "prepare": "npx husky install"
+    "prepare": "npx husky install",
+    "build:docker": "docker build -t mbarone000/weatherdashboard:latest ."
   },
   "dependencies": {
     "@types/node": "^18.0.1",
