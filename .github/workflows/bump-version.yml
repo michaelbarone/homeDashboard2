@@ -10,6 +10,9 @@ on:
       - 'dist/**/*'
   workflow_dispatch: # Allow manual invocation of the workflow
 
+env:
+   GH_TOKEN: ${{ secrets.GH_REPO_TOKEN }}
+
 jobs:
   bump-version:
     runs-on: ubuntu-latest
