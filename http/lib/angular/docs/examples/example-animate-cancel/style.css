@@ -1,0 +1,15 @@
+.red-add,
+.red-remove {
+  transition: all 4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.red,
+.red-add.red-add-active {
+  color: #ff0000;
+  font-size: 40px;
+}
+
+.red-remove.red-remove-active {
+  font-size: 10px;
+  color: black;
+}

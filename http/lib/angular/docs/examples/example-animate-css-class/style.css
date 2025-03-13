@@ -1,0 +1,15 @@
+.css-class-add,
+.css-class-remove {
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.css-class,
+.css-class-add.css-class-add-active {
+  color: red;
+  font-size: 3em;
+}
+
+.css-class-remove.css-class-remove-active {
+  font-size: 1em;
+  color: black;
+}

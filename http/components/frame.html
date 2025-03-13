@@ -1,0 +1,101 @@
+<!-- eslint-disable @html-eslint/no-duplicate-id -->
+<!DOCTYPE html>
+<style>
+  .dashboard {
+    font-size: 5pt;
+  }
+  #header,
+  #header div {
+    z-index: 100;
+  }
+</style>
+<div class="wrap dashboard" ng-controller="dashCtrl">
+  <div class="brightness abs-zero"></div>
+  <ng-include ng-cloak src="'components/spinner/spinner.html'"></ng-include>
+  <div id="header" class="menu">
+    <div
+      id="weather-alert"
+      ng-cloak
+      ng-show="data.weather.alerts.headline"
+      ng-click="showAlert = !showAlert;"
+      ng-init="showAlert=false;"
+      class="translucent-alert weather-alert"
+      style="display: block; padding: 5px; position: relative; pointer-events: auto"
+    >
+      <div class="pull-left font-ultralight xxsmall" stlye="margin:-5px">
+        <img id="weather-alert-icon" alt="weather-alert-icon" src="./images/alert.png" height="10px" width="10px" />
+      </div>
+      <div>
+        <div ng-cloak ng-show="data.params['kiosk']" id="weather-alert-expires" class="xsmall pull-right" style="margin: 5px; max-width: 90%">
+          {{data.weather.alerts.headline}}
+        </div>
+
+        <div
+          ng-cloak
+          ng-show="!data.params['kiosk']"
+          id="weather-alert-expires"
+          class="xsmall pull-right"
+          style="margin: 5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 90%"
+        >
+          {{data.weather.alerts.headline}}
+        </div>
+        <div id="weather-alert-description" class="xsmall font-light"></div>
+      </div>
+      <div class="clearfix"></div>
+      <div id="weather-alert-message" class="xsmall" ng-show="showAlert" style="text-overflow: ellipsis; overflow: hidden">{{data.weather.alerts.instruction}}</div>
+    </div>
+  </div>
+
+  <div id="dashboardWrapper" scrolling="auto">
+    <div id="dashboardMask">
+      <footer style="display: block; position: absolute; bottom: 0; width: 100%; z-index: 20">
+        <div ng-cloak id="weather" ng-show="data.weather.daily.length>0" style="display: block; position: relative; bottom: 0; width: 100%; padding: 0 0 0 2.5%">
+          <div id="weather-container-current">
+            <div id="weather-current" class="weather-item weather-current">
+              <span ng-show="data.weather.api.weatherBitBackOffCount==0">
+                <div class="bright big">{{data.weather.current.temp}}<sup>°</sup><span class="wi wi-yahoo-32"></span></div>
+                <div class="bright"><span class="bright weather-forecast-item-low">Humidity: {{data.weather.current.rh | number:0}}%</span></div>
+                <div class="weather-current-alt font-light medium wi">
+                  <span class="weather-forecast-item-low xsmall">AQI: {{data.weather.current.aqi}} - {{data.weather.current.aqiIndex}}</span><br />
+                  <span class="weather-forecast-item-low xsmall">UV: {{data.weather.current.uv | number:1}} - Vis:{{data.weather.current.vis | number:1}}</span><br />
+                  <span class="wi wi-strong-wind"> {{data.weather.current.wind_spd}}mph <i class="xsmall wi wi-wind towards-{{data.weather.current.wind_dir}}-deg"></i></span
+                  ><br />
+                  <span class="wi wi-sunrise"></span> {{functions.getSunrise(data.weather.current.sunrise,data.weather.current.datetime)}} am<br />
+                  <span class="wi wi-sunset"></span> {{functions.getSunset(data.weather.current.sunset,data.weather.current.datetime)}} pm<br /><br />
+                </div>
+              </span>
+              <span ng-show="data.weather.api.weatherBitBackOffCount>0">
+                <span class="weather-forecast-item-low xxsmall">Last Check: {{functions.getTime(data.weather.lastChecked)}}</span><br />
+                <span ng-show="data.weather.api.weatherBitBackOffCount==0" class="weather-forecast-item-low xxsmall"
+                  >Last Update: {{functions.getTime(data.weather.lastUpdated.current)}}</span
+                >
+                <span ng-show="data.weather.api.weatherBitBackOffCount>0" class="weather-forecast-item-low xxsmall"
+                  >Next Check: {{functions.getTime(data.weather.api.weatherBitBackOffLast429 + data.weather.api.weatherBitBackOffCount * 3600000)}}</span
+                ><br />
+                <span ng-show="data.weather.api.weatherBitBackOffCount>0" class="weather-forecast-item-low xxsmall">TOO MANY REQUESTS</span><br />
+                <span ng-show="data.weather.api.weatherBitBackOffCount>0" class="weather-forecast-item-low xxsmall"
+                  >Backoff Count: {{data.weather.api.weatherBitBackOffCount}}</span
+                >
+              </span>
+            </div>
+
+            <div id="weather-forecast" class="weather-item" style="position: absolute; bottom: 0; right: 0px; display: inline-flex">
+              <div class="text-center weather-item weather-forecast" style="margin: 10px" ng-repeat="day in data.weather.daily | limitTo: frameWeatherTiles track by $index">
+                <div class="day medium wi">{{functions.getDay(day.datetime, $index)}}</div>
+                <br /><span class="wi medium wi-yahoo-{{functions.weatherCode(day.weather.code)}}"></span><br />
+                <div style="white-space: nowrap">
+                  <span class="weather-forecast-item-low xsmall">Rain: {{day.pop}}%</span>
+                </div>
+                <div class="bright weather-forecast-item-high medium">{{day.max_temp | roundTripleDigits}}<sup>°</sup></div>
+                <div class="bright weather-forecast-item-low medium wi">{{day.min_temp | roundTripleDigits}}<sup>°</sup></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="weather-loading" onClick="window.location.reload();" ng-show="data.weather.daily.length==0" class="text-center" style="margin-bottom: 30px">
+          <span class="dark font-light">Loading Weather...</span>
+        </div>
+      </footer>
+    </div>
+  </div>
+</div>
