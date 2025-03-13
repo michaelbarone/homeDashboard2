@@ -27,7 +27,7 @@
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "env-var": "^7.4.1",
-    "express": "^4.17.1",
+    "express": "^4.20.0",
     "fast-redact": "^3.1.2",
     "logform": "^2.5.1",
     "morgan": "^1.10.0",
