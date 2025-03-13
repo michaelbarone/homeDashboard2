@@ -49,4 +49,4 @@ jobs:
         git-message: "chore(release): {version}"
         release-count: 0
         skip-on-empty: false
-        config-file-path: ".versionrc.js"
+        config-file-path: ".versionrc.cjs"

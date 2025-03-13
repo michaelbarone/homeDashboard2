@@ -5,44 +5,52 @@ module.exports = config({
       "types": [
         {
           "type": "feat",
-          "section": "Features"
+          "section": "✨ Features"
         },
         {
           "type": "fix",
-          "section": "Bug Fixes"
+          "section": "🐛 Bug Fixes"
+        },
+        {
+          "type": "hotfix",
+          "section": "🔥 Hotfixes"
         },
         {
           "type": "docs",
-          "section": "Documentation"
+          "section": "📚 Documentation"
         },
         {
           "type": "style",
-          "section": "Style"
+          "section": "💎 Style"
         },
         {
           "type": "refactor",
-          "section": "Refactor"
+          "section": "📦 Refactor"
         },
         {
           "type": "perf",
-          "section": "Performance"
+          "section": "🚀 Performance"
         },
         {
           "type": "test",
-          "section": "Tests"
+          "section": "🚨 Tests"
         },
         {
           "type": "build",
-          "section": "Build"
+          "section": "🛠 Build"
+        },
+        {
+          "type": "revert",
+          "section": "🗑 Reverts"
         },
         {
           "type": "chore",
-          "section": "Chore",
+          "section": "♻️ Chore",
           "hidden": true
         },
         {
           "type": "ci",
-          "section": "CI CD",
+          "section": "⚙️ CI CD",
           "hidden": true
         }
       ]
