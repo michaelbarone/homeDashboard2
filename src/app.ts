@@ -161,7 +161,7 @@ app.get("/data/updateWeather", async (req, res) => {
   // check data, if old pull from api
   // save to local json file every X hours to keep fresh for server restarts...  need to put this in persistent storage for docker, currently wont persist
   const dateNow = Date.now();
-  let difDate = dateNow - new Date(weather.lastUpdated.current).getTime();
+  const difDate = dateNow - new Date(weather.lastUpdated.current).getTime();
 
   // trim old data
   if (weather?.daily[0] && getDay(weather?.daily[0]?.datetime, 0) != "TODAY") {
@@ -270,13 +270,8 @@ app.get("/data/updateWeather", async (req, res) => {
           break;
       }
       weather.current.aqiIndex = aqiIndex;
-      difDate = dateNow - new Date(weather.lastUpdated.daily).getTime();
-      if (
-        weather.lastUpdated.daily === 0 ||
-        // (difDate > dashboardSettings.checkWeatherCurrentMinimumElapsedTime && (!weather?.daily[0]?.datetime || dateNow > new Date(weather?.daily[0].datetime).getTime()))
-        (difDate > dashboardSettings.checkWeatherCurrentMinimumElapsedTime &&
-          (!weather?.daily[0]?.datetime || !weather.daily[3]?.datetime || dateNow - weather.lastUpdated.daily < 21600000)) // 21600000 is 1/4 day
-      ) {
+      // Refresh if < 4-day forecast OR more than 6 hours passed (21600000ms)
+      if (!weather.daily[3]?.datetime || dateNow - weather.lastUpdated.daily > 21600000) {
         log.info("JSON data version outdated, refreshing forecast weather");
         log.debug("API-CALL-weatherbit forecast");
         addApiLog("API-CALL-weatherbit forecast");
@@ -296,7 +291,6 @@ app.get("/data/updateWeather", async (req, res) => {
           })
           .catch(function (error) {
             log.error(`/data/updateWeather error: ${error}`);
-            weather.lastUpdated.daily = 0;
             // dont reset this, so we can still see old forcast data
             // weather.daily = [];
           });
